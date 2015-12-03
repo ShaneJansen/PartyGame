@@ -32,6 +32,7 @@ public class Game implements ApplicationListener {
 	public static final float WORLD_WIDTH = 1000.0f;
 	public static final float WORLD_HEIGHT = 500.0f;
 	public static float PPU;
+	public static boolean PAUSED = false;
 
 	public static AssetManager ASSETS;
 	public static SpriteBatch SPRITE_BATCH;
@@ -95,6 +96,7 @@ public class Game implements ApplicationListener {
 	 */
 	@Override
 	public void pause() {
+		PAUSED = true;
 		GAME.pause();
 	}
 
@@ -104,6 +106,7 @@ public class Game implements ApplicationListener {
 	 */
 	@Override
 	public void resume() {
+		PAUSED = false;
 		GAME.resume();
 	}
 

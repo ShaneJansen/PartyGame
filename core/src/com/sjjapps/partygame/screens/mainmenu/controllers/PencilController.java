@@ -36,6 +36,7 @@ public class PencilController implements SjjController {
 
     @Override
     public void update(float deltaTime) {
+        if (Game.PAUSED) return;
         mViewport.apply();
 
         // Draw Pencil Lines
