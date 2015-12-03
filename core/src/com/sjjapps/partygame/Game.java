@@ -1,27 +1,121 @@
 package com.sjjapps.partygame;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.sjjapps.partygame.controllers.MultiplexerManager;
+import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 
-public class Game extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+public class Game implements ApplicationListener {
+	/**
+	 * SINGLE-SCREEN:
+	 * Simply extend ApplicationAdapter or implement
+	 * ApplicationListener.
+	 *
+	 * MULTI-SCREENS:
+	 * Use the Game class for multi-screens.
+	 * The main class should extend Game.
+	 * Each screen class should implement Screen or ScreenAdapter.
+	 * The Game class extends ApplicationListener so you will only
+	 * need the main class to inherit from Game.
+	 *
+	 * The Game class holds a reference to the current Screen and
+	 * provides getters and setters for it.  Make sure to call super
+	 * on any overridden Game methods.  Game's render implementation
+	 * will automatically update and render the active Screen reference.
+	 */
+
+	public static final String TAG = "MyGame";
+	public static final float WORLD_WIDTH = 1000.0f;
+	public static final float WORLD_HEIGHT = 500.0f;
+	public static float PPU;
+
+	public static AssetManager ASSETS;
+	public static SpriteBatch SPRITE_BATCH;
+	public static ModelBatch MODEL_BATCH;
+	public static ShapeRenderer SHAPE_RENDERER;
+	public static MultiplexerManager MULTIPLEXER_MANAGER;
+	public static final com.badlogic.gdx.Game GAME = new com.badlogic.gdx.Game() {
+		@Override
+		public void create() {
+			PPU = Gdx.graphics.getWidth() / Game.WORLD_WIDTH;
+
+			ASSETS =  new AssetManager();
+			SPRITE_BATCH = new SpriteBatch();
+			MODEL_BATCH = new ModelBatch();
+			SHAPE_RENDERER = new ShapeRenderer();
+			MULTIPLEXER_MANAGER = new MultiplexerManager(new InputMultiplexer());
+
+			Gdx.input.setInputProcessor(MULTIPLEXER_MANAGER.getInputMultiplexer());
+			Texture.setAssetManager(ASSETS);
+			GAME.setScreen(new MainMenu()); // Initial screen
+		}
+	};
+
+	public static void log(String message) {
+		Gdx.app.log(TAG, message);
 	}
 
+	/**
+	 * Used to initialize subsystems and load resources.
+	 */
+	@Override
+	public void create () {
+		Gdx.app.setLogLevel(Application.LOG_DEBUG); // Set to Application.NONE for release
+		GAME.create();
+	}
+
+	/**
+	 * Used to handle setting a new screen size, which
+	 * can be used to reposition UI elements or reconfigure
+	 * camera objects.
+	 */
+	@Override
+	public void resize(int width, int height) {
+		PPU = Gdx.graphics.getWidth() / Game.WORLD_WIDTH;
+		GAME.resize(width, height);
+	}
+
+	/**
+	 * Called continuously for every game loop iteration.
+	 * Used to update and render the game elements
+	 */
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		GAME.render();
+	}
+
+	/**
+	 * Save game state when it loses focus which does
+	 * not involve the actual game being puased unless
+	 * specified.
+	 */
+	@Override
+	public void pause() {
+		GAME.pause();
+	}
+
+	/**
+	 * Used to handle the game coming back from being
+	 * paused and restores the game state.
+	 */
+	@Override
+	public void resume() {
+		GAME.resume();
+	}
+
+	/**
+	 * Used to free resources and clean up.
+	 */
+	@Override
+	public void dispose() {
+		ASSETS.dispose();
+		SPRITE_BATCH.dispose();
+		MODEL_BATCH.dispose();
+		SHAPE_RENDERER.dispose();
+		GAME.dispose();
 	}
 }
