@@ -1,7 +1,6 @@
 package com.sjjapps.partygame.screens.mainmenu.controllers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -10,8 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Loadable;
-import com.sjjapps.partygame.common.SjjController;
+import com.sjjapps.partygame.common.Controller;
 import com.sjjapps.partygame.models.Asset;
 import com.sjjapps.partygame.models.Point;
 import com.sjjapps.partygame.screens.mainmenu.models.Pencil;
@@ -21,13 +19,13 @@ import java.util.Random;
 /**
  * Created by Shane Jansen on 11/28/15.
  */
-public class PencilController implements SjjController, Loadable {
+public class PencilController implements Controller {
     private Viewport mViewport;
     private Random mRandom;
     private Array<Pencil> mPencils;
 
-    public PencilController(Camera camera) {
-        mViewport = new ScreenViewport(camera);
+    public PencilController() {
+        mViewport = new ScreenViewport();
         mRandom = new Random();
         mPencils = new Array<Pencil>();
 

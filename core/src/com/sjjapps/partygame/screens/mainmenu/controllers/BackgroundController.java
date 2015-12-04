@@ -1,26 +1,24 @@
 package com.sjjapps.partygame.screens.mainmenu.controllers;
 
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Loadable;
-import com.sjjapps.partygame.common.SjjController;
+import com.sjjapps.partygame.common.Controller;
 import com.sjjapps.partygame.managers.FilePathManager;
 
 /**
  * Created by Shane Jansen on 11/27/15.
  */
-public class BackgroundController extends InputAdapter implements SjjController, Loadable {
+public class BackgroundController extends InputAdapter implements Controller {
     private BackgroundControllerInterface mControllerInterface;
     private Viewport mViewport;
     private Texture mBackground;
 
-    public BackgroundController(BackgroundControllerInterface controllerInterface, OrthographicCamera camera) {
+    public BackgroundController(BackgroundControllerInterface controllerInterface) {
         this.mControllerInterface = controllerInterface;
-        mViewport = new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT, camera);
+        mViewport = new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT);
 
         // Load Assets
         Game.ASSETS.load(FilePathManager.MAIN_MENU, Texture.class);

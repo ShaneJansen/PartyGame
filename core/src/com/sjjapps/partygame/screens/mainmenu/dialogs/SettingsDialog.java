@@ -1,26 +1,20 @@
 package com.sjjapps.partygame.screens.mainmenu.dialogs;
 
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Loadable;
+import com.sjjapps.partygame.common.Dialog;
 import com.sjjapps.partygame.managers.FilePathManager;
 
 /**
  * Created by Shane Jansen on 12/4/15.
  */
-public class SettingsDialog implements Screen, Loadable {
+public class SettingsDialog extends Dialog {
     private Viewport mViewport;
     private Texture mBackground;
 
-    public SettingsDialog(Camera camera) {
-        mViewport = new FitViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT, camera);
-
-        // Load Assets
-        Game.ASSETS.load(FilePathManager.MAIN_MENU, Texture.class);
+    public SettingsDialog() {
+        super();
     }
 
     @Override

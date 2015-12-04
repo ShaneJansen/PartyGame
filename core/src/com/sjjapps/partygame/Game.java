@@ -1,6 +1,9 @@
 package com.sjjapps.partygame;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,14 +21,14 @@ public class Game implements ApplicationListener {
 	 * MULTI-SCREENS:
 	 * Use the Game class for multi-screens.
 	 * The main class should extend Game.
-	 * Each screen class should implement Screen or ScreenAdapter.
+	 * Each screen class should implement Realm or ScreenAdapter.
 	 * The Game class extends ApplicationListener so you will only
 	 * need the main class to inherit from Game.
 	 *
-	 * The Game class holds a reference to the current Screen and
+	 * The Game class holds a reference to the current Realm and
 	 * provides getters and setters for it.  Make sure to call super
 	 * on any overridden Game methods.  Game's render implementation
-	 * will automatically update and render the active Screen reference.
+	 * will automatically update and render the active Realm reference.
 	 */
 
 	public static final String TAG = "MyGame";

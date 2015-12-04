@@ -1,14 +1,12 @@
 package com.sjjapps.partygame.screens.mainmenu.controllers;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Loadable;
-import com.sjjapps.partygame.common.SjjController;
+import com.sjjapps.partygame.common.Controller;
 import com.sjjapps.partygame.managers.StringManager;
 import com.sjjapps.partygame.models.Asset;
 import com.sjjapps.partygame.models.StdTextButton;
@@ -16,10 +14,10 @@ import com.sjjapps.partygame.models.StdTextButton;
 /**
  * Created by Shane Jansen on 11/27/15.
  */
-public class UiController extends Stage implements SjjController, Loadable {
+public class UiController extends Stage implements Controller {
 
-    public UiController(Camera camera) {
-        super(new FitViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT, camera));
+    public UiController() {
+        super(new FitViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT));
 
         // Load Assets
         for (Asset a: StdTextButton.getNeededAssets()) Game.ASSETS.load(a.file, a.type);
