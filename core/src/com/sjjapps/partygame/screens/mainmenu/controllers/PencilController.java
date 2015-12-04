@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Controller;
-import com.sjjapps.partygame.models.Asset;
 import com.sjjapps.partygame.models.Point;
 import com.sjjapps.partygame.screens.mainmenu.models.Pencil;
 
@@ -24,13 +23,14 @@ public class PencilController implements Controller {
     private Random mRandom;
     private Array<Pencil> mPencils;
 
+    public static void addAssets() {
+        Pencil.addAssets();
+    }
+
     public PencilController() {
         mViewport = new ScreenViewport();
         mRandom = new Random();
         mPencils = new Array<Pencil>();
-
-        // Load Assets
-        for (Asset a: Pencil.getNeededAssets()) Game.ASSETS.load(a.file, a.type);
     }
 
     @Override
@@ -76,9 +76,6 @@ public class PencilController implements Controller {
                 s.setPosition(newX, newY);
             }
             s.draw(Game.SPRITE_BATCH);
-            // Add new pencil point
-            //p.getPoints().add(new Point(newX, newY));
-            //if (p.getPoints().size >= 200) p.getPoints().removeIndex(0);
         }
         Game.SPRITE_BATCH.end();
     }
@@ -86,14 +83,6 @@ public class PencilController implements Controller {
     @Override
     public void resize(int width, int height) {
         mViewport.update(width, height);
-    }
-
-    @Override
-    public void didFinishLoading() {}
-
-    @Override
-    public void dispose() {
-        for (Asset a: Pencil.getNeededAssets()) Game.ASSETS.unload(a.file);
     }
 
     public void addPencil(int posX, int posY, boolean initialPencil) {

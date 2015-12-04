@@ -7,6 +7,7 @@ import com.sjjapps.partygame.screens.mainmenu.controllers.BackgroundControllerIn
 import com.sjjapps.partygame.screens.mainmenu.controllers.PencilController;
 import com.sjjapps.partygame.screens.mainmenu.controllers.UiController;
 import com.sjjapps.partygame.screens.mainmenu.dialogs.SettingsDialog;
+import com.sjjapps.partygame.screens.mainmenu.models.Pencil;
 
 /**
  * Created by Shane Jansen on 11/17/15.
@@ -18,20 +19,22 @@ public class MainMenu extends DialogRealm implements BackgroundControllerInterfa
 
     public MainMenu() {
         super();
+        // Loading Assets
+        UiController.addAssets();
+        BackgroundController.addAssets();
+        Pencil.addAssets();
+        Game.ASSETS.finishLoading(); // Blocks main thread. No loading screen.
+        finishedLoading();
+    }
 
-        // Initialize
+    private void finishedLoading() {
+        //Initialize
         addController(new UiController());
         addController(new BackgroundController(this));
         mPencilController = new PencilController();
         addController(mPencilController);
         addInputListeners();
-
         mSettingsDialog = new SettingsDialog();
-
-        // Loading Assets
-        Game.ASSETS.finishLoading(); // Blocks main thread. No loading screen.
-        didFinishLoading();
-        mSettingsDialog.didFinishLoading();
 
         // Finalize
         mPencilController.addPencil(0, 0, true);
@@ -49,5 +52,10 @@ public class MainMenu extends DialogRealm implements BackgroundControllerInterfa
             addDialog(tempDialog);
             temp = true;
         }*/
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

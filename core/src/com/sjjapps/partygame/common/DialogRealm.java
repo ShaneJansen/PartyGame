@@ -50,13 +50,13 @@ public abstract class DialogRealm extends Realm implements Screen {
     /**
      * Called when all assets are finished loading.
      */
-    @Override
+    /*@Override
     public void didFinishLoading() {
         super.didFinishLoading();
         for (Dialog d: mDialogs) {
             d.didFinishLoading();
         }
-    }
+    }*/
 
     @Override
     public void show() {
@@ -114,7 +114,7 @@ public abstract class DialogRealm extends Realm implements Screen {
         }
     }
 
-    @Override
+    /*@Override
     public void dispose() {
         super.dispose();
 
@@ -123,5 +123,5 @@ public abstract class DialogRealm extends Realm implements Screen {
                 d.dispose();
             }
         }
-    }
+    }*/
 }

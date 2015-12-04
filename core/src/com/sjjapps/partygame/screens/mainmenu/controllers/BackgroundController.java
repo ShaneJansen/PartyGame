@@ -7,21 +7,30 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Controller;
 import com.sjjapps.partygame.managers.FilePathManager;
+import com.sjjapps.partygame.models.Asset;
 
 /**
  * Created by Shane Jansen on 11/27/15.
  */
 public class BackgroundController extends InputAdapter implements Controller {
+    private static final Asset[] mAssets = new Asset[] {
+            new Asset(FilePathManager.MAIN_MENU, Texture.class)
+    };
     private BackgroundControllerInterface mControllerInterface;
     private Viewport mViewport;
     private Texture mBackground;
+
+    public static void addAssets() {
+        for (Asset a: mAssets) {
+            Game.ASSETS.load(a.file, a.type);
+        }
+    }
 
     public BackgroundController(BackgroundControllerInterface controllerInterface) {
         this.mControllerInterface = controllerInterface;
         mViewport = new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT);
 
-        // Load Assets
-        Game.ASSETS.load(FilePathManager.MAIN_MENU, Texture.class);
+        mBackground = Game.ASSETS.get(mAssets[0].file);
     }
 
     @Override
@@ -45,13 +54,4 @@ public class BackgroundController extends InputAdapter implements Controller {
         mViewport.update(width, height);
     }
 
-    @Override
-    public void didFinishLoading() {
-        mBackground = Game.ASSETS.get(FilePathManager.MAIN_MENU, Texture.class);
-    }
-
-    @Override
-    public void dispose() {
-        Game.ASSETS.unload(FilePathManager.MAIN_MENU);
-    }
 }

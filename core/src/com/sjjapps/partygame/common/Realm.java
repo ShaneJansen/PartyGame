@@ -30,19 +30,10 @@ public abstract class Realm implements Screen {
      * Removes a controller from the realm.
      * @param controller
      */
-    public void removeController(Controller controller) {
+    /*public void removeController(Controller controller) {
         controller.dispose();
         mControllers.removeValue(controller, true);
-    }
-
-    /**
-     * Called when all assets are finished loading.
-     */
-    public void didFinishLoading() {
-        for (Controller c: mControllers) {
-            c.didFinishLoading();
-        }
-    }
+    }*/
 
     /**
      * Adds listeners to the Multiplexer.
@@ -85,12 +76,12 @@ public abstract class Realm implements Screen {
     /**
      * Disposes each controller.
      */
-    @Override
+    /*@Override
     public void dispose() {
         for (Controller c: mControllers) {
             c.dispose();
         }
-    }
+    }*/
 
     /**
      * Returns and array of controllers managed by this Realm.

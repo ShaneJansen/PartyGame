@@ -22,17 +22,19 @@ public class Pencil {
     private Color mColor;
     private int mRadius;
 
+    public static void addAssets() {
+        for (Asset a: mAssets) {
+            Game.ASSETS.load(a.file, a.type);
+        }
+    }
+
     public Pencil() {
         this.mVelocityX = 50;
         this.mVelocityY = 50;
         mPoints = new Array<Point>();
         mColor = Color.BLACK;
 
-        mSprite = new Sprite((Texture) Game.ASSETS.get(mAssets[0].file, mAssets[0].type));
-    }
-
-    public static Asset[] getNeededAssets() {
-        return mAssets;
+        mSprite = new Sprite((Texture) Game.ASSETS.get(mAssets[0].file));
     }
 
     public Sprite getSprite() {

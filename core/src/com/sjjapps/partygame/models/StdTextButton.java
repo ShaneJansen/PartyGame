@@ -17,12 +17,18 @@ public class StdTextButton {
             new Asset(FilePathManager.BUTTON, Texture.class),
             new Asset(FilePathManager.BUTTON_DOWN, Texture.class)
     };
-    private TextButton mTextButton;
+    protected TextButton mTextButton;
+
+    public static void addAssets() {
+        for (Asset a: mAssets) {
+            Game.ASSETS.load(a.file, a.type);
+        }
+    }
 
     public StdTextButton(String text) {
-        BitmapFont mFont = (BitmapFont) Game.ASSETS.get(mAssets[0].file, mAssets[0].type);
-        Texture mTextureButton = (Texture) Game.ASSETS.get(mAssets[1].file, mAssets[1].type);
-        Texture mTextureButtonDown = (Texture) Game.ASSETS.get(mAssets[2].file, mAssets[2].type);
+        BitmapFont mFont = Game.ASSETS.get(mAssets[0].file);
+        Texture mTextureButton = Game.ASSETS.get(mAssets[1].file);
+        Texture mTextureButtonDown = Game.ASSETS.get(mAssets[2].file);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = mFont;
@@ -32,11 +38,7 @@ public class StdTextButton {
         mTextButton = new TextButton(text, style);
     }
 
-    public static Asset[] getNeededAssets() {
-        return mAssets;
-    }
-
-    public TextButton getModel() {
+    public TextButton getTextButton() {
         return mTextButton;
     }
 }
