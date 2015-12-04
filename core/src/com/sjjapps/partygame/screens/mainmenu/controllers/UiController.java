@@ -7,7 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.controllers.SjjController;
+import com.sjjapps.partygame.common.Loadable;
+import com.sjjapps.partygame.common.SjjController;
 import com.sjjapps.partygame.managers.StringManager;
 import com.sjjapps.partygame.models.Asset;
 import com.sjjapps.partygame.models.StdTextButton;
@@ -15,7 +16,7 @@ import com.sjjapps.partygame.models.StdTextButton;
 /**
  * Created by Shane Jansen on 11/27/15.
  */
-public class UiController extends Stage implements SjjController {
+public class UiController extends Stage implements SjjController, Loadable {
 
     public UiController(Camera camera) {
         super(new FitViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT, camera));
@@ -29,6 +30,11 @@ public class UiController extends Stage implements SjjController {
         getViewport().apply();
         act(deltaTime);
         draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        getViewport().update(width, height);
     }
 
     @Override
@@ -59,11 +65,6 @@ public class UiController extends Stage implements SjjController {
                 Game.log("Clicked play.");
             }
         });
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        getViewport().update(width, height);
     }
 
     @Override

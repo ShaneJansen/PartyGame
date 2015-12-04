@@ -1,34 +1,38 @@
 package com.sjjapps.partygame.screens.mainmenu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.sjjapps.partygame.common.DialogScreen;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.screens.mainmenu.controllers.BackgroundController;
 import com.sjjapps.partygame.screens.mainmenu.controllers.BackgroundControllerInterface;
 import com.sjjapps.partygame.screens.mainmenu.controllers.PencilController;
 import com.sjjapps.partygame.screens.mainmenu.controllers.UiController;
+import com.sjjapps.partygame.screens.mainmenu.dialogs.SettingsDialog;
 
 /**
  * Created by Shane Jansen on 11/17/15.
  */
-public class MainMenu extends InputAdapter implements Screen, BackgroundControllerInterface {
+public class MainMenu extends DialogScreen implements BackgroundControllerInterface {
     private BackgroundController mBackgroundController;
     private UiController mUiController;
     private PencilController mPencilController;
 
-    @Override
-    public void show() {
+    private boolean temp = false;
+    private SettingsDialog tempDialog;
+
+    public MainMenu() {
+        super();
+
+        tempDialog = new SettingsDialog(new OrthographicCamera());
+
         // Initialize
         mBackgroundController = new BackgroundController(this, new OrthographicCamera());
         mPencilController = new PencilController(new OrthographicCamera());
         mUiController = new UiController(new OrthographicCamera());
 
-        // Click Listeners - Ordered
-        Game.MULTIPLEXER_MANAGER.addInput(mUiController);
-        Game.MULTIPLEXER_MANAGER.addInput(mBackgroundController);
+        addInputListeners();
 
         // Loading Assets
         Game.ASSETS.finishLoading(); // Blocks main thread. No loading screen.
@@ -38,6 +42,12 @@ public class MainMenu extends InputAdapter implements Screen, BackgroundControll
 
         // Finalize
         mPencilController.addPencil(0, 0, true);
+    }
+
+    @Override
+    public void addInputListeners() {
+        Game.MULTIPLEXER_MANAGER.addInput(mUiController);
+        Game.MULTIPLEXER_MANAGER.addInput(mBackgroundController);
     }
 
     @Override
@@ -53,32 +63,23 @@ public class MainMenu extends InputAdapter implements Screen, BackgroundControll
 
         // Draw the UI
         mUiController.update(delta);
+
+        super.render(delta);
     }
 
     @Override
     public void resize(int width, int height) {
+        super.resize(width, height);
+
         mBackgroundController.resize(width, height);
         mPencilController.resize(width, height);
         mUiController.resize(width, height);
     }
 
     @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
+        super.dispose();
+
         mBackgroundController.dispose();
         mUiController.dispose();
         mPencilController.dispose();
@@ -86,6 +87,15 @@ public class MainMenu extends InputAdapter implements Screen, BackgroundControll
 
     @Override
     public void backgroundClicked(int posX, int posY) {
+        tempDialog.didFinishLoading();
         mPencilController.addPencil(posX, posY, false);
+        if (temp) {
+            removeDialog();
+            temp = false;
+        }
+        else {
+            addDialog(tempDialog);
+            temp = true;
+        }
     }
 }

@@ -10,7 +10,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.controllers.SjjController;
+import com.sjjapps.partygame.common.Loadable;
+import com.sjjapps.partygame.common.SjjController;
 import com.sjjapps.partygame.models.Asset;
 import com.sjjapps.partygame.models.Point;
 import com.sjjapps.partygame.screens.mainmenu.models.Pencil;
@@ -20,7 +21,7 @@ import java.util.Random;
 /**
  * Created by Shane Jansen on 11/28/15.
  */
-public class PencilController implements SjjController {
+public class PencilController implements SjjController, Loadable {
     private Viewport mViewport;
     private Random mRandom;
     private Array<Pencil> mPencils;
@@ -36,7 +37,6 @@ public class PencilController implements SjjController {
 
     @Override
     public void update(float deltaTime) {
-        if (Game.PAUSED) return;
         mViewport.apply();
 
         // Draw Pencil Lines
@@ -74,13 +74,28 @@ public class PencilController implements SjjController {
             }
             float newX = s.getX() + (deltaTime * p.getVelocityX());
             float newY = s.getY() + (deltaTime * p.getVelocityY());
-            s.setPosition(newX, newY);
+            if (!Game.PAUSED) {
+                s.setPosition(newX, newY);
+            }
             s.draw(Game.SPRITE_BATCH);
             // Add new pencil point
             //p.getPoints().add(new Point(newX, newY));
             //if (p.getPoints().size >= 200) p.getPoints().removeIndex(0);
         }
         Game.SPRITE_BATCH.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        mViewport.update(width, height);
+    }
+
+    @Override
+    public void didFinishLoading() {}
+
+    @Override
+    public void dispose() {
+        for (Asset a: Pencil.getNeededAssets()) Game.ASSETS.unload(a.file);
     }
 
     public void addPencil(int posX, int posY, boolean initialPencil) {
@@ -162,18 +177,5 @@ public class PencilController implements SjjController {
             p.setRadius(10);
         }
         mPencils.add(p);
-    }
-
-    @Override
-    public void didFinishLoading() {}
-
-    @Override
-    public void resize(int width, int height) {
-        mViewport.update(width, height);
-    }
-
-    @Override
-    public void dispose() {
-        for (Asset a: Pencil.getNeededAssets()) Game.ASSETS.unload(a.file);
     }
 }

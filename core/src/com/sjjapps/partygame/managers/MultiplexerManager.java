@@ -1,9 +1,10 @@
-package com.sjjapps.partygame.controllers;
+package com.sjjapps.partygame.managers;
 
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.IdentityMap;
+import com.sjjapps.partygame.common.SjjController;
 
 /**
  * Created by Shane Jansen on 11/26/15.
