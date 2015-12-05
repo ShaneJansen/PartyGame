@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.managers.FilePathManager;
 import com.sjjapps.partygame.models.Asset;
@@ -12,7 +13,7 @@ import com.sjjapps.partygame.models.Point;
 /**
  * Created by Shane Jansen on 11/23/15.
  */
-public class Pencil {
+public class Pencil implements Disposable {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.PENCIL, Texture.class),
     };
@@ -75,5 +76,13 @@ public class Pencil {
 
     public void setRadius(int radius) {
         this.mRadius = radius;
+    }
+
+    @Override
+    public void dispose() {
+        for (Asset a: mAssets) {
+            Game.ASSETS.unload(a.file);
+        }
+        mSprite.getTexture().dispose();
     }
 }

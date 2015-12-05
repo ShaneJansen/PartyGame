@@ -5,19 +5,22 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Disposable;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.managers.FilePathManager;
 
 /**
  * Created by Shane Jansen on 11/17/15.
  */
-public class StdTextButton {
+public class StdTextButton implements Disposable {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.FONT, BitmapFont.class),
             new Asset(FilePathManager.BUTTON, Texture.class),
             new Asset(FilePathManager.BUTTON_DOWN, Texture.class)
     };
     protected TextButton mTextButton;
+    private BitmapFont mFont;
+    private Texture mTextureButton, mTextureButtonDown;
 
     public static void addAssets() {
         for (Asset a: mAssets) {
@@ -26,9 +29,9 @@ public class StdTextButton {
     }
 
     public StdTextButton(String text) {
-        BitmapFont mFont = Game.ASSETS.get(mAssets[0].file);
-        Texture mTextureButton = Game.ASSETS.get(mAssets[1].file);
-        Texture mTextureButtonDown = Game.ASSETS.get(mAssets[2].file);
+        mFont = Game.ASSETS.get(mAssets[0].file);
+        mTextureButton = Game.ASSETS.get(mAssets[1].file);
+        mTextureButtonDown = Game.ASSETS.get(mAssets[2].file);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = mFont;
@@ -40,5 +43,15 @@ public class StdTextButton {
 
     public TextButton getTextButton() {
         return mTextButton;
+    }
+
+    @Override
+    public void dispose() {
+        for (Asset a: mAssets) {
+            Game.ASSETS.unload(a.file);
+        }
+        mFont.dispose();
+        mTextureButton.dispose();
+        mTextureButtonDown.dispose();
     }
 }

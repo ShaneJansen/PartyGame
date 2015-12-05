@@ -1,7 +1,5 @@
 package com.sjjapps.partygame.screens.mainmenu.dialogs;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Dialog;
 
@@ -9,8 +7,6 @@ import com.sjjapps.partygame.common.Dialog;
  * Created by Shane Jansen on 12/4/15.
  */
 public class SettingsDialog extends Dialog {
-    private Viewport mViewport;
-    private Texture mBackground;
 
     public SettingsDialog() {
         super();

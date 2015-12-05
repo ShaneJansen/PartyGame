@@ -1,7 +1,6 @@
 package com.sjjapps.partygame.common;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.sjjapps.partygame.Game;
 
 import java.util.Stack;
@@ -9,10 +8,11 @@ import java.util.Stack;
 /**
  * Created by Shane Jansen on 12/3/15.
  */
-public abstract class DialogRealm extends Realm implements Screen {
+public abstract class DialogRealm extends Realm {
     private Stack<Dialog> mDialogs;
 
     public DialogRealm() {
+        super();
         mDialogs = new Stack<Dialog>();
     }
 
@@ -47,19 +47,9 @@ public abstract class DialogRealm extends Realm implements Screen {
         addInputListeners();
     }
 
-    /**
-     * Called when all assets are finished loading.
-     */
-    /*@Override
-    public void didFinishLoading() {
-        super.didFinishLoading();
-        for (Dialog d: mDialogs) {
-            d.didFinishLoading();
-        }
-    }*/
-
     @Override
     public void show() {
+        super.show();
         if (!mDialogs.empty()) {
             for (Dialog d: mDialogs) {
                 d.show();
@@ -70,7 +60,6 @@ public abstract class DialogRealm extends Realm implements Screen {
     @Override
     public void render(float delta) {
         super.render(delta);
-
         if (!mDialogs.empty()) {
             mDialogs.peek().render(delta);
         }
@@ -79,7 +68,6 @@ public abstract class DialogRealm extends Realm implements Screen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-
         if (!mDialogs.empty()) {
             for (Dialog d: mDialogs) {
                 d.resize(width, height);
@@ -89,6 +77,7 @@ public abstract class DialogRealm extends Realm implements Screen {
 
     @Override
     public void pause() {
+        super.pause();
         if (!mDialogs.empty()) {
             for (Dialog d: mDialogs) {
                 d.pause();
@@ -98,6 +87,7 @@ public abstract class DialogRealm extends Realm implements Screen {
 
     @Override
     public void resume() {
+        super.resume();
         if (!mDialogs.empty()) {
             for (Dialog d: mDialogs) {
                 d.resume();
@@ -107,6 +97,7 @@ public abstract class DialogRealm extends Realm implements Screen {
 
     @Override
     public void hide() {
+        super.hide();
         if (!mDialogs.empty()) {
             for (Dialog d: mDialogs) {
                 d.hide();
@@ -114,14 +105,13 @@ public abstract class DialogRealm extends Realm implements Screen {
         }
     }
 
-    /*@Override
+    @Override
     public void dispose() {
         super.dispose();
-
         if (!mDialogs.empty()) {
             for (Dialog d: mDialogs) {
                 d.dispose();
             }
         }
-    }*/
+    }
 }

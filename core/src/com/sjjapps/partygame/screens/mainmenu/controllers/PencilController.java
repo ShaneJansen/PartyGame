@@ -34,7 +34,12 @@ public class PencilController implements Controller {
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
         mViewport.apply();
 
         // Draw Pencil Lines
@@ -70,8 +75,8 @@ public class PencilController implements Controller {
                 p.setVelocityY(p.getVelocityY() * -1);
                 p.getPoints().add(new Point(s.getX(), s.getY()));
             }
-            float newX = s.getX() + (deltaTime * p.getVelocityX());
-            float newY = s.getY() + (deltaTime * p.getVelocityY());
+            float newX = s.getX() + (delta * p.getVelocityX());
+            float newY = s.getY() + (delta * p.getVelocityY());
             if (!Game.PAUSED) {
                 s.setPosition(newX, newY);
             }
@@ -83,6 +88,28 @@ public class PencilController implements Controller {
     @Override
     public void resize(int width, int height) {
         mViewport.update(width, height);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        for (Pencil p: mPencils) {
+            p.dispose();
+        }
     }
 
     public void addPencil(int posX, int posY, boolean initialPencil) {

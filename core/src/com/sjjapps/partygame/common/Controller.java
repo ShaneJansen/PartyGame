@@ -1,9 +1,9 @@
 package com.sjjapps.partygame.common;
 
+import com.badlogic.gdx.Screen;
+
 /**
- * Created by Shane Jansen on 11/26/15.
+ * Created by Shane Jansen on 12/4/15.
  */
-public interface Controller {
-    void update(float deltaTime);
-    void resize(int width, int height);
+public interface Controller extends Screen {
 }

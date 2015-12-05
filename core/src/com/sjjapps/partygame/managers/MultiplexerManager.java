@@ -2,20 +2,20 @@ package com.sjjapps.partygame.managers;
 
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.IdentityMap;
-import com.sjjapps.partygame.common.Controller;
 
 /**
  * Created by Shane Jansen on 11/26/15.
  */
 public class MultiplexerManager {
     private final InputMultiplexer multiplexer;
-    private final IdentityMap<Controller, GestureDetector> detectors;
+    private final IdentityMap<Screen, GestureDetector> detectors;
 
     public MultiplexerManager(InputMultiplexer multiplexer) {
         this.multiplexer = multiplexer;
-        this.detectors = new IdentityMap<Controller, GestureDetector>();
+        this.detectors = new IdentityMap<Screen, GestureDetector>();
     }
 
     public void addInput(Object controller) {

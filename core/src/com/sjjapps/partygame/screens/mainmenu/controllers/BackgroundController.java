@@ -16,7 +16,7 @@ public class BackgroundController extends InputAdapter implements Controller {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.MAIN_MENU, Texture.class)
     };
-    private BackgroundControllerInterface mControllerInterface;
+    private BackgroundInterface mInterface;
     private Viewport mViewport;
     private Texture mBackground;
 
@@ -26,8 +26,8 @@ public class BackgroundController extends InputAdapter implements Controller {
         }
     }
 
-    public BackgroundController(BackgroundControllerInterface controllerInterface) {
-        this.mControllerInterface = controllerInterface;
+    public BackgroundController(BackgroundInterface backgroundInterface) {
+        this.mInterface = backgroundInterface;
         mViewport = new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT);
 
         mBackground = Game.ASSETS.get(mAssets[0].file);
@@ -35,12 +35,17 @@ public class BackgroundController extends InputAdapter implements Controller {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        mControllerInterface.backgroundClicked(screenX, screenY);
+        mInterface.backgroundClicked(screenX, screenY);
         return true;
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
         mViewport.apply();
 
         Game.SPRITE_BATCH.setProjectionMatrix(mViewport.getCamera().combined);
@@ -52,6 +57,26 @@ public class BackgroundController extends InputAdapter implements Controller {
     @Override
     public void resize(int width, int height) {
         mViewport.update(width, height);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        mBackground.dispose();
     }
 
 }

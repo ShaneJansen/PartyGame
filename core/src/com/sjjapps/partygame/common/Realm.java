@@ -30,10 +30,18 @@ public abstract class Realm implements Screen {
      * Removes a controller from the realm.
      * @param controller
      */
-    /*public void removeController(Controller controller) {
+    public void removeController(Controller controller) {
         controller.dispose();
         mControllers.removeValue(controller, true);
-    }*/
+    }
+
+    /**
+     * Returns and array of controllers managed by this Realm.
+     * @return
+     */
+    public Array<Controller> getControllers() {
+        return mControllers;
+    }
 
     /**
      * Adds listeners to the Multiplexer.
@@ -42,6 +50,13 @@ public abstract class Realm implements Screen {
     public void addInputListeners() {
         for (Controller c : getControllers()) {
             Game.MULTIPLEXER_MANAGER.addInput(c);
+        }
+    }
+
+    @Override
+    public void show() {
+        for (Controller c: mControllers) {
+            c.show();
         }
     }
 
@@ -56,8 +71,8 @@ public abstract class Realm implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        for (int i=mControllers.size-1; i>=0; i--){
-            mControllers.get(i).update(delta);
+        for (int i= mControllers.size-1; i>=0; i--){
+            mControllers.get(i).render(delta);
         }
     }
 
@@ -73,21 +88,34 @@ public abstract class Realm implements Screen {
         }
     }
 
+    @Override
+    public void pause() {
+        for (Controller c: mControllers) {
+            c.pause();
+        }
+    }
+
+    @Override
+    public void resume() {
+        for (Controller c: mControllers) {
+            c.resume();
+        }
+    }
+
+    @Override
+    public void hide() {
+        for (Controller c: mControllers) {
+            c.hide();
+        }
+    }
+
     /**
      * Disposes each controller.
      */
-    /*@Override
+    @Override
     public void dispose() {
         for (Controller c: mControllers) {
             c.dispose();
         }
-    }*/
-
-    /**
-     * Returns and array of controllers managed by this Realm.
-     * @return
-     */
-    public Array<Controller> getControllers() {
-        return mControllers;
     }
 }
