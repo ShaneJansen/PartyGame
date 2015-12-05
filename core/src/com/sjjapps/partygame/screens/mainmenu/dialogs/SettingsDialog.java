@@ -1,6 +1,5 @@
 package com.sjjapps.partygame.screens.mainmenu.dialogs;
 
-import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Dialog;
 
 /**
@@ -8,8 +7,8 @@ import com.sjjapps.partygame.common.Dialog;
  */
 public class SettingsDialog extends Dialog {
 
-    public SettingsDialog() {
-        super();
+    public SettingsDialog(DialogInterface dialogInterface) {
+        super(dialogInterface);
     }
 
     @Override
@@ -19,17 +18,12 @@ public class SettingsDialog extends Dialog {
 
     @Override
     public void render(float delta) {
-        mViewport.apply();
-
-        Game.SPRITE_BATCH.setProjectionMatrix(mViewport.getCamera().combined);
-        Game.SPRITE_BATCH.begin();
-        Game.SPRITE_BATCH.draw(mBackground, -mBackground.getWidth() * 0.5f, -mBackground.getHeight() * 0.5f);
-        Game.SPRITE_BATCH.end();
+        super.render(delta);
     }
 
     @Override
     public void resize(int width, int height) {
-        mViewport.update(width, height);
+        super.resize(width, height);
     }
 
     @Override
@@ -49,6 +43,6 @@ public class SettingsDialog extends Dialog {
 
     @Override
     public void dispose() {
-
+        super.dispose();
     }
 }

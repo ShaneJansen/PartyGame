@@ -1,7 +1,12 @@
 package com.sjjapps.partygame.common;
 
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
@@ -11,12 +16,15 @@ import com.sjjapps.partygame.models.Asset;
 /**
  * Created by Shane Jansen on 12/4/15.
  */
-public abstract class Dialog implements Screen {
+public abstract class Dialog extends InputAdapter implements Screen {
     private static final Asset[] mAssets = new Asset[] {
-            new Asset(FilePathManager.MAIN_MENU, Texture.class)
+            new Asset(FilePathManager.DIALOG_BACKGROUND, Texture.class),
+            new Asset(FilePathManager.BUTTON_X, Texture.class)
     };
+    private DialogInterface mInterface;
     protected Viewport mViewport;
-    protected Texture mBackground;
+    private Texture mBackground;
+    private Sprite mButtonX;
 
     public static void addAssets() {
         for (Asset a: mAssets) {
@@ -24,9 +32,31 @@ public abstract class Dialog implements Screen {
         }
     }
 
-    public Dialog() {
+    public Dialog(DialogInterface dialogInterface) {
+        this.mInterface = dialogInterface;
         mViewport = new FitViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT);
+        ((OrthographicCamera) mViewport.getCamera()).zoom += 1; // Zoom the camera out to reveal the background
+        mViewport.getCamera().update();
         mBackground = Game.ASSETS.get(mAssets[0].file);
+        mButtonX = new Sprite((Texture) Game.ASSETS.get(mAssets[1].file));
+    }
+
+    @Override
+    public void render(float delta) {
+        mViewport.apply();
+
+        Game.SPRITE_BATCH.setProjectionMatrix(mViewport.getCamera().combined);
+        Game.SPRITE_BATCH.begin();
+        Game.SPRITE_BATCH.draw(mBackground, -mBackground.getWidth() * 0.5f, -mBackground.getHeight() * 0.5f);
+        mButtonX.setPosition(-mBackground.getWidth() * 0.5f - mButtonX.getWidth() * 0.5f,
+                mBackground.getHeight() * 0.5f - mButtonX.getHeight() * 0.5f);
+        mButtonX.draw(Game.SPRITE_BATCH);
+        Game.SPRITE_BATCH.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        mViewport.update(width, height);
     }
 
     @Override
@@ -35,5 +65,23 @@ public abstract class Dialog implements Screen {
             Game.ASSETS.unload(a.file);
         }
         mBackground.dispose();
+        mButtonX.getTexture().dispose();
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        Vector3 vector = new Vector3(screenX, screenY, 0);
+        mViewport.getCamera().unproject(vector, mViewport.getScreenX(), mViewport.getScreenY(),
+                mViewport.getScreenWidth(), mViewport.getScreenHeight());
+        Rectangle textureBounds = new Rectangle(mButtonX.getX(), mButtonX.getY(),
+                mButtonX.getWidth(), mButtonX.getHeight());
+        if (textureBounds.contains(vector.x, vector.y)) {
+            mInterface.btnDialogExitClicked();
+        }
+        return true;
+    }
+
+    public interface DialogInterface {
+        void btnDialogExitClicked();
     }
 }

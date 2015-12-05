@@ -79,4 +79,7 @@ public class BackgroundController extends InputAdapter implements Controller {
         mBackground.dispose();
     }
 
+    public interface BackgroundInterface {
+        void backgroundClicked(int posX, int posY);
+    }
 }

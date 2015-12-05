@@ -11,11 +11,13 @@ public class FilePathManager {
     public static final String FONT = FONT_BASE + "font.fnt";
 
     // Buttons
-    public static final String BUTTON = IMAGE_BASE + "button.png";
-    public static final String BUTTON_DOWN = IMAGE_BASE + "buttonDown.png";
+    public static final String BUTTON = IMAGE_BASE + "btn.png";
+    public static final String BUTTON_DOWN = IMAGE_BASE + "btnDown.png";
+    public static final String BUTTON_X = IMAGE_BASE + "btnX.png";
 
     // Backgrounds
-    public static final String MAIN_MENU = IMAGE_BASE + "menu.png";
+    public static final String MAIN_MENU = IMAGE_BASE + "dialogBg.png";
+    public static final String DIALOG_BACKGROUND = IMAGE_BASE + "dialogBg.png";
 
     // Textures
     public static final String PENCIL = IMAGE_BASE + "pencil.png";

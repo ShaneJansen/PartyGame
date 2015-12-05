@@ -104,4 +104,10 @@ public class UiController extends Stage implements Controller {
         mBtnCustomWords.dispose();
         mBtnSettings.dispose();
     }
+
+    public interface UiInterface {
+        void btnPlayClicked();
+        void btnCustomWordsClicked();
+        void btnSettingsClicked();
+    }
 }

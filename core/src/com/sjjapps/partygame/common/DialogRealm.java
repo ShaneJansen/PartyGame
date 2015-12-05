@@ -33,18 +33,27 @@ public abstract class DialogRealm extends Realm {
      */
     public void removeDialog() {
         if (!mDialogs.empty()) {
+            Game.MULTIPLEXER_MANAGER.removeInput(mDialogs.peek());
             mDialogs.pop();
+            if (mDialogs.empty()) {
+                addInputListeners();
+                Game.PAUSED = false;
+            }
+            else {
+                Game.MULTIPLEXER_MANAGER.addInput(mDialogs.peek());
+            }
         }
-        Game.PAUSED = false;
-        addInputListeners();
     }
 
     /**
      * Clears all of the dialogs from the screen.
      */
     public void clearDialogs() {
-        mDialogs.clear();
+        for (Dialog d: mDialogs) {
+            Game.MULTIPLEXER_MANAGER.removeInput(mDialogs.pop());
+        }
         addInputListeners();
+        Game.PAUSED = false;
     }
 
     @Override

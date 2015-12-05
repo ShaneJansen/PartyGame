@@ -1,18 +1,18 @@
 package com.sjjapps.partygame.screens.mainmenu;
 
 import com.sjjapps.partygame.Game;
+import com.sjjapps.partygame.common.Dialog;
 import com.sjjapps.partygame.common.DialogRealm;
 import com.sjjapps.partygame.screens.mainmenu.controllers.BackgroundController;
-import com.sjjapps.partygame.screens.mainmenu.controllers.BackgroundInterface;
 import com.sjjapps.partygame.screens.mainmenu.controllers.PencilController;
 import com.sjjapps.partygame.screens.mainmenu.controllers.UiController;
-import com.sjjapps.partygame.screens.mainmenu.controllers.UiInterface;
 import com.sjjapps.partygame.screens.mainmenu.dialogs.SettingsDialog;
 
 /**
  * Created by Shane Jansen on 11/17/15.
  */
-public class MainMenu extends DialogRealm implements BackgroundInterface, UiInterface {
+public class MainMenu extends DialogRealm implements BackgroundController.BackgroundInterface,
+        UiController.UiInterface, Dialog.DialogInterface {
     private PencilController mPencilController;
 
     public MainMenu() {
@@ -55,6 +55,12 @@ public class MainMenu extends DialogRealm implements BackgroundInterface, UiInte
 
     @Override
     public void btnSettingsClicked() {
-        addDialog(new SettingsDialog());
+        addDialog(new SettingsDialog(this));
+        addDialog(new SettingsDialog(this));
+    }
+
+    @Override
+    public void btnDialogExitClicked() {
+        removeDialog();
     }
 }
