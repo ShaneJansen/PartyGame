@@ -22,7 +22,7 @@ public class UiController extends Stage implements Controller {
     }
 
     public UiController(UiInterface uiInterface) {
-        super(new FitViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT));
+        super(new FitViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT), Game.SPRITE_BATCH);
         this.mInterface = uiInterface;
 
         // Create Views
@@ -40,7 +40,7 @@ public class UiController extends Stage implements Controller {
         table.setFillParent(true); // Sets the table to fill the entire stage
         table.pack();
         //table.right().bottom(); // Alignment is center by default
-        //table.setDebug(true);
+        table.setDebug(true);
         addActor(table);
         //table.addAction(fadeIn(2f));
 

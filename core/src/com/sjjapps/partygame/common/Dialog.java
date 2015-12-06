@@ -21,9 +21,10 @@ public abstract class Dialog extends InputAdapter implements Screen {
             new Asset(FilePathManager.DIALOG_BACKGROUND, Texture.class),
             new Asset(FilePathManager.BUTTON_X, Texture.class)
     };
+    protected static final float ZOOM_AMOUNT = 0.3f;
     private DialogInterface mInterface;
     protected Viewport mViewport;
-    private Texture mBackground;
+    protected Texture mBackground;
     private Sprite mButtonX;
 
     public static void addAssets() {
@@ -34,11 +35,13 @@ public abstract class Dialog extends InputAdapter implements Screen {
 
     public Dialog(DialogInterface dialogInterface) {
         this.mInterface = dialogInterface;
-        mViewport = new FitViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT);
-        ((OrthographicCamera) mViewport.getCamera()).zoom += 1; // Zoom the camera out to reveal the background
-        mViewport.getCamera().update();
+
         mBackground = Game.ASSETS.get(mAssets[0].file);
         mButtonX = new Sprite((Texture) Game.ASSETS.get(mAssets[1].file));
+
+        mViewport = new FitViewport(mBackground.getWidth(), mBackground.getHeight());
+        ((OrthographicCamera) mViewport.getCamera()).zoom += ZOOM_AMOUNT; // Zoom the camera out to reveal the background
+        mViewport.getCamera().update();
     }
 
     @Override

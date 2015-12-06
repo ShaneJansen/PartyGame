@@ -8,4 +8,7 @@ public class StringManager {
     public static final String BUTTON_PLAY = "Play\n2-8 Players Needed";
     public static final String BUTTON_CUSTOM_WORDS = "Custom Words";
     public static final String BUTTON_SETTINGS = "Settings";
+
+    // Dialogs
+    public static final String BUTTON_SAVE = "Save";
 }

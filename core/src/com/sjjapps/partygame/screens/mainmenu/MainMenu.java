@@ -56,7 +56,6 @@ public class MainMenu extends DialogRealm implements BackgroundController.Backgr
     @Override
     public void btnSettingsClicked() {
         addDialog(new SettingsDialog(this));
-        addDialog(new SettingsDialog(this));
     }
 
     @Override
