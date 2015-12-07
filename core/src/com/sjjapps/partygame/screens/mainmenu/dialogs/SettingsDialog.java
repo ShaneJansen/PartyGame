@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.common.Dialog;
 import com.sjjapps.partygame.managers.StringManager;
 import com.sjjapps.partygame.models.StdTextButton;
@@ -22,7 +23,7 @@ public class SettingsDialog extends Dialog {
 
     public SettingsDialog(DialogInterface dialogInterface) {
         super(dialogInterface);
-        mStage = new Stage(new FitViewport(mBackground.getWidth(), mBackground.getHeight()));
+        mStage = new Stage(new ScreenViewport());
         ((OrthographicCamera) mStage.getViewport().getCamera()).zoom += ZOOM_AMOUNT;
 
         // Create views
@@ -54,7 +55,8 @@ public class SettingsDialog extends Dialog {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        mStage.getViewport().update(width, height);
+        mStage.getViewport().setScreenSize(mViewport.getScreenWidth(), mViewport.getScreenHeight());
+        mStage.getViewport().setScreenPosition(mViewport.getScreenX(), mViewport.getScreenY());
     }
 
     @Override

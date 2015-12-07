@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Controller;
 import com.sjjapps.partygame.managers.StringManager;
@@ -22,7 +23,7 @@ public class UiController extends Stage implements Controller {
     }
 
     public UiController(UiInterface uiInterface) {
-        super(new FitViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT), Game.SPRITE_BATCH);
+        super(new ScreenViewport(), Game.SPRITE_BATCH);
         this.mInterface = uiInterface;
 
         // Create Views
@@ -32,7 +33,7 @@ public class UiController extends Stage implements Controller {
 
         // Create table
         Table table = new Table();
-        table.add(mBtnPlay.getTextButton()); // Table add returns a cell which can be used to adjust size, padding, etc
+        table.add(mBtnPlay.getTextButton());
         table.row(); // Moves to the next rows in a table
         table.add(mBtnCustomWords.getTextButton()).padTop(20f);
         table.row();
@@ -40,7 +41,7 @@ public class UiController extends Stage implements Controller {
         table.setFillParent(true); // Sets the table to fill the entire stage
         table.pack();
         //table.right().bottom(); // Alignment is center by default
-        table.setDebug(true);
+        //table.debug();
         addActor(table);
         //table.addAction(fadeIn(2f));
 
@@ -79,7 +80,7 @@ public class UiController extends Stage implements Controller {
 
     @Override
     public void resize(int width, int height) {
-        getViewport().update(width, height);
+        getViewport().update(width, height, true);
     }
 
     @Override
