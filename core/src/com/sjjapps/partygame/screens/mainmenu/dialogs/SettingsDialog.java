@@ -3,8 +3,8 @@ package com.sjjapps.partygame.screens.mainmenu.dialogs;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Dialog;
 import com.sjjapps.partygame.managers.StringManager;
 import com.sjjapps.partygame.models.StdTextButton;
@@ -23,8 +23,8 @@ public class SettingsDialog extends Dialog {
 
     public SettingsDialog(DialogInterface dialogInterface) {
         super(dialogInterface);
-        mStage = new Stage(new ScreenViewport());
-        ((OrthographicCamera) mStage.getViewport().getCamera()).zoom += ZOOM_AMOUNT;
+        mStage = new Stage(new ExtendViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT));
+        ((OrthographicCamera) mStage.getViewport().getCamera()).zoom += getZoomAmount();
 
         // Create views
         mBtnSave = new StdTextButton(StringManager.BUTTON_SAVE);

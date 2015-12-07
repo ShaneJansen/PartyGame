@@ -4,8 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Controller;
 import com.sjjapps.partygame.managers.StringManager;
@@ -23,7 +22,7 @@ public class UiController extends Stage implements Controller {
     }
 
     public UiController(UiInterface uiInterface) {
-        super(new ScreenViewport(), Game.SPRITE_BATCH);
+        super(new ExtendViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT), Game.SPRITE_BATCH);
         this.mInterface = uiInterface;
 
         // Create Views
@@ -41,7 +40,7 @@ public class UiController extends Stage implements Controller {
         table.setFillParent(true); // Sets the table to fill the entire stage
         table.pack();
         //table.right().bottom(); // Alignment is center by default
-        //table.debug();
+        table.debug();
         addActor(table);
         //table.addAction(fadeIn(2f));
 

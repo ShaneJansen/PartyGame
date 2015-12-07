@@ -21,7 +21,7 @@ public abstract class Dialog extends InputAdapter implements Screen {
             new Asset(FilePathManager.DIALOG_BACKGROUND, Texture.class),
             new Asset(FilePathManager.BUTTON_X, Texture.class)
     };
-    protected static final float ZOOM_AMOUNT = 0.3f;
+    protected float mZoomAmount;
     private DialogInterface mInterface;
     protected Viewport mViewport;
     protected Texture mBackground;
@@ -35,12 +35,22 @@ public abstract class Dialog extends InputAdapter implements Screen {
 
     public Dialog(DialogInterface dialogInterface) {
         this.mInterface = dialogInterface;
+        mZoomAmount = 0.3f;
+        init();
+    }
 
+    public Dialog(DialogInterface dialogInterface, float zoomAmount) {
+        this.mInterface = dialogInterface;
+        this.mZoomAmount = zoomAmount;
+        init();
+    }
+
+    private void init() {
         mBackground = Game.ASSETS.get(mAssets[0].file);
         mButtonX = new Sprite((Texture) Game.ASSETS.get(mAssets[1].file));
 
         mViewport = new FitViewport(mBackground.getWidth(), mBackground.getHeight());
-        ((OrthographicCamera) mViewport.getCamera()).zoom += ZOOM_AMOUNT; // Zoom the camera out to reveal the background
+        ((OrthographicCamera) mViewport.getCamera()).zoom += mZoomAmount; // Zoom the camera out to reveal the background
         mViewport.getCamera().update();
     }
 
@@ -82,6 +92,16 @@ public abstract class Dialog extends InputAdapter implements Screen {
             mInterface.btnDialogExitClicked();
         }
         return true;
+    }
+
+    public float getZoomAmount() {
+        return mZoomAmount;
+    }
+
+    public float getScaleAmount() {
+        // TODO
+        //return mZoomAmount + 1.7f;
+        return 0;
     }
 
     public interface DialogInterface {

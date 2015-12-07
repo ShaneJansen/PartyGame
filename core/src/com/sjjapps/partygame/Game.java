@@ -32,8 +32,8 @@ public class Game implements ApplicationListener {
 	 */
 
 	public static final String TAG = "MyGame";
-	public static final float WORLD_WIDTH = 1000.0f;
-	public static final float WORLD_HEIGHT = 500.0f;
+	public static final float WORLD_WIDTH = 800.0f;
+	public static final float WORLD_HEIGHT = 400.0f;
 	public static float PPU;
 	public static boolean PAUSED = false;
 
