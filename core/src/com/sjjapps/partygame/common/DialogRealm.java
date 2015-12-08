@@ -23,7 +23,7 @@ public abstract class DialogRealm extends Realm {
     public void addDialog(Dialog dialog) {
         mDialogs.push(dialog);
         Game.MULTIPLEXER_MANAGER.clear();
-        Game.MULTIPLEXER_MANAGER.addInput(dialog);
+        dialog.addListeners();
         Game.PAUSED = true;
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
@@ -33,14 +33,14 @@ public abstract class DialogRealm extends Realm {
      */
     public void removeDialog() {
         if (!mDialogs.empty()) {
-            Game.MULTIPLEXER_MANAGER.removeInput(mDialogs.peek());
+            Game.MULTIPLEXER_MANAGER.clear();
             mDialogs.pop();
             if (mDialogs.empty()) {
                 addInputListeners();
                 Game.PAUSED = false;
             }
             else {
-                Game.MULTIPLEXER_MANAGER.addInput(mDialogs.peek());
+                mDialogs.peek().addListeners();
             }
         }
     }

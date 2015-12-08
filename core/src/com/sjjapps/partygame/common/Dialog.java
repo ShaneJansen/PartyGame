@@ -33,6 +33,10 @@ public abstract class Dialog extends InputAdapter implements Screen {
         }
     }
 
+    public void addListeners() {
+        Game.MULTIPLEXER_MANAGER.addInput(this);
+    }
+
     public Dialog(DialogInterface dialogInterface) {
         this.mInterface = dialogInterface;
         mZoomAmount = 0.3f;
