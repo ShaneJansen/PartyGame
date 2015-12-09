@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
@@ -41,94 +42,75 @@ public class PencilStage extends Stage {
     @Override
     public void act(float delta) {
         super.act(delta);
-        // Check if there was a collision
         for (Actor a: getActors()) {
-            
-        }
-    }
-
-    @Override
-    public void render(float delta) {
-        mViewport.apply();
-
-        // Draw Pencil Lines
-        Game.SHAPE_RENDERER.setProjectionMatrix(mViewport.getCamera().combined);
-        Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
-        for (Pencil p: mPencils) {
-            Game.SHAPE_RENDERER.setColor(p.getColor());
-            for (int i=0; i<p.getPoints().size; i++) {
-                if (i == p.getPoints().size - 1) {
-                    Game.SHAPE_RENDERER.rectLine(p.getPoints().get(i).x, p.getPoints().get(i).y,
-                            p.getSprite().getX(), p.getSprite().getY(), p.getRadius());
+            if (a instanceof Pencil) {
+                // Check if a pencil touches a wall
+                if (a.getX() >= Gdx.graphics.getWidth() * 0.5f ||
+                        a.getX() <= -Gdx.graphics.getWidth() * 0.5f) {
+                    ((Pencil) a).bounce(true, false);
                 }
-                else {
-                    Game.SHAPE_RENDERER.rectLine(p.getPoints().get(i).x, p.getPoints().get(i).y,
-                            p.getPoints().get(i + 1).x, p.getPoints().get(i + 1).y, p.getRadius());
+                if (a.getY() >= Gdx.graphics.getHeight() * 0.5f ||
+                        a.getY() <= -Gdx.graphics.getHeight() * 0.5f) {
+                    ((Pencil) a).bounce(false, true);
                 }
             }
         }
-        Game.SHAPE_RENDERER.end();
-
-        // Draw Pencils
-        Game.SPRITE_BATCH.setProjectionMatrix(mViewport.getCamera().combined);
-        Game.SPRITE_BATCH.begin();
-        for (Pencil p: mPencils) {
-            Sprite s = p.getSprite();
-            if (s.getX() >= Gdx.graphics.getWidth() * 0.5f ||
-                    s.getX() <= -Gdx.graphics.getWidth() * 0.5f) {
-                p.setVelocityX(p.getVelocityX() * -1);
-                p.getPoints().add(new Point(s.getX(), s.getY()));
-            }
-            if (s.getY() >= Gdx.graphics.getHeight() * 0.5f ||
-                    s.getY() <= -Gdx.graphics.getHeight() * 0.5f) {
-                p.setVelocityY(p.getVelocityY() * -1);
-                p.getPoints().add(new Point(s.getX(), s.getY()));
-            }
-            float newX = s.getX() + (delta * p.getVelocityX());
-            float newY = s.getY() + (delta * p.getVelocityY());
-            if (!Game.PAUSED) {
-                s.setPosition(newX, newY);
-            }
-            s.draw(Game.SPRITE_BATCH);
-        }
-        Game.SPRITE_BATCH.end();
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        Actor
+        for (Actor a: getActors()) {
+            if (a instanceof Disposable) ((Disposable) a).dispose();
+        }
     }
 
     public void addPencil(int posX, int posY, boolean initialPencil) {
         Vector3 vector = new Vector3(posX, posY, 0);
         getViewport().getCamera().unproject(vector);
-
-        Pencil p = new Pencil();
-        p.getSprite().setPosition(vector.x, vector.y);
-        p.getPoints().add(new Point(vector.x, vector.y)); // Add initial point
-        p.getSprite().setScale(Game.PPU);
+        Pencil p;
 
         // Randomize the new pencil
-        p.getSprite().setRotation(mRandom.nextInt(360));
-        p.getSprite().setOrigin(0, 0);
+        int velocity, radius;
+        float scale;
         switch (mRandom.nextInt(4)) {
             case 0:
-                p.setVelocityX((int)(Game.PPU * 50));
-                p.setVelocityY((int)(Game.PPU * 50));
+                velocity = 50;
                 break;
             case 1:
-                p.setVelocityX((int)(Game.PPU * 100));
-                p.setVelocityY((int)(Game.PPU * 100));
+                velocity = 100;
                 break;
             case 2:
-                p.setVelocityX((int)(Game.PPU * 150));
-                p.setVelocityY((int)(Game.PPU * 150));
+                velocity = 150;
                 break;
-            case 3:
-                p.setVelocityX((int)(Game.PPU * 200));
-                p.setVelocityY((int)(Game.PPU * 200));
+            default:
+                velocity = 200;
                 break;
+        }
+        switch (mRandom.nextInt(4)) {
+            case 0:
+                scale = 0.25f;
+                radius = 2;
+                break;
+            case 1:
+                scale = 0.5f;
+                radius = 3;
+                break;
+            case 2:
+                scale = 0.75f;
+                radius = 4;
+                break;
+            default:
+                scale = 1.0f;
+                radius = 5;
+        }
+        if (initialPencil) {
+            p = new Pencil(200, 10);
+            p.setScale(2.0f);
+        }
+        else {
+            p = new Pencil(velocity, radius);
+            p.setScale(scale);
         }
         switch (mRandom.nextInt(4)) {
             case 0:
@@ -144,40 +126,7 @@ public class PencilStage extends Stage {
                 p.setColor(Color.YELLOW);
                 break;
         }
-        switch (mRandom.nextInt(4)) {
-            case 0:
-                p.setVelocityX(p.getVelocityX() * -1);
-                break;
-            case 1:
-                p.setVelocityY(p.getVelocityY() * -1);
-                break;
-            case 2:
-                p.setVelocityX(p.getVelocityX() * -1);
-                p.setVelocityY(p.getVelocityY() * -1);
-                break;
-        }
-        switch (mRandom.nextInt(4)) {
-            case 0:
-                p.getSprite().scale(0.25f);
-                p.setRadius(2);
-                break;
-            case 1:
-                p.getSprite().scale(0.5f);
-                p.setRadius(3);
-                break;
-            case 2:
-                p.getSprite().scale(0.75f);
-                p.setRadius(4);
-                break;
-            default:
-                p.setRadius(5);
-        }
-        if (initialPencil) {
-            p.setVelocityX((int)(Game.PPU * 200));
-            p.setVelocityY((int)(Game.PPU * 200));
-            p.getSprite().scale(2);
-            p.setRadius(10);
-        }
-        mPencils.add(p);
+        p.setRotation(mRandom.nextInt(360));
+        addActor(p);
     }
 }

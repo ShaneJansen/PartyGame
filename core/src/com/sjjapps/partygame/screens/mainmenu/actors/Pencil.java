@@ -2,10 +2,11 @@ package com.sjjapps.partygame.screens.mainmenu.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.sjjapps.partygame.Game;
@@ -16,14 +17,13 @@ import com.sjjapps.partygame.models.Point;
 /**
  * Created by Shane Jansen on 11/23/15.
  */
-public class Pencil extends Actor implements Disposable, EventListener {
+public class Pencil extends Actor implements Disposable {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.PENCIL, Texture.class),
     };
-    private Sprite mSprite;
+    private Texture mTexture;
     private int mVelocityX, mVelocityY;
     private Array<Point> mPoints;
-    private Color mColor;
     private int mRadius;
 
     public static void addAssets() {
@@ -32,53 +32,55 @@ public class Pencil extends Actor implements Disposable, EventListener {
         }
     }
 
-    public Pencil() {
-        this.mVelocityX = 50;
-        this.mVelocityY = 50;
-        mPoints = new Array<Point>();
-        mColor = Color.BLACK;
-
-        mSprite = new Sprite((Texture) Game.ASSETS.get(mAssets[0].file));
-    }
-
-    public Sprite getSprite() {
-        return mSprite;
-    }
-
-    public int getVelocityX() {
-        return mVelocityX;
-    }
-
-    public int getVelocityY() {
-        return mVelocityY;
-    }
-
-    public Array<Point> getPoints() {
-        return mPoints;
-    }
-
-    public Color getColor() {
-        return mColor;
-    }
-
-    public int getRadius() {
-        return mRadius;
-    }
-
-    public void setVelocityX(int velocityX) {
-        this.mVelocityX = velocityX;
-    }
-
-    public void setVelocityY(int velocityY) {
-        this.mVelocityY = velocityY;
-    }
-
-    public void setColor(Color mColor) {
-        this.mColor = mColor;
-    }
-
-    public void setRadius(int radius) {
+    public Pencil(int velocity, int radius) {
         this.mRadius = radius;
+        this.mVelocityX = velocity;
+        this.mVelocityY = velocity;
+        mPoints = new Array<Point>();
+        //setOriginX()
+        setColor(color);
+        mTexture = Game.ASSETS.get(mAssets[0].file);
+    }
+
+    public void bounce(boolean reverseX, boolean reverseY) {
+        if (reverseX) mVelocityX *= -1;
+        if (reverseY) mVelocityY *= -1;
+        mPoints.add(new Point(getX(), getY()));
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        float newX = getX() + (delta * mVelocityX);
+        float newY = getY() + (delta * mVelocityY);
+        setPosition(newX, newY);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        batch.end();
+
+        // Draw pencil lines
+        Game.SHAPE_RENDERER.setProjectionMatrix(batch.getProjectionMatrix());
+        Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
+        Game.SHAPE_RENDERER.setColor(getColor());
+        for (int i=0; i<mPoints.size; i++) {
+            if (i == mPoints.size - 1) {
+                Game.SHAPE_RENDERER.rectLine(mPoints.get(i).x, mPoints.get(i).y,
+                        getX(), getY(), mRadius);
+            }
+            else {
+                Game.SHAPE_RENDERER.rectLine(mPoints.get(i).x, mPoints.get(i).y,
+                        mPoints.get(i + 1).x, mPoints.get(i + 1).y, mRadius);
+            }
+        }
+        Game.SHAPE_RENDERER.end();
+
+        // Draw pencil
+        batch.begin();
+        batch.draw(new TextureRegion(mTexture), getX(), getY(), getOriginX(), getOriginY(),
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
     @Override
@@ -86,11 +88,6 @@ public class Pencil extends Actor implements Disposable, EventListener {
         for (Asset a: mAssets) {
             Game.ASSETS.unload(a.file);
         }
-        mSprite.getTexture().dispose();
-    }
-
-    @Override
-    public boolean handle(Event event) {
-        return false;
+        mTexture.dispose();
     }
 }
