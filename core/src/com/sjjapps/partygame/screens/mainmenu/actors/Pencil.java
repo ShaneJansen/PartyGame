@@ -3,6 +3,9 @@ package com.sjjapps.partygame.screens.mainmenu.actors;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.sjjapps.partygame.Game;
@@ -13,7 +16,7 @@ import com.sjjapps.partygame.models.Point;
 /**
  * Created by Shane Jansen on 11/23/15.
  */
-public class Pencil implements Disposable {
+public class Pencil extends Actor implements Disposable, EventListener {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.PENCIL, Texture.class),
     };
@@ -84,5 +87,10 @@ public class Pencil implements Disposable {
             Game.ASSETS.unload(a.file);
         }
         mSprite.getTexture().dispose();
+    }
+
+    @Override
+    public boolean handle(Event event) {
+        return false;
     }
 }

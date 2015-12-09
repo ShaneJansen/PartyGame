@@ -79,13 +79,19 @@ public abstract class Realm implements Screen {
 
     /**
      * Resizes each stage.
+     * Passing true when updating the viewport changes the camera
+     * position so it is centered on the stage, making 0,0 the bottom
+     * left corner. This is useful for UIs, where the camera position
+     * is not usually changed. When managing the camera position
+     * yourself, pass false or omit the boolean. If the stage position
+     * is not set, by default 0,0 will be in the center of the screen.
      * @param width
      * @param height
      */
     @Override
     public void resize(int width, int height) {
         for (Stage s: mStages) {
-            s.getViewport().update(width, height);
+            s.getViewport().update(width, height, true);
         }
     }
 

@@ -34,8 +34,6 @@ public class BackgroundStage extends Stage {
     public BackgroundStage(BackgroundInterface backgroundInterface) {
         super(new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT), Game.SPRITE_BATCH);
         this.mInterface = backgroundInterface;
-        setDebugAll(true);
-
         mBackground = Game.ASSETS.get(mAssets[0].file);
     }
 

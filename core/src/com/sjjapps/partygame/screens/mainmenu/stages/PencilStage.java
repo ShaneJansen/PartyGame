@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -18,24 +21,30 @@ import java.util.Random;
 /**
  * Created by Shane Jansen on 11/28/15.
  */
-public class PencilController implements Controller {
-    private Viewport mViewport;
+public class PencilStage extends Stage {
     private Random mRandom;
-    private Array<Pencil> mPencils;
 
     public static void addAssets() {
         Pencil.addAssets();
     }
 
-    public PencilController() {
-        mViewport = new ScreenViewport();
+    public PencilStage() {
+        super(new ScreenViewport(), Game.SPRITE_BATCH);
         mRandom = new Random();
-        mPencils = new Array<Pencil>();
     }
 
     @Override
-    public void show() {
+    public void draw() {
+        super.draw();
+    }
 
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        // Check if there was a collision
+        for (Actor a: getActors()) {
+            
+        }
     }
 
     @Override
@@ -86,35 +95,14 @@ public class PencilController implements Controller {
     }
 
     @Override
-    public void resize(int width, int height) {
-        mViewport.update(width, height);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
     public void dispose() {
-        for (Pencil p: mPencils) {
-            p.dispose();
-        }
+        super.dispose();
+        Actor
     }
 
     public void addPencil(int posX, int posY, boolean initialPencil) {
         Vector3 vector = new Vector3(posX, posY, 0);
-        mViewport.getCamera().unproject(vector);
+        getViewport().getCamera().unproject(vector);
 
         Pencil p = new Pencil();
         p.getSprite().setPosition(vector.x, vector.y);
