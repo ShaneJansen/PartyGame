@@ -2,19 +2,16 @@ package com.sjjapps.partygame.screens.mainmenu.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Controller;
-import com.sjjapps.partygame.models.Point;
 import com.sjjapps.partygame.screens.mainmenu.actors.Pencil;
 
 import java.util.Random;
@@ -30,8 +27,12 @@ public class PencilStage extends Stage {
     }
 
     public PencilStage() {
-        super(new ScreenViewport(), Game.SPRITE_BATCH);
+        super(new ScalingViewport(Scaling.fill, Game.WORLD_WIDTH, Game.WORLD_HEIGHT), Game.SPRITE_BATCH);
+        /*super(new ExtendViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT,
+                        new OrthographicCamera(Game.WORLD_WIDTH, Game.WORLD_HEIGHT)),
+                Game.SPRITE_BATCH);*/
         mRandom = new Random();
+        //getViewport().setScreenPosition((int) (Game.WORLD_WIDTH / 2), (int) (Game.WORLD_HEIGHT / 2));
     }
 
     @Override
@@ -107,10 +108,12 @@ public class PencilStage extends Stage {
         if (initialPencil) {
             p = new Pencil(200, 10);
             p.setScale(2.0f);
+            p.setPosition(0, 0);
         }
         else {
             p = new Pencil(velocity, radius);
             p.setScale(scale);
+            p.setPosition(vector.x, vector.y);
         }
         switch (mRandom.nextInt(4)) {
             case 0:

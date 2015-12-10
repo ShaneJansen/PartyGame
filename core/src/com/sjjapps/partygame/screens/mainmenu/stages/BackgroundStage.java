@@ -1,19 +1,12 @@
 package com.sjjapps.partygame.screens.mainmenu.stages;
 
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Controller;
 import com.sjjapps.partygame.managers.FilePathManager;
 import com.sjjapps.partygame.models.Asset;
-import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 
 /**
  * Created by Shane Jansen on 11/27/15.
@@ -32,7 +25,9 @@ public class BackgroundStage extends Stage {
     }
 
     public BackgroundStage(BackgroundInterface backgroundInterface) {
-        super(new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT), Game.SPRITE_BATCH);
+        super(new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT,
+                        new OrthographicCamera(Game.WORLD_WIDTH, Game.WORLD_HEIGHT)),
+                Game.SPRITE_BATCH);
         this.mInterface = backgroundInterface;
         mBackground = Game.ASSETS.get(mAssets[0].file);
     }

@@ -3,7 +3,6 @@ package com.sjjapps.partygame.screens.mainmenu.actors;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -37,8 +36,6 @@ public class Pencil extends Actor implements Disposable {
         this.mVelocityX = velocity;
         this.mVelocityY = velocity;
         mPoints = new Array<Point>();
-        //setOriginX()
-        setColor(color);
         mTexture = Game.ASSETS.get(mAssets[0].file);
     }
 
@@ -61,8 +58,17 @@ public class Pencil extends Actor implements Disposable {
         super.draw(batch, parentAlpha);
         batch.end();
 
-        // Draw pencil lines
+        //TEST
         Game.SHAPE_RENDERER.setProjectionMatrix(batch.getProjectionMatrix());
+        Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
+        Game.SHAPE_RENDERER.setColor(Color.YELLOW);
+        Game.SHAPE_RENDERER.circle(getStage().getViewport().getCamera().viewportWidth,
+                getStage().getViewport().getCamera().viewportHeight, 20);
+        Game.SHAPE_RENDERER.end();
+        batch.begin();
+
+        // Draw pencil lines
+        /*Game.SHAPE_RENDERER.setProjectionMatrix(batch.getProjectionMatrix());
         Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
         Game.SHAPE_RENDERER.setColor(getColor());
         for (int i=0; i<mPoints.size; i++) {
@@ -80,7 +86,7 @@ public class Pencil extends Actor implements Disposable {
         // Draw pencil
         batch.begin();
         batch.draw(new TextureRegion(mTexture), getX(), getY(), getOriginX(), getOriginY(),
-                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());z*/
     }
 
     @Override
