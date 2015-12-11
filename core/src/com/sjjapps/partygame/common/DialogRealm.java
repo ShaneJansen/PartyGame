@@ -1,6 +1,5 @@
 package com.sjjapps.partygame.common;
 
-import com.badlogic.gdx.Gdx;
 import com.sjjapps.partygame.Game;
 
 import java.util.Stack;
@@ -23,9 +22,9 @@ public abstract class DialogRealm extends Realm {
     public void addDialog(Dialog dialog) {
         mDialogs.push(dialog);
         Game.MULTIPLEXER_MANAGER.clear();
-        dialog.addListeners();
+        Game.MULTIPLEXER_MANAGER.addInput(dialog);
         Game.PAUSED = true;
-        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        //resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     /**
@@ -40,7 +39,7 @@ public abstract class DialogRealm extends Realm {
                 Game.PAUSED = false;
             }
             else {
-                mDialogs.peek().addListeners();
+                Game.MULTIPLEXER_MANAGER.addInput(mDialogs.peek());
             }
         }
     }
@@ -57,61 +56,22 @@ public abstract class DialogRealm extends Realm {
     }
 
     @Override
-    public void show() {
-        super.show();
-        if (!mDialogs.empty()) {
-            for (Dialog d: mDialogs) {
-                d.show();
-            }
-        }
-    }
-
-    @Override
     public void render(float delta) {
         super.render(delta);
         if (!mDialogs.empty()) {
-            mDialogs.peek().render(delta);
+            mDialogs.peek().act(delta);
+            mDialogs.peek().draw();
         }
     }
 
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        if (!mDialogs.empty()) {
+        /*if (!mDialogs.empty()) {
             for (Dialog d: mDialogs) {
-                d.resize(width, height);
+                d.getViewport().update(width, height, true);
             }
-        }
-    }
-
-    @Override
-    public void pause() {
-        super.pause();
-        if (!mDialogs.empty()) {
-            for (Dialog d: mDialogs) {
-                d.pause();
-            }
-        }
-    }
-
-    @Override
-    public void resume() {
-        super.resume();
-        if (!mDialogs.empty()) {
-            for (Dialog d: mDialogs) {
-                d.resume();
-            }
-        }
-    }
-
-    @Override
-    public void hide() {
-        super.hide();
-        if (!mDialogs.empty()) {
-            for (Dialog d: mDialogs) {
-                d.hide();
-            }
-        }
+        }*/
     }
 
     @Override

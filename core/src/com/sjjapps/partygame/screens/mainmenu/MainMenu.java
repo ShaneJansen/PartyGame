@@ -1,7 +1,10 @@
 package com.sjjapps.partygame.screens.mainmenu;
 
 import com.sjjapps.partygame.Game;
+import com.sjjapps.partygame.common.DialogRealm;
 import com.sjjapps.partygame.common.Realm;
+import com.sjjapps.partygame.common.Utils;
+import com.sjjapps.partygame.screens.mainmenu.dialogs.SettingsDialog;
 import com.sjjapps.partygame.screens.mainmenu.stages.BackgroundStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.PencilStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.UiStage;
@@ -9,7 +12,7 @@ import com.sjjapps.partygame.screens.mainmenu.stages.UiStage;
 /**
  * Created by Shane Jansen on 11/17/15.
  */
-public class MainMenu extends Realm {
+public class MainMenu extends DialogRealm {
     private PencilStage mPencilStage;
 
     public MainMenu() {
@@ -38,6 +41,7 @@ public class MainMenu extends Realm {
             @Override
             public void btnSettingsClicked() {
                 Game.log("Settings clicked");
+                addDialog(new SettingsDialog());
             }
         }));
         mPencilStage = new PencilStage();

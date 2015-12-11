@@ -19,7 +19,7 @@ import com.sjjapps.partygame.models.Size;
  */
 public class Pencil extends Actor implements Disposable {
     private static final Asset[] mAssets = new Asset[] {
-            new Asset(FilePathManager.PENCIL, Texture.class),
+            new Asset(FilePathManager.PENCIL, Texture.class)
     };
     private Texture mTexture;
     private int mVelocityX, mVelocityY;
