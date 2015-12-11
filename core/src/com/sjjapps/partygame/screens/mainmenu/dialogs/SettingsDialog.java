@@ -1,21 +1,14 @@
 package com.sjjapps.partygame.screens.mainmenu.dialogs;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Dialog;
-import com.sjjapps.partygame.managers.StringManager;
-import com.sjjapps.partygame.models.StdTextButton;
 
 /**
  * Created by Shane Jansen on 12/4/15.
  */
-public class SettingsDialog extends Dialog {
-    private Stage mStage;
+//public class SettingsDialog extends Dialog {
+    /*private Stage mStage;
     private StdTextButton mBtnSave;
 
     public static void addAssets() {
@@ -95,5 +88,5 @@ public class SettingsDialog extends Dialog {
         super.dispose();
         mStage.dispose();
         mBtnSave.dispose();
-    }
-}
+    }*/
+//}

@@ -1,15 +1,10 @@
 package com.sjjapps.partygame.screens.mainmenu.stages;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.screens.mainmenu.actors.Pencil;
@@ -20,6 +15,7 @@ import java.util.Random;
  * Created by Shane Jansen on 11/28/15.
  */
 public class PencilStage extends Stage {
+    private static final float PENCIL_SCALE = 2f/10f;
     private Random mRandom;
 
     public static void addAssets() {
@@ -27,17 +23,8 @@ public class PencilStage extends Stage {
     }
 
     public PencilStage() {
-        super(new ScalingViewport(Scaling.fill, Game.WORLD_WIDTH, Game.WORLD_HEIGHT), Game.SPRITE_BATCH);
-        /*super(new ExtendViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT,
-                        new OrthographicCamera(Game.WORLD_WIDTH, Game.WORLD_HEIGHT)),
-                Game.SPRITE_BATCH);*/
+        super(new ScreenViewport(), Game.SPRITE_BATCH);
         mRandom = new Random();
-        //getViewport().setScreenPosition((int) (Game.WORLD_WIDTH / 2), (int) (Game.WORLD_HEIGHT / 2));
-    }
-
-    @Override
-    public void draw() {
-        super.draw();
     }
 
     @Override
@@ -46,12 +33,12 @@ public class PencilStage extends Stage {
         for (Actor a: getActors()) {
             if (a instanceof Pencil) {
                 // Check if a pencil touches a wall
-                if (a.getX() >= Gdx.graphics.getWidth() * 0.5f ||
-                        a.getX() <= -Gdx.graphics.getWidth() * 0.5f) {
+                if (a.getX() >= getCamera().viewportWidth ||
+                        a.getX() <= 0) {
                     ((Pencil) a).bounce(true, false);
                 }
-                if (a.getY() >= Gdx.graphics.getHeight() * 0.5f ||
-                        a.getY() <= -Gdx.graphics.getHeight() * 0.5f) {
+                if (a.getY() >= getCamera().viewportHeight ||
+                        a.getY() <= 0) {
                     ((Pencil) a).bounce(false, true);
                 }
             }
@@ -106,12 +93,12 @@ public class PencilStage extends Stage {
                 radius = 5;
         }
         if (initialPencil) {
-            p = new Pencil(200, 10);
-            p.setScale(2.0f);
-            p.setPosition(0, 0);
+            p = new Pencil(getCamera().viewportWidth, PENCIL_SCALE, 200, 10);
+            p.setScale(1.0f);
+            p.setPosition(getCamera().viewportWidth * 0.5f, getCamera().viewportHeight * 0.5f);
         }
         else {
-            p = new Pencil(velocity, radius);
+            p = new Pencil(getCamera().viewportWidth, PENCIL_SCALE, velocity, radius);
             p.setScale(scale);
             p.setPosition(vector.x, vector.y);
         }
@@ -130,6 +117,7 @@ public class PencilStage extends Stage {
                 break;
         }
         p.setRotation(mRandom.nextInt(360));
+        p.bounce(false, false);
         addActor(p);
     }
 }

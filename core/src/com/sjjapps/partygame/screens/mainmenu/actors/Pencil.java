@@ -1,6 +1,5 @@
 package com.sjjapps.partygame.screens.mainmenu.actors;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,9 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.sjjapps.partygame.Game;
+import com.sjjapps.partygame.common.Utils;
 import com.sjjapps.partygame.managers.FilePathManager;
 import com.sjjapps.partygame.models.Asset;
 import com.sjjapps.partygame.models.Point;
+import com.sjjapps.partygame.models.Size;
 
 /**
  * Created by Shane Jansen on 11/23/15.
@@ -31,12 +32,17 @@ public class Pencil extends Actor implements Disposable {
         }
     }
 
-    public Pencil(int velocity, int radius) {
-        this.mRadius = radius;
+    public Pencil(float viewportWidth, float scaleWidth, int velocity, int radius) {
         this.mVelocityX = velocity;
         this.mVelocityY = velocity;
+        this.mRadius = radius;
         mPoints = new Array<Point>();
         mTexture = Game.ASSETS.get(mAssets[0].file);
+
+        Size size = Utils.scaleScreenSize(mTexture.getHeight(), mTexture.getWidth(),
+                viewportWidth, scaleWidth);
+        setWidth(size.width);
+        setHeight(size.height);
     }
 
     public void bounce(boolean reverseX, boolean reverseY) {
@@ -58,17 +64,8 @@ public class Pencil extends Actor implements Disposable {
         super.draw(batch, parentAlpha);
         batch.end();
 
-        //TEST
-        Game.SHAPE_RENDERER.setProjectionMatrix(batch.getProjectionMatrix());
-        Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
-        Game.SHAPE_RENDERER.setColor(Color.YELLOW);
-        Game.SHAPE_RENDERER.circle(getStage().getViewport().getCamera().viewportWidth,
-                getStage().getViewport().getCamera().viewportHeight, 20);
-        Game.SHAPE_RENDERER.end();
-        batch.begin();
-
         // Draw pencil lines
-        /*Game.SHAPE_RENDERER.setProjectionMatrix(batch.getProjectionMatrix());
+        Game.SHAPE_RENDERER.setProjectionMatrix(batch.getProjectionMatrix());
         Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
         Game.SHAPE_RENDERER.setColor(getColor());
         for (int i=0; i<mPoints.size; i++) {
@@ -86,7 +83,7 @@ public class Pencil extends Actor implements Disposable {
         // Draw pencil
         batch.begin();
         batch.draw(new TextureRegion(mTexture), getX(), getY(), getOriginX(), getOriginY(),
-                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());z*/
+                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
     @Override

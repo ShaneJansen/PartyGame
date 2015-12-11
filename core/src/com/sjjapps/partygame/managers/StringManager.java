@@ -6,7 +6,7 @@ package com.sjjapps.partygame.managers;
 public class StringManager {
     // Main Menu
     public static final String BUTTON_PLAY = "Play\n2-8 Players Needed";
-    public static final String BUTTON_CUSTOM_WORDS = "Custom Words";
+    public static final String BUTTON_CREDITS = "Credits";
     public static final String BUTTON_SETTINGS = "Settings";
 
     // Dialogs

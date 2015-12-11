@@ -24,6 +24,10 @@ public class BackgroundStage extends Stage {
         }
     }
 
+    public interface BackgroundInterface {
+        void backgroundClicked(int posX, int posY);
+    }
+
     public BackgroundStage(BackgroundInterface backgroundInterface) {
         super(new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT,
                         new OrthographicCamera(Game.WORLD_WIDTH, Game.WORLD_HEIGHT)),
@@ -53,9 +57,5 @@ public class BackgroundStage extends Stage {
     public void dispose() {
         super.dispose();
         mBackground.dispose();
-    }
-
-    public interface BackgroundInterface {
-        void backgroundClicked(int posX, int posY);
     }
 }
