@@ -15,23 +15,15 @@ public class MainMenu extends Realm {
     public MainMenu() {
         super();
         // Loading Assets
-        BackgroundStage.addAssets();
         UiStage.addAssets();
         PencilStage.addAssets();
+        BackgroundStage.addAssets();
         Game.ASSETS.finishLoading(); // Blocks main thread. No loading screen.
         finishedLoading();
     }
 
     private void finishedLoading() {
         // Initialize
-        addStage(new BackgroundStage(new BackgroundStage.BackgroundInterface() {
-            @Override
-            public void backgroundClicked(int posX, int posY) {
-                mPencilStage.addPencil(posX, posY, false);
-            }
-        }));
-        mPencilStage = new PencilStage();
-        addStage(mPencilStage);
         addStage(new UiStage(new UiStage.UiInterface() {
             @Override
             public void btnPlayClicked() {
@@ -46,6 +38,14 @@ public class MainMenu extends Realm {
             @Override
             public void btnSettingsClicked() {
                 Game.log("Settings clicked");
+            }
+        }));
+        mPencilStage = new PencilStage();
+        addStage(mPencilStage);
+        addStage(new BackgroundStage(new BackgroundStage.BackgroundInterface() {
+            @Override
+            public void backgroundClicked(int posX, int posY) {
+                mPencilStage.addPencil(posX, posY, false);
             }
         }));
 

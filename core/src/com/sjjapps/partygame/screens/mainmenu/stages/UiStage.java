@@ -1,9 +1,9 @@
 package com.sjjapps.partygame.screens.mainmenu.stages;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -34,26 +34,23 @@ public class UiStage extends Stage {
         this.mInterface = uiInterface;
 
         // Create Views
-        mBtnPlay = WidgetFactory.stdButton(getCamera().viewportWidth, BUTTON_SCALE, StringManager.BUTTON_PLAY);
-        mBtnCredits = WidgetFactory.stdButton(getCamera().viewportWidth, BUTTON_SCALE, StringManager.BUTTON_CREDITS);
-        mBtnSettings = WidgetFactory.stdButton(getCamera().viewportWidth, BUTTON_SCALE, StringManager.BUTTON_SETTINGS);
+        mBtnPlay = WidgetFactory.getStdButton(getCamera().viewportWidth, BUTTON_SCALE, StringManager.BUTTON_PLAY);
+        mBtnCredits = WidgetFactory.getStdButton(getCamera().viewportWidth, BUTTON_SCALE, StringManager.BUTTON_CREDITS);
+        mBtnSettings = WidgetFactory.getStdButton(getCamera().viewportWidth, BUTTON_SCALE, StringManager.BUTTON_SETTINGS);
 
-        mBtnPlay.setPosition(getCamera().viewportWidth * 0.5f, getCamera().viewportHeight * 0.5f);
-        addActor(mBtnPlay);
-
-        /*// Create table
+        // Create table
         Table table = new Table();
-        table.add(mBtnPlay.getTextButton());
-        table.row(); // Moves to the next rows in a table
-        table.add(mBtnCredits.getTextButton()).padTop(20f);
+        table.add(mBtnPlay).width(mBtnPlay.getWidth()).height(mBtnPlay.getHeight());
         table.row();
-        table.add(mBtnSettings.getTextButton()).padTop(20f);
-        table.setFillParent(true); // Sets the table to fill the entire stage
+        table.add(mBtnCredits).width(mBtnCredits.getWidth()).height(mBtnCredits.getHeight()).padTop(20f);
+        table.row();
+        table.add(mBtnSettings).width(mBtnSettings.getWidth()).height(mBtnSettings.getHeight()).padTop(20f);
+        table.setFillParent(true);
         table.pack();
         //table.right().bottom(); // Alignment is center by default
         table.debug();
         addActor(table);
-        //table.addAction(fadeIn(2f));*/
+        //table.addAction(Actions.fadeIn(100f)); // Not working
 
         // Listeners
         mBtnPlay.addListener(new ClickListener() {
@@ -85,18 +82,20 @@ public class UiStage extends Stage {
     public void draw() {
         super.draw();
 
-        //TEST
-        Game.SHAPE_RENDERER.setProjectionMatrix(getBatch().getProjectionMatrix());
+        // TEST: Draw a yellow dot
+        /*Game.SHAPE_RENDERER.setProjectionMatrix(getBatch().getProjectionMatrix());
         Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
         Game.SHAPE_RENDERER.setColor(Color.YELLOW);
         Game.SHAPE_RENDERER.circle(getCamera().viewportWidth * 0.5f,
                 getCamera().viewportHeight * 0.5f, 20);
-        Game.SHAPE_RENDERER.end();
+        Game.SHAPE_RENDERER.end();*/
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        mBtnPlay.getSkin().dispose(); // TODO: use skins instead?
+        mBtnPlay.getSkin().dispose();
+        mBtnCredits.getSkin().dispose();
+        mBtnSettings.getSkin().dispose();
     }
 }
