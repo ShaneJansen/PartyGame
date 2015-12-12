@@ -59,6 +59,7 @@ public abstract class DialogRealm extends Realm {
     public void render(float delta) {
         super.render(delta);
         if (!mDialogs.empty()) {
+            mDialogs.peek().getViewport().apply(true);
             mDialogs.peek().act(delta);
             mDialogs.peek().draw();
         }
@@ -67,11 +68,11 @@ public abstract class DialogRealm extends Realm {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        /*if (!mDialogs.empty()) {
+        if (!mDialogs.empty()) {
             for (Dialog d: mDialogs) {
                 d.getViewport().update(width, height, true);
             }
-        }*/
+        }
     }
 
     @Override

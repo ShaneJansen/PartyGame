@@ -16,7 +16,7 @@ public class FilePathManager {
     public static final String BUTTON_X = IMAGE_BASE + "btnX.png";
 
     // Backgrounds
-    public static final String MAIN_MENU = IMAGE_BASE + "bgDialog.png";
+    public static final String MAIN_MENU = IMAGE_BASE + "bgMainMenu.png";
     public static final String DIALOG_BACKGROUND = IMAGE_BASE + "bgDialog.png";
 
     // Textures

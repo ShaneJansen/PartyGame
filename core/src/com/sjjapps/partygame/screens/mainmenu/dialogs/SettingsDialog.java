@@ -9,11 +9,12 @@ import com.sjjapps.partygame.common.Dialog;
 public class SettingsDialog extends Dialog {
 
     public static void addAssets() {
+        Dialog.addAssets();
         WidgetFactory.addAssets();
     }
 
     public SettingsDialog() {
-        super(5f/10f);
+        super(8f/10f);
     }
 
     @Override

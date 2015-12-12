@@ -2,11 +2,13 @@ package com.sjjapps.partygame.common;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.managers.FilePathManager;
@@ -20,6 +22,8 @@ public abstract class Dialog extends Stage {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.DIALOG_BACKGROUND, Texture.class)
     };
+    private Size mSize;
+    private FillViewport mBackgroundViewport;
     private Texture mTexture;
 
     public static void addAssets() {
@@ -30,33 +34,50 @@ public abstract class Dialog extends Stage {
 
     public Dialog(float widthScale) {
         super(new ScreenViewport(), Game.SPRITE_BATCH);
-        Size size = Utils.scaleScreenSize(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
+        mBackgroundViewport = new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT);
+        mSize = Utils.scaleScreenSize(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
                 Gdx.graphics.getWidth(), widthScale);
-        //getViewport().setScreenSize((int) size.width, (int) size.height);
-        //getViewport().setScreenSize(100, 100);
-        //getViewport().setWorldSize(100, 100);
-        getViewport().update(100, 100);
         mTexture = Game.ASSETS.get(mAssets[0].file);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        getViewport().setScreenSize((int) mSize.width, (int) mSize.height);
+        getViewport().setScreenPosition((int) (Gdx.graphics.getWidth() * 0.5f - getViewport().getScreenWidth() * 0.5f),
+                (int) (Gdx.graphics.getHeight() * 0.5f - getViewport().getScreenHeight() * 0.5f));
+
+        mBackgroundViewport.setScreenSize((int) mSize.width, (int) mSize.height);
+        mBackgroundViewport.setScreenPosition((int) (Gdx.graphics.getWidth() * 0.5f - mBackgroundViewport.getScreenWidth() * 0.5f),
+                (int) (Gdx.graphics.getHeight() * 0.5f - mBackgroundViewport.getScreenHeight() * 0.5f));
     }
 
     @Override
     public void draw() {
         super.draw();
-        Game.SPRITE_BATCH.setProjectionMatrix(getCamera().combined);
-        Game.SPRITE_BATCH.begin();
-        Game.SPRITE_BATCH.draw(mTexture, 0, 0);
-        /*mButtonX.setPosition(-mTexture.getWidth() * 0.5f - mButtonX.getWidth() * 0.5f,
-                mTexture.getHeight() * 0.5f - mButtonX.getHeight() * 0.5f);
-        mButtonX.draw(Game.SPRITE_BATCH);*/
-        //Game.SPRITE_BATCH.draw(new TextureRegion(mTexture), getX(), getY(), getOriginX(), getOriginY(),
-        //        getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-        Game.SPRITE_BATCH.end();
 
-        Game.SHAPE_RENDERER.setProjectionMatrix(getBatch().getProjectionMatrix());
+        // Background
+        mBackgroundViewport.apply(true);
+        getBatch().setProjectionMatrix(mBackgroundViewport.getCamera().combined);
+        getBatch().begin();
+        getBatch().draw(mTexture,
+                mBackgroundViewport.getWorldWidth() * 0.5f - mTexture.getWidth() * 0.5f,
+                mBackgroundViewport.getWorldHeight() * 0.5f - mTexture.getHeight() * 0.5f);
+        getBatch().end();
+        // Test Circles
+        Game.SHAPE_RENDERER.setProjectionMatrix(mBackgroundViewport.getCamera().combined);
         Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
         Game.SHAPE_RENDERER.setColor(Color.YELLOW);
-        //Game.SHAPE_RENDERER.circle(getCamera().viewportWidth * 0.5f,
-        //        getCamera().viewportHeight * 0.5f, 20);
+        Game.SHAPE_RENDERER.circle(mBackgroundViewport.getWorldWidth(), mBackgroundViewport.getWorldHeight(), 30);
+        Game.SHAPE_RENDERER.circle(0, 0, 30);
+        Game.SHAPE_RENDERER.end();
+
+        // Foreground
+        getViewport().apply(true);
+        Game.SHAPE_RENDERER.setProjectionMatrix(getViewport().getCamera().combined);
+        Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
+        Game.SHAPE_RENDERER.setColor(Color.RED);
+        Game.SHAPE_RENDERER.circle(getViewport().getWorldWidth(), getViewport().getWorldHeight(), 20);
         Game.SHAPE_RENDERER.circle(0, 0, 20);
         Game.SHAPE_RENDERER.end();
     }

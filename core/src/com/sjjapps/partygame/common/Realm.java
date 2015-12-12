@@ -71,7 +71,7 @@ public abstract class Realm implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         for (int i=mStages.size-1; i>=0; i--) {
-            mStages.get(i).getViewport().apply();
+            mStages.get(i).getViewport().apply(true);
             if (!Game.PAUSED) mStages.get(i).act(delta);
             mStages.get(i).draw();
         }

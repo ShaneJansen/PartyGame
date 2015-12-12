@@ -21,6 +21,7 @@ public class MainMenu extends DialogRealm {
         UiStage.addAssets();
         PencilStage.addAssets();
         BackgroundStage.addAssets();
+        SettingsDialog.addAssets();
         Game.ASSETS.finishLoading(); // Blocks main thread. No loading screen.
         finishedLoading();
     }
