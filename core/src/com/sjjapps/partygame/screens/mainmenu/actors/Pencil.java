@@ -21,7 +21,7 @@ public class Pencil extends Actor implements Disposable {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.PENCIL, Texture.class)
     };
-    private Texture mTexture;
+    private Texture mTxtBackground;
     private int mVelocityX, mVelocityY;
     private Array<Point> mPoints;
     private int mRadius;
@@ -37,9 +37,9 @@ public class Pencil extends Actor implements Disposable {
         this.mVelocityY = velocity;
         this.mRadius = radius;
         mPoints = new Array<Point>();
-        mTexture = Game.ASSETS.get(mAssets[0].file);
+        mTxtBackground = Game.ASSETS.get(mAssets[0].file);
 
-        Size size = Utils.scaleScreenSize(mTexture.getHeight(), mTexture.getWidth(),
+        Size size = Utils.scaleScreenSize(mTxtBackground.getHeight(), mTxtBackground.getWidth(),
                 viewportWidth, scaleWidth);
         setWidth(size.width);
         setHeight(size.height);
@@ -82,7 +82,7 @@ public class Pencil extends Actor implements Disposable {
 
         // Draw pencil
         batch.begin();
-        batch.draw(new TextureRegion(mTexture), getX(), getY(), getOriginX(), getOriginY(),
+        batch.draw(new TextureRegion(mTxtBackground), getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
@@ -91,6 +91,6 @@ public class Pencil extends Actor implements Disposable {
         for (Asset a: mAssets) {
             Game.ASSETS.unload(a.file);
         }
-        mTexture.dispose();
+        mTxtBackground.dispose();
     }
 }

@@ -16,7 +16,7 @@ public class BackgroundStage extends Stage {
             new Asset(FilePathManager.MAIN_MENU, Texture.class)
     };
     private BackgroundInterface mInterface;
-    private Texture mBackground;
+    private Texture mTxtBackground;
 
     public static void addAssets() {
         for (Asset a: mAssets) {
@@ -33,7 +33,7 @@ public class BackgroundStage extends Stage {
                         new OrthographicCamera(Game.WORLD_WIDTH, Game.WORLD_HEIGHT)),
                 Game.SPRITE_BATCH);
         this.mInterface = backgroundInterface;
-        mBackground = Game.ASSETS.get(mAssets[0].file);
+        mTxtBackground = Game.ASSETS.get(mAssets[0].file);
     }
 
     @Override
@@ -47,15 +47,15 @@ public class BackgroundStage extends Stage {
         super.draw();
         Game.SPRITE_BATCH.setProjectionMatrix(getViewport().getCamera().combined);
         Game.SPRITE_BATCH.begin();
-        Game.SPRITE_BATCH.draw(mBackground,
-                getViewport().getWorldWidth() * 0.5f - mBackground.getWidth() * 0.5f,
-                getViewport().getWorldHeight() * 0.5f - mBackground.getHeight() * 0.5f);
+        Game.SPRITE_BATCH.draw(mTxtBackground,
+                getViewport().getWorldWidth() * 0.5f - mTxtBackground.getWidth() * 0.5f,
+                getViewport().getWorldHeight() * 0.5f - mTxtBackground.getHeight() * 0.5f);
         Game.SPRITE_BATCH.end();
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        mBackground.dispose();
+        mTxtBackground.dispose();
     }
 }
