@@ -3,7 +3,10 @@ package com.sjjapps.partygame.common;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -20,9 +23,10 @@ public abstract class Dialog extends Stage {
             new Asset(FilePathManager.DIALOG_BACKGROUND, Texture.class),
             new Asset(FilePathManager.BUTTON_X, Texture.class)
     };
-    private Size mSize;
+    private DialogInterface mDialogInterface;
     private FillViewport mVpBackground;
-    private Texture mTxtBackground, mTxtButtonX;
+    private Texture mTxtBackground;
+    private Sprite mSprButtonX;
 
     public static void addAssets() {
         for (Asset a: mAssets) {
@@ -30,24 +34,38 @@ public abstract class Dialog extends Stage {
         }
     }
 
-    public Dialog(float widthScale) {
+    public interface DialogInterface {
+        void btnExitPressed();
+    }
+
+    public Dialog(DialogInterface dialogInterface, float widthScale) {
         super(new ScreenViewport(), Game.SPRITE_BATCH);
+        this.mDialogInterface = dialogInterface;
         mVpBackground = new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT);
-        mSize = Utils.scaleScreenSize(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
-                Gdx.graphics.getWidth(), widthScale);
         mTxtBackground = Game.ASSETS.get(mAssets[0].file);
+        Texture txtButtonX = Game.ASSETS.get(mAssets[1].file);
+
+        // Set dialog size
+        Size mainSize = Utils.scaleScreenSize(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
+                Gdx.graphics.getWidth(), widthScale);
+        getViewport().setScreenSize((int) mainSize.width, (int) mainSize.height);
+        getViewport().setScreenPosition((int) (Gdx.graphics.getWidth() * 0.5f - getViewport().getScreenWidth() * 0.5f),
+                (int) (Gdx.graphics.getHeight() * 0.5f - getViewport().getScreenHeight() * 0.5f));
+        // Set background size
+        mVpBackground.setScreenSize((int) mainSize.width, (int) mainSize.height);
+        mVpBackground.setScreenPosition((int) (Gdx.graphics.getWidth() * 0.5f - mVpBackground.getScreenWidth() * 0.5f),
+                (int) (Gdx.graphics.getHeight() * 0.5f - mVpBackground.getScreenHeight() * 0.5f));
+        // Set exit button size
+        Size szExitButton = Utils.scaleScreenSize(txtButtonX.getHeight(), txtButtonX.getWidth(),
+                mainSize.width, 1f / 10f);
+        mSprButtonX = new Sprite(txtButtonX);
+        mSprButtonX.setSize(szExitButton.width, szExitButton.height);
+        mSprButtonX.setPosition(0, getViewport().getWorldHeight() - szExitButton.height);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        getViewport().setScreenSize((int) mSize.width, (int) mSize.height);
-        getViewport().setScreenPosition((int) (Gdx.graphics.getWidth() * 0.5f - getViewport().getScreenWidth() * 0.5f),
-                (int) (Gdx.graphics.getHeight() * 0.5f - getViewport().getScreenHeight() * 0.5f));
-
-        mVpBackground.setScreenSize((int) mSize.width, (int) mSize.height);
-        mVpBackground.setScreenPosition((int) (Gdx.graphics.getWidth() * 0.5f - mVpBackground.getScreenWidth() * 0.5f),
-                (int) (Gdx.graphics.getHeight() * 0.5f - mVpBackground.getScreenHeight() * 0.5f));
     }
 
     @Override
@@ -72,6 +90,10 @@ public abstract class Dialog extends Stage {
 
         // Foreground
         getViewport().apply(true);
+        getBatch().setProjectionMatrix(getViewport().getCamera().combined);
+        getBatch().begin();
+        mSprButtonX.draw(getBatch());
+        getBatch().end();
         // Test circles
         Game.SHAPE_RENDERER.setProjectionMatrix(getViewport().getCamera().combined);
         Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
@@ -83,14 +105,14 @@ public abstract class Dialog extends Stage {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        /*Vector3 vector = new Vector3(screenX, screenY, 0);
-        mViewport.getCamera().unproject(vector, mViewport.getScreenX(), mViewport.getScreenY(),
-                mViewport.getScreenWidth(), mViewport.getScreenHeight());
-        Rectangle textureBounds = new Rectangle(mButtonX.getX(), mButtonX.getY(),
-                mButtonX.getWidth(), mButtonX.getHeight());
+        Vector3 vector = new Vector3(screenX, screenY, 0);
+        getViewport().getCamera().unproject(vector, getViewport().getScreenX(), getViewport().getScreenY(),
+                getViewport().getScreenWidth(), getViewport().getScreenHeight());
+        Rectangle textureBounds = new Rectangle(mSprButtonX.getX(), mSprButtonX.getY(),
+                mSprButtonX.getWidth(), mSprButtonX.getHeight());
         if (textureBounds.contains(vector.x, vector.y)) {
-            mInterface.btnDialogExitClicked();
-        }*/
+            mDialogInterface.btnExitPressed();
+        }
         return true;
     }
 }

@@ -7,7 +7,7 @@ import java.util.Stack;
 /**
  * Created by Shane Jansen on 12/3/15.
  */
-public abstract class DialogRealm extends Realm {
+public abstract class DialogRealm extends Realm implements Dialog.DialogInterface {
     private Stack<Dialog> mDialogs;
 
     public DialogRealm() {
@@ -24,7 +24,6 @@ public abstract class DialogRealm extends Realm {
         Game.MULTIPLEXER_MANAGER.clear();
         Game.MULTIPLEXER_MANAGER.addInput(dialog);
         Game.PAUSED = true;
-        //resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     /**
@@ -66,16 +65,6 @@ public abstract class DialogRealm extends Realm {
     }
 
     @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        if (!mDialogs.empty()) {
-            for (Dialog d: mDialogs) {
-                d.getViewport().update(width, height, true);
-            }
-        }
-    }
-
-    @Override
     public void dispose() {
         super.dispose();
         if (!mDialogs.empty()) {
@@ -83,5 +72,10 @@ public abstract class DialogRealm extends Realm {
                 d.dispose();
             }
         }
+    }
+
+    @Override
+    public void btnExitPressed() {
+        removeDialog();
     }
 }

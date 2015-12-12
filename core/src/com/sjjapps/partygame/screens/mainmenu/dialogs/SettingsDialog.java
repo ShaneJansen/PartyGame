@@ -13,8 +13,8 @@ public class SettingsDialog extends Dialog {
         WidgetFactory.addAssets();
     }
 
-    public SettingsDialog() {
-        super(8f/10f);
+    public SettingsDialog(DialogInterface dialogInterface) {
+        super(dialogInterface, 8f/10f);
     }
 
     @Override

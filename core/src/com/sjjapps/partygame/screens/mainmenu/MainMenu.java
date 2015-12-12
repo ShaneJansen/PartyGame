@@ -40,7 +40,7 @@ public class MainMenu extends DialogRealm {
             @Override
             public void btnSettingsClicked() {
                 Game.log("Settings clicked");
-                addDialog(new SettingsDialog());
+                addDialog(new SettingsDialog(MainMenu.this));
             }
         }));
         mStgPencil = new PencilStage();
