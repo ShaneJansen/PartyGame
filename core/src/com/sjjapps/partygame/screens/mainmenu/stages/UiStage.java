@@ -33,7 +33,7 @@ public class UiStage extends Stage {
         super(new ScreenViewport(), Game.SPRITE_BATCH);
         this.mInterface = uiInterface;
 
-        // Create Views
+        // Create views
         mBtnPlay = WidgetFactory.getStdButton(getCamera().viewportWidth, BUTTON_SCALE, StringManager.BUTTON_PLAY);
         mBtnCredits = WidgetFactory.getStdButton(getCamera().viewportWidth, BUTTON_SCALE, StringManager.BUTTON_CREDITS);
         mBtnSettings = WidgetFactory.getStdButton(getCamera().viewportWidth, BUTTON_SCALE, StringManager.BUTTON_SETTINGS);
@@ -48,7 +48,7 @@ public class UiStage extends Stage {
         table.setFillParent(true);
         table.pack();
         //table.right().bottom(); // Alignment is center by default
-        table.debug();
+        //table.debug();
         addActor(table);
         //table.addAction(Actions.fadeIn(100f)); // Not working
 
@@ -71,24 +71,6 @@ public class UiStage extends Stage {
                 mInterface.btnSettingsClicked();
             }
         });
-    }
-
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-    }
-
-    @Override
-    public void draw() {
-        super.draw();
-
-        // TEST: Draw a yellow dot
-        /*Game.SHAPE_RENDERER.setProjectionMatrix(getBatch().getProjectionMatrix());
-        Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
-        Game.SHAPE_RENDERER.setColor(Color.YELLOW);
-        Game.SHAPE_RENDERER.circle(getCamera().viewportWidth * 0.5f,
-                getCamera().viewportHeight * 0.5f, 20);
-        Game.SHAPE_RENDERER.end();*/
     }
 
     @Override
