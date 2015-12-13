@@ -4,14 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.sjjapps.partygame.Game;
@@ -67,7 +63,7 @@ public class WidgetFactory {
         style.background = new TextureRegionDrawable(new TextureRegion(skin.get("background", Texture.class)));
         style.fontColor = Color.GRAY;
 
-        final HintTextField textField = new HintTextField(hint, style);
+        HintTextField textField = new HintTextField(hint, style);
         Size size = Utils.scaleScreenSize(textField.getHeight(), textField.getWidth(),
                 viewportWidth, scaleWidth);
         style.font.getData().setScale(size.height / textField.getHeight());
@@ -75,5 +71,22 @@ public class WidgetFactory {
         textField.setWidth(size.width);
         textField.setHeight(size.height);
         return textField;
+    }
+
+    public static Label getStdLabel(float viewportWidth, float scaleWidth, String text) {
+        Skin skin = new Skin();
+        skin.add("font", Game.ASSETS.get(mAssets[0].file));
+
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = skin.get("font", BitmapFont.class);
+        style.fontColor = Color.WHITE;
+
+        Label label = new Label(text, style);
+        Size size = Utils.scaleScreenSize(label.getHeight(), label.getWidth(),
+                viewportWidth, scaleWidth);
+        style.font.getData().setScale(size.height / label.getHeight());
+        label.setWidth(size.width);
+        label.setHeight(size.height);
+        return label;
     }
 }

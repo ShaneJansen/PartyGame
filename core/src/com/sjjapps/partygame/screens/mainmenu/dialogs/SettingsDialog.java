@@ -37,8 +37,6 @@ public class SettingsDialog extends Dialog {
         table.add(mBtnSave).width(mBtnSave.getWidth()).height(mBtnSave.getHeight()).padTop(20f);
         table.setFillParent(true);
         table.pack();
-        table.debug();
-        //table.setPosition(0, 0);
         addActor(table);
 
         // Listeners

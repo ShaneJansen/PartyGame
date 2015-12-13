@@ -1,6 +1,7 @@
 package com.sjjapps.partygame.screens.mainmenu;
 
 import com.sjjapps.partygame.Game;
+import com.sjjapps.partygame.common.AlertDialog;
 import com.sjjapps.partygame.common.DialogRealm;
 import com.sjjapps.partygame.screens.mainmenu.dialogs.SettingsDialog;
 import com.sjjapps.partygame.screens.mainmenu.stages.BackgroundStage;
@@ -20,6 +21,7 @@ public class MainMenu extends DialogRealm {
         PencilStage.addAssets();
         BackgroundStage.addAssets();
         SettingsDialog.addAssets();
+        AlertDialog.addAssets();
         Game.ASSETS.finishLoading(); // Blocks main thread. No loading screen.
         finishedLoading();
     }
@@ -29,17 +31,16 @@ public class MainMenu extends DialogRealm {
         addStage(new UiStage(new UiStage.UiInterface() {
             @Override
             public void btnPlayClicked() {
-                Game.log("Play clicked");
+                addDialog(new AlertDialog(MainMenu.this, 5f/10f, "This is an alert!"), false);
             }
 
             @Override
             public void btnCreditsClicked() {
-                Game.log("Credits clicked");
+
             }
 
             @Override
             public void btnSettingsClicked() {
-                Game.log("Settings clicked");
                 addDialog(new SettingsDialog(MainMenu.this), true);
             }
         }));
