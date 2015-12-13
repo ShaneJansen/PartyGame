@@ -19,11 +19,11 @@ public abstract class DialogRealm extends Realm implements Dialog.DialogInterfac
      * Adds a dialog to the Realm.
      * @param dialog
      */
-    public void addDialog(Dialog dialog) {
+    public void addDialog(Dialog dialog, boolean shouldPause) {
         mDialogs.push(dialog);
         Game.MULTIPLEXER_MANAGER.clear();
         Game.MULTIPLEXER_MANAGER.addInput(dialog);
-        Game.PAUSED = true;
+        Game.PAUSED = shouldPause;
     }
 
     /**
@@ -59,6 +59,7 @@ public abstract class DialogRealm extends Realm implements Dialog.DialogInterfac
         super.render(delta);
         if (!mDialogs.empty()) {
             mDialogs.peek().getViewport().apply(true);
+            Game.SPRITE_BATCH.setProjectionMatrix(mDialogs.peek().getCamera().combined);
             mDialogs.peek().act(delta);
             mDialogs.peek().draw();
         }

@@ -68,7 +68,7 @@ public abstract class Dialog extends Stage {
 
         // Set exit button size and style
         Size szExitButton = Utils.scaleScreenSize(txtButtonX.getHeight(), txtButtonX.getWidth(),
-                mainSize.width, 1f / 10f);
+                Gdx.graphics.getWidth(), 1f/10f);
         Skin skin = new Skin();
         skin.add("up", txtButtonX);
         skin.add("down", txtButtonX);

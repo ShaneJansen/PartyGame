@@ -72,6 +72,7 @@ public abstract class Realm implements Screen {
 
         for (int i=mStages.size-1; i>=0; i--) {
             mStages.get(i).getViewport().apply(true);
+            Game.SPRITE_BATCH.setProjectionMatrix(mStages.get(i).getCamera().combined);
             if (!Game.PAUSED) mStages.get(i).act(delta);
             mStages.get(i).draw();
         }

@@ -12,25 +12,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.sjjapps.partygame.managers.MultiplexerManager;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 
+/**
+ * Created by Shane Jansen on 12/4/15.
+ *
+ * The Game class holds a reference to the current Realm and
+ * provides getters and setters for it.  Make sure to call super
+ * on any overridden Game methods.  Game's render implementation
+ * will automatically update and render the active Realm reference.
+ */
 public class Game implements ApplicationListener {
-	/**
-	 * SINGLE-SCREEN:
-	 * Simply extend ApplicationAdapter or implement
-	 * ApplicationListener.
-	 *
-	 * MULTI-SCREENS:
-	 * Use the Game class for multi-screens.
-	 * The main class should extend Game.
-	 * Each screen class should implement Realm or ScreenAdapter.
-	 * The Game class extends ApplicationListener so you will only
-	 * need the main class to inherit from Game.
-	 *
-	 * The Game class holds a reference to the current Realm and
-	 * provides getters and setters for it.  Make sure to call super
-	 * on any overridden Game methods.  Game's render implementation
-	 * will automatically update and render the active Realm reference.
-	 */
-
 	public static final String TAG = "MyGame";
 	public static final float WORLD_WIDTH = 800.0f;
 	public static final float WORLD_HEIGHT = 480.0f;
@@ -39,7 +29,6 @@ public class Game implements ApplicationListener {
 
 	public static AssetManager ASSETS;
 	public static SpriteBatch SPRITE_BATCH;
-	public static ModelBatch MODEL_BATCH;
 	public static ShapeRenderer SHAPE_RENDERER;
 	public static MultiplexerManager MULTIPLEXER_MANAGER;
 	public static final com.badlogic.gdx.Game GAME = new com.badlogic.gdx.Game() {
@@ -49,7 +38,6 @@ public class Game implements ApplicationListener {
 
 			ASSETS =  new AssetManager();
 			SPRITE_BATCH = new SpriteBatch();
-			MODEL_BATCH = new ModelBatch();
 			SHAPE_RENDERER = new ShapeRenderer();
 			MULTIPLEXER_MANAGER = new MultiplexerManager(new InputMultiplexer());
 
@@ -120,7 +108,6 @@ public class Game implements ApplicationListener {
 	public void dispose() {
 		ASSETS.dispose();
 		SPRITE_BATCH.dispose();
-		MODEL_BATCH.dispose();
 		SHAPE_RENDERER.dispose();
 		GAME.dispose();
 	}

@@ -1,11 +1,19 @@
 package com.sjjapps.partygame.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Utils;
 import com.sjjapps.partygame.managers.FilePathManager;
@@ -19,7 +27,8 @@ public class WidgetFactory {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.FONT, BitmapFont.class),
             new Asset(FilePathManager.BUTTON, Texture.class),
-            new Asset(FilePathManager.BUTTON_DOWN, Texture.class)
+            new Asset(FilePathManager.BUTTON_DOWN, Texture.class),
+            new Asset(FilePathManager.EDIT_TEXT, Texture.class)
     };
 
     public static void addAssets() {
@@ -28,16 +37,12 @@ public class WidgetFactory {
         }
     }
 
-    public static Skin getButtonSkin() {
+    public static TextButton getStdButton(float viewportWidth, float scaleWidth, String text) {
         Skin skin = new Skin();
         skin.add("font", Game.ASSETS.get(mAssets[0].file));
         skin.add("up", Game.ASSETS.get(mAssets[1].file));
         skin.add("down", Game.ASSETS.get(mAssets[2].file));
-        return skin;
-    }
 
-    public static TextButton getStdButton(float viewportWidth, float scaleWidth, String text) {
-        Skin skin = getButtonSkin();
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = skin.get("font", BitmapFont.class);
         style.up = new TextureRegionDrawable(new TextureRegion(skin.get("up", Texture.class)));
@@ -46,9 +51,29 @@ public class WidgetFactory {
         TextButton textButton = new TextButton(text, style);
         Size size = Utils.scaleScreenSize(textButton.getHeight(), textButton.getWidth(),
                 viewportWidth, scaleWidth);
-        textButton.getLabel().setFontScale(size.height / textButton.getHeight());
+        style.font.getData().setScale(size.height / textButton.getHeight());
         textButton.setWidth(size.width);
         textButton.setHeight(size.height);
         return textButton;
+    }
+
+    public static HintTextField getStdTextField(float viewportWidth, float scaleWidth, String hint) {
+        Skin skin = new Skin();
+        skin.add("font", Game.ASSETS.get(mAssets[0].file));
+        skin.add("background", Game.ASSETS.get(mAssets[3].file));
+
+        TextField.TextFieldStyle style = new TextField.TextFieldStyle();
+        style.font = skin.get("font", BitmapFont.class);
+        style.background = new TextureRegionDrawable(new TextureRegion(skin.get("background", Texture.class)));
+        style.fontColor = Color.GRAY;
+
+        final HintTextField textField = new HintTextField(hint, style);
+        Size size = Utils.scaleScreenSize(textField.getHeight(), textField.getWidth(),
+                viewportWidth, scaleWidth);
+        style.font.getData().setScale(size.height / textField.getHeight());
+        textField.setAlignment(Align.center);
+        textField.setWidth(size.width);
+        textField.setHeight(size.height);
+        return textField;
     }
 }
