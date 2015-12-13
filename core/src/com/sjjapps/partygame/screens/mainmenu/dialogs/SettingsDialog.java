@@ -15,8 +15,6 @@ import com.sjjapps.partygame.common.Dialog;
  */
 public class SettingsDialog extends Dialog {
     private static final float WIDGET_SCALE = 3f/10f;
-    private TextField mTfName;
-    private TextButton mBtnSave;
 
     public static void addAssets() {
         Dialog.addAssets();
@@ -27,20 +25,20 @@ public class SettingsDialog extends Dialog {
         super(dialogInterface, 8f/10f);
 
         // Create views
-        mTfName = WidgetFactory.getStdTextField(Gdx.graphics.getWidth(), WIDGET_SCALE, "Enter your name here.");
-        mBtnSave = WidgetFactory.getStdButton(Gdx.graphics.getWidth(), WIDGET_SCALE, "Test");
+        TextField tfName = WidgetFactory.getStdTextField(Gdx.graphics.getWidth(), WIDGET_SCALE, "Enter your name here.");
+        TextButton btnSave = WidgetFactory.getStdButton(Gdx.graphics.getWidth(), WIDGET_SCALE, "Test");
 
         // Create table
         Table table = new Table();
-        table.add(mTfName).width(mTfName.getWidth()).height(mTfName.getHeight());
+        table.add(tfName).width(tfName.getWidth()).height(tfName.getHeight());
         table.row();
-        table.add(mBtnSave).width(mBtnSave.getWidth()).height(mBtnSave.getHeight()).padTop(20f);
+        table.add(btnSave).width(btnSave.getWidth()).height(btnSave.getHeight()).padTop(20f);
         table.setFillParent(true);
         table.pack();
         addActor(table);
 
         // Listeners
-        mBtnSave.addListener(new ClickListener() {
+        btnSave.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Game.log("TEST");
@@ -51,6 +49,5 @@ public class SettingsDialog extends Dialog {
     @Override
     public void dispose() {
         super.dispose();
-        mBtnSave.getSkin().dispose();
     }
 }

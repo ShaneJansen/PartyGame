@@ -47,7 +47,7 @@ public class WidgetFactory {
         TextButton textButton = new TextButton(text, style);
         Size size = Utils.scaleScreenSize(textButton.getHeight(), textButton.getWidth(),
                 viewportWidth, scaleWidth);
-        style.font.getData().setScale(size.height / textButton.getHeight());
+        textButton.getLabel().setFontScale(size.height / textButton.getHeight());
         textButton.setWidth(size.width);
         textButton.setHeight(size.height);
         return textButton;
@@ -66,7 +66,7 @@ public class WidgetFactory {
         HintTextField textField = new HintTextField(hint, style);
         Size size = Utils.scaleScreenSize(textField.getHeight(), textField.getWidth(),
                 viewportWidth, scaleWidth);
-        style.font.getData().setScale(size.height / textField.getHeight());
+        //textButton.getLabel().setFontScale(size.height / textButton.getHeight());
         textField.setAlignment(Align.center);
         textField.setWidth(size.width);
         textField.setHeight(size.height);
@@ -84,7 +84,7 @@ public class WidgetFactory {
         Label label = new Label(text, style);
         Size size = Utils.scaleScreenSize(label.getHeight(), label.getWidth(),
                 viewportWidth, scaleWidth);
-        style.font.getData().setScale(size.height / label.getHeight());
+        label.setFontScale(size.height / label.getHeight());
         label.setWidth(size.width);
         label.setHeight(size.height);
         return label;
