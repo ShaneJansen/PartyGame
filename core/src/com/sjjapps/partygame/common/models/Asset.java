@@ -1,4 +1,4 @@
-package com.sjjapps.partygame.models;
+package com.sjjapps.partygame.common.models;
 
 /**
  * Created by Shane Jansen on 11/29/15.

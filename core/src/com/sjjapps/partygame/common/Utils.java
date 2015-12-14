@@ -1,6 +1,6 @@
 package com.sjjapps.partygame.common;
 
-import com.sjjapps.partygame.models.Size;
+import com.sjjapps.partygame.common.models.Size;
 
 /**
  * Created by Shane Jansen on 12/11/15.

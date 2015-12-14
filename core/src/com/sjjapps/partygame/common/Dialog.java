@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.managers.FilePathManager;
-import com.sjjapps.partygame.models.Asset;
-import com.sjjapps.partygame.models.Size;
+import com.sjjapps.partygame.common.models.Asset;
+import com.sjjapps.partygame.common.models.Size;
 
 /**
  * Created by Shane Jansen on 12/11/15.

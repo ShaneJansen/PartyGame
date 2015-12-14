@@ -2,7 +2,7 @@ package com.sjjapps.partygame.common;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.sjjapps.partygame.actors.WidgetFactory;
+import com.sjjapps.partygame.common.actors.WidgetFactory;
 
 /**
  * Created by Shane Jansen on 12/13/15.

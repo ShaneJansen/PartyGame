@@ -1,4 +1,4 @@
-package com.sjjapps.partygame.actors;
+package com.sjjapps.partygame.common.actors;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;

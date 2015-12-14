@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.actors.WidgetFactory;
+import com.sjjapps.partygame.common.actors.WidgetFactory;
 import com.sjjapps.partygame.common.Dialog;
 
 /**
