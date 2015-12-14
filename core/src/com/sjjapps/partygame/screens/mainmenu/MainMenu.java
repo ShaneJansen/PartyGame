@@ -30,17 +30,17 @@ public class MainMenu extends DialogRealm {
         // Initialize
         addStage(new UiStage(new UiStage.UiInterface() {
             @Override
-            public void btnPlayClicked() {
-                addDialog(new AlertDialog(MainMenu.this, 5f/10f, "This is an alert!"), false);
+            public void btnHostClicked() {
+                addDialog(new AlertDialog(MainMenu.this, "This is an alert!\nA lot more text and more and more and more."), false);
+            }
+
+            @Override
+            public void btnJoinClicked() {
+
             }
 
             @Override
             public void btnCreditsClicked() {
-
-            }
-
-            @Override
-            public void btnSettingsClicked() {
                 addDialog(new SettingsDialog(MainMenu.this), true);
             }
         }));

@@ -66,14 +66,14 @@ public class WidgetFactory {
         HintTextField textField = new HintTextField(hint, style);
         Size size = Utils.scaleScreenSize(textField.getHeight(), textField.getWidth(),
                 viewportWidth, scaleWidth);
-        //textButton.getLabel().setFontScale(size.height / textButton.getHeight());
+        //textField.getLabel().setFontScale(size.height / textField.getHeight());
         textField.setAlignment(Align.center);
         textField.setWidth(size.width);
         textField.setHeight(size.height);
         return textField;
     }
 
-    public static Label getStdLabel(float viewportWidth, float scaleWidth, String text) {
+    public static Label getStdLabel(float width, float height, float fontScale, String text) {
         Skin skin = new Skin();
         skin.add("font", Game.ASSETS.get(mAssets[0].file));
 
@@ -82,11 +82,10 @@ public class WidgetFactory {
         style.fontColor = Color.WHITE;
 
         Label label = new Label(text, style);
-        Size size = Utils.scaleScreenSize(label.getHeight(), label.getWidth(),
-                viewportWidth, scaleWidth);
-        label.setFontScale(size.height / label.getHeight());
-        label.setWidth(size.width);
-        label.setHeight(size.height);
+        label.setWrap(true);
+        label.setFontScale(fontScale);
+        label.setWidth(width);
+        label.setHeight(height);
         return label;
     }
 }

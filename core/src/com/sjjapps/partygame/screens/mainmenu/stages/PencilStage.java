@@ -33,13 +33,21 @@ public class PencilStage extends Stage {
         for (Actor a: getActors()) {
             if (a instanceof Pencil) {
                 // Check if a pencil touches a wall
-                if (a.getX() >= getCamera().viewportWidth ||
-                        a.getX() <= 0) {
+                if (a.getX() >= getCamera().viewportWidth) {
                     ((Pencil) a).bounce(true, false);
+                    a.setPosition(a.getX() - 1, a.getY());
                 }
-                if (a.getY() >= getCamera().viewportHeight ||
-                        a.getY() <= 0) {
+                else if (a.getX() <= 0) {
+                    ((Pencil) a).bounce(true, false);
+                    a.setPosition(a.getX() + 1, a.getY());
+                }
+                if (a.getY() >= getCamera().viewportHeight) {
                     ((Pencil) a).bounce(false, true);
+                    a.setPosition(a.getX(), a.getY() - 1);
+                }
+                else if (a.getY() <= 0) {
+                    ((Pencil) a).bounce(false, true);
+                    a.setPosition(a.getX(), a.getY() + 1);
                 }
             }
         }
