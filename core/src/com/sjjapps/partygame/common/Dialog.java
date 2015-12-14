@@ -49,7 +49,7 @@ public abstract class Dialog extends Stage {
 
         // Set dialog size
         Size mainSize = Utils.scaleScreenSize(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
-                Gdx.graphics.getWidth(), widthScale);
+                Gdx.graphics.getWidth() * widthScale);
         getViewport().setScreenSize((int) mainSize.width, (int) mainSize.height);
         getViewport().setScreenPosition((int) (Gdx.graphics.getWidth() * 0.5f - getViewport().getScreenWidth() * 0.5f),
                 (int) (Gdx.graphics.getHeight() * 0.5f - getViewport().getScreenHeight() * 0.5f));
@@ -61,7 +61,7 @@ public abstract class Dialog extends Stage {
 
         // Set exit button size and style
         Size szExitButton = Utils.scaleScreenSize(txtButtonX.getHeight(), txtButtonX.getWidth(),
-                Gdx.graphics.getWidth(), 1f/10f);
+                Gdx.graphics.getWidth() * 1f / 10f);
         Skin skin = new Skin();
         skin.add("up", txtButtonX);
         skin.add("down", txtButtonX);

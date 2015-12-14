@@ -25,8 +25,8 @@ public class SettingsDialog extends Dialog {
         super(dialogInterface, 8f/10f);
 
         // Create views
-        TextField tfName = WidgetFactory.getStdTextField(Gdx.graphics.getWidth(), WIDGET_SCALE, "Enter your name here.");
-        TextButton btnSave = WidgetFactory.getStdButton(Gdx.graphics.getWidth(), WIDGET_SCALE, "Test");
+        TextField tfName = WidgetFactory.getStdTextField(Gdx.graphics.getWidth() * WIDGET_SCALE, "Enter your name here.");
+        TextButton btnSave = WidgetFactory.getStdButton(Gdx.graphics.getWidth() * WIDGET_SCALE, "Test");
 
         // Create table
         Table table = new Table();

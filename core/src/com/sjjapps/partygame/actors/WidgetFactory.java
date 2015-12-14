@@ -33,7 +33,7 @@ public class WidgetFactory {
         }
     }
 
-    public static TextButton getStdButton(float viewportWidth, float scaleWidth, String text) {
+    public static TextButton getStdButton(float width, String text) {
         Skin skin = new Skin();
         skin.add("font", Game.ASSETS.get(mAssets[0].file));
         skin.add("up", Game.ASSETS.get(mAssets[1].file));
@@ -45,15 +45,14 @@ public class WidgetFactory {
         style.down = new TextureRegionDrawable(new TextureRegion(skin.get("down", Texture.class)));
 
         TextButton textButton = new TextButton(text, style);
-        Size size = Utils.scaleScreenSize(textButton.getHeight(), textButton.getWidth(),
-                viewportWidth, scaleWidth);
+        Size size = Utils.scaleScreenSize(textButton.getHeight(), textButton.getWidth(), width);
         textButton.getLabel().setFontScale(size.height / textButton.getHeight());
         textButton.setWidth(size.width);
         textButton.setHeight(size.height);
         return textButton;
     }
 
-    public static HintTextField getStdTextField(float viewportWidth, float scaleWidth, String hint) {
+    public static HintTextField getStdTextField(float width, String hint) {
         Skin skin = new Skin();
         skin.add("font", Game.ASSETS.get(mAssets[0].file));
         skin.add("background", Game.ASSETS.get(mAssets[3].file));
@@ -64,8 +63,7 @@ public class WidgetFactory {
         style.fontColor = Color.GRAY;
 
         HintTextField textField = new HintTextField(hint, style);
-        Size size = Utils.scaleScreenSize(textField.getHeight(), textField.getWidth(),
-                viewportWidth, scaleWidth);
+        Size size = Utils.scaleScreenSize(textField.getHeight(), textField.getWidth(), width);
         //textField.getLabel().setFontScale(size.height / textField.getHeight());
         textField.setAlignment(Align.center);
         textField.setWidth(size.width);

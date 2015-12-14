@@ -31,9 +31,9 @@ public class UiStage extends Stage {
         this.mInterface = uiInterface;
 
         // Create views
-        TextButton btnHost = WidgetFactory.getStdButton(getCamera().viewportWidth, WIDGET_SCALE, "Host Game\n2-8 Players Needed");
-        TextButton btnJoin = WidgetFactory.getStdButton(getCamera().viewportWidth, WIDGET_SCALE, "Join Game");
-        TextButton btnCredits = WidgetFactory.getStdButton(getCamera().viewportWidth, WIDGET_SCALE, "Credits");
+        TextButton btnHost = WidgetFactory.getStdButton(getCamera().viewportWidth * WIDGET_SCALE, "Host Game\n2-8 Players Needed");
+        TextButton btnJoin = WidgetFactory.getStdButton(getCamera().viewportWidth * WIDGET_SCALE, "Join Game");
+        TextButton btnCredits = WidgetFactory.getStdButton(getCamera().viewportWidth * WIDGET_SCALE, "Credits");
 
         // Create table
         Table table = new Table();

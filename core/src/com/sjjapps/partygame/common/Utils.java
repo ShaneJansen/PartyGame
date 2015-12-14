@@ -7,11 +7,9 @@ import com.sjjapps.partygame.models.Size;
  */
 public class Utils {
 
-    public static Size scaleScreenSize(float height, float width,
-                                       float viewportWidth, float widthScale) {
+    public static Size scaleScreenSize(float height, float width, float desiredWidth) {
         float ratio = height / width;
-        float resizedWidth = viewportWidth * widthScale;
-        float resizedHeight = resizedWidth * ratio;
-        return new Size(resizedWidth, resizedHeight);
+        float resizedHeight = desiredWidth * ratio;
+        return new Size(desiredWidth, resizedHeight);
     }
 }
