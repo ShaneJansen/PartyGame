@@ -19,13 +19,14 @@ public class AlertDialog extends Dialog {
         super(dialogInterface, 5f / 10f);
 
         // Create views
-        Label lblAlert = WidgetFactory.getStdLabel(getCamera().viewportWidth * WIDGET_SCALE,
-                getCamera().viewportHeight * WIDGET_SCALE,
-                fontScale, text);
+        float widgetWidth = getCamera().viewportWidth * WIDGET_SCALE;
+        float widgetHeight = getCamera().viewportHeight * WIDGET_SCALE;
+        int fontSize = (int) (widgetWidth * fontScale);
+        Label lblAlert = WidgetFactory.INSTANCE.getStdLabel(widgetWidth, widgetHeight, fontSize, text);
 
         // Create table
         Table table = new Table();
-        table.add(lblAlert).width(lblAlert.getWidth()).height(lblAlert.getHeight()).fill();
+        table.add(lblAlert).width(lblAlert.getWidth()).height(lblAlert.getHeight());
         table.setFillParent(true);
         table.pack();
         table.debug();
@@ -33,6 +34,6 @@ public class AlertDialog extends Dialog {
     }
 
     public AlertDialog(DialogInterface dialogInterface, String text) {
-        this(dialogInterface, 3f, text);
+        this(dialogInterface, 8f / 100f, text);
     }
 }

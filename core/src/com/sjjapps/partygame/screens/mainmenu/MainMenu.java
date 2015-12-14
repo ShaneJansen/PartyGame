@@ -3,6 +3,7 @@ package com.sjjapps.partygame.screens.mainmenu;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.AlertDialog;
 import com.sjjapps.partygame.common.DialogRealm;
+import com.sjjapps.partygame.common.models.AlertTextField;
 import com.sjjapps.partygame.screens.mainmenu.dialogs.SettingsDialog;
 import com.sjjapps.partygame.screens.mainmenu.stages.BackgroundStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.PencilStage;
@@ -20,8 +21,11 @@ public class MainMenu extends DialogRealm {
         UiStage.addAssets();
         PencilStage.addAssets();
         BackgroundStage.addAssets();
+
         SettingsDialog.addAssets();
         AlertDialog.addAssets();
+        AlertTextField.addAssets();
+
         Game.ASSETS.finishLoading(); // Blocks main thread. No loading screen.
         finishedLoading();
     }
@@ -36,7 +40,7 @@ public class MainMenu extends DialogRealm {
 
             @Override
             public void btnJoinClicked() {
-
+                addDialog(new AlertTextField(MainMenu.this, "Enter your name here."), false);
             }
 
             @Override

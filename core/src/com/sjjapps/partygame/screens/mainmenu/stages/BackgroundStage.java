@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.managers.FilePathManager;
 import com.sjjapps.partygame.common.models.Asset;
+import com.sjjapps.partygame.managers.FilePathManager;
 
 /**
  * Created by Shane Jansen on 11/27/15.

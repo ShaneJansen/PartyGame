@@ -8,7 +8,7 @@ public class FilePathManager {
     private static final String FONT_BASE = "fonts/";
 
     // Fonts
-    public static final String FONT = FONT_BASE + "font.fnt";
+    public static final String FONT = FONT_BASE + "fntDefault.ttf";
 
     // Buttons
     public static final String BUTTON = IMAGE_BASE + "btn.png";

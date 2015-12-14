@@ -13,7 +13,8 @@ import com.sjjapps.partygame.common.actors.WidgetFactory;
  * Created by Shane Jansen on 11/27/15.
  */
 public class UiStage extends Stage {
-    private static final float WIDGET_SCALE = 3f/10f;
+    private static final float WIDGET_SCALE = 3f / 10f;
+    private static final float FONT_SCALE = 10f / 100f;
     private UiInterface mInterface;
 
     public static void addAssets() {
@@ -31,9 +32,11 @@ public class UiStage extends Stage {
         this.mInterface = uiInterface;
 
         // Create views
-        TextButton btnHost = WidgetFactory.getStdButton(getCamera().viewportWidth * WIDGET_SCALE, "Host Game\n2-8 Players Needed");
-        TextButton btnJoin = WidgetFactory.getStdButton(getCamera().viewportWidth * WIDGET_SCALE, "Join Game");
-        TextButton btnCredits = WidgetFactory.getStdButton(getCamera().viewportWidth * WIDGET_SCALE, "Credits");
+        float widgetWidth = getCamera().viewportWidth * WIDGET_SCALE;
+        int fontSize = (int) (widgetWidth * FONT_SCALE);
+        TextButton btnHost = WidgetFactory.INSTANCE.getStdButton(widgetWidth, fontSize, "Host Game\n2-8 Players Needed");
+        TextButton btnJoin = WidgetFactory.INSTANCE.getStdButton(widgetWidth, fontSize, "Join Game");
+        TextButton btnCredits = WidgetFactory.INSTANCE.getStdButton(widgetWidth, fontSize, "Credits");
 
         // Create table
         Table table = new Table();
