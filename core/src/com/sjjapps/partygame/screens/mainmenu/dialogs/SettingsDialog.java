@@ -13,8 +13,7 @@ import com.sjjapps.partygame.common.actors.WidgetFactory;
  * Created by Shane Jansen on 12/4/15.
  */
 public class SettingsDialog extends Dialog {
-    private static final float WIDGET_SCALE = 3f / 10f;
-    private static final float FONT_SCALE = 8f / 100f;
+    private static final float WIDGET_SCALE = 4f / 10f;
 
     public static void addAssets() {
         Dialog.addAssets();
@@ -26,9 +25,11 @@ public class SettingsDialog extends Dialog {
 
         // Create views
         float widgetWidth = getCamera().viewportWidth * WIDGET_SCALE;
-        int fontSize = (int) (widgetWidth * FONT_SCALE);
-        TextField tfName = WidgetFactory.INSTANCE.getStdTextField(widgetWidth, fontSize, "Enter your name here.");
-        TextButton btnSave = WidgetFactory.INSTANCE.getStdButton(widgetWidth, fontSize, "Test");
+        float widgetHeight = widgetWidth * (4f / 10f);
+        TextField tfName = WidgetFactory.getInstance().getStdTextField(widgetWidth, widgetHeight,
+                WidgetFactory.mBfNormalRg, "Enter your name here.");
+        TextButton btnSave = WidgetFactory.getInstance().getStdButton(widgetWidth, widgetHeight,
+                WidgetFactory.mBfNormalRg, "Test");
 
         // Create table
         Table table = new Table();

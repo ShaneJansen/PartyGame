@@ -1,5 +1,6 @@
 package com.sjjapps.partygame.common;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
@@ -15,14 +16,13 @@ public class AlertDialog extends Dialog {
         WidgetFactory.addAssets();
     }
 
-    public AlertDialog(DialogInterface dialogInterface, float fontScale, String text) {
+    public AlertDialog(DialogInterface dialogInterface, BitmapFont font, String text) {
         super(dialogInterface, 5f / 10f);
 
         // Create views
         float widgetWidth = getCamera().viewportWidth * WIDGET_SCALE;
         float widgetHeight = getCamera().viewportHeight * WIDGET_SCALE;
-        int fontSize = (int) (widgetWidth * fontScale);
-        Label lblAlert = WidgetFactory.INSTANCE.getStdLabel(widgetWidth, widgetHeight, fontSize, text);
+        Label lblAlert = WidgetFactory.getInstance().getStdLabel(widgetWidth, widgetHeight, font, text);
 
         // Create table
         Table table = new Table();
@@ -34,6 +34,6 @@ public class AlertDialog extends Dialog {
     }
 
     public AlertDialog(DialogInterface dialogInterface, String text) {
-        this(dialogInterface, 8f / 100f, text);
+        this(dialogInterface, WidgetFactory.mBfNormalLg, text);
     }
 }

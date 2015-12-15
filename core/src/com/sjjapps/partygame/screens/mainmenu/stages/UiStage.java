@@ -33,10 +33,13 @@ public class UiStage extends Stage {
 
         // Create views
         float widgetWidth = getCamera().viewportWidth * WIDGET_SCALE;
-        int fontSize = (int) (widgetWidth * FONT_SCALE);
-        TextButton btnHost = WidgetFactory.INSTANCE.getStdButton(widgetWidth, fontSize, "Host Game\n2-8 Players Needed");
-        TextButton btnJoin = WidgetFactory.INSTANCE.getStdButton(widgetWidth, fontSize, "Join Game");
-        TextButton btnCredits = WidgetFactory.INSTANCE.getStdButton(widgetWidth, fontSize, "Credits");
+        float widgetHeight = widgetWidth * (4f / 10f);
+        TextButton btnHost = WidgetFactory.getInstance().getStdButton(widgetWidth, widgetHeight,
+                WidgetFactory.mBfNormalRg, "Host Game\n2-8 Players Needed");
+        TextButton btnJoin = WidgetFactory.getInstance().getStdButton(widgetWidth, widgetHeight,
+                WidgetFactory.mBfNormalRg, "Join Game");
+        TextButton btnCredits = WidgetFactory.getInstance().getStdButton(widgetWidth, widgetHeight,
+                WidgetFactory.mBfNormalRg, "Credits");
 
         // Create table
         Table table = new Table();

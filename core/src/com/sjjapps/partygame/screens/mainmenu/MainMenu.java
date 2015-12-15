@@ -1,9 +1,11 @@
 package com.sjjapps.partygame.screens.mainmenu;
 
+import com.badlogic.gdx.Gdx;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.AlertDialog;
+import com.sjjapps.partygame.common.AlertTextField;
 import com.sjjapps.partygame.common.DialogRealm;
-import com.sjjapps.partygame.common.models.AlertTextField;
+import com.sjjapps.partygame.common.actors.WidgetFactory;
 import com.sjjapps.partygame.screens.mainmenu.dialogs.SettingsDialog;
 import com.sjjapps.partygame.screens.mainmenu.stages.BackgroundStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.PencilStage;
@@ -18,6 +20,8 @@ public class MainMenu extends DialogRealm {
     public MainMenu() {
         super();
         // Loading Assets
+        WidgetFactory.initialize(Gdx.graphics.getWidth());
+
         UiStage.addAssets();
         PencilStage.addAssets();
         BackgroundStage.addAssets();

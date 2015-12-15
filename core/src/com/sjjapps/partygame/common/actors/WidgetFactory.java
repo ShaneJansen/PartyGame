@@ -13,22 +13,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Utils;
 import com.sjjapps.partygame.common.models.Asset;
-import com.sjjapps.partygame.common.models.Size;
 import com.sjjapps.partygame.managers.FilePathManager;
 
 /**
  * Created by Shane Jansen on 12/11/15.
  */
-public enum WidgetFactory {
-    INSTANCE;
+public class WidgetFactory {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.BUTTON, Texture.class),
             new Asset(FilePathManager.BUTTON_DOWN, Texture.class),
             new Asset(FilePathManager.EDIT_TEXT, Texture.class)
     };
-    private FreeTypeFontGenerator mFontGenerator;
+    private static WidgetFactory INSTANCE;
+    public static BitmapFont mBfNormalLg, mBfNormalRg, mBfNormalSm;
 
     public static void addAssets() {
         for (Asset a: mAssets) {
@@ -36,16 +34,26 @@ public enum WidgetFactory {
         }
     }
 
-    WidgetFactory() {
-        Game.log("Singleton constructor");
-        mFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FilePathManager.FONT));
+    public static void initialize(float viewportWidth) {
+        INSTANCE = new WidgetFactory();
+
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FilePathManager.FONT));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        parameter.size = (int) (viewportWidth * 30f / 500f);
+        mBfNormalLg = fontGenerator.generateFont(parameter);
+        parameter.size = (int) (viewportWidth * 15f / 500f);
+        mBfNormalRg = fontGenerator.generateFont(parameter);
+        parameter.size = (int) (viewportWidth * 8f / 500f);
+        mBfNormalSm = fontGenerator.generateFont(parameter);
     }
 
-    public TextButton getStdButton(float width, int fontSize, String text) {
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = fontSize;
-        BitmapFont font = mFontGenerator.generateFont(parameter);
+    public static WidgetFactory getInstance() {
+        if (INSTANCE != null) return INSTANCE;
+        else throw new NullPointerException("WidgetFactory has not been initialized yet.");
+    }
 
+    public TextButton getStdButton(float width, float height, BitmapFont font, String text) {
         Skin skin = new Skin();
         skin.add("font", font);
         skin.add("up", Game.ASSETS.get(mAssets[0].file));
@@ -56,19 +64,14 @@ public enum WidgetFactory {
         style.up = new TextureRegionDrawable(new TextureRegion(skin.get("up", Texture.class)));
         style.down = new TextureRegionDrawable(new TextureRegion(skin.get("down", Texture.class)));
 
-        TextButton textButton = new TextButton(text, style);
-        Size size = Utils.scaleScreenSize(textButton.getHeight(), textButton.getWidth(), width);
-        //textButton.getLabel().setFontScale(size.height / textButton.getHeight());
-        textButton.setWidth(size.width);
-        textButton.setHeight(size.height);
+        TextButton textButton = new TextButton("", style);
+        textButton.setWidth(width);
+        textButton.setHeight(height);
+        textButton.setText(text); // Set text only after default button is calculated
         return textButton;
     }
 
-    public HintTextField getStdTextField(float width, int fontSize, String hint) {
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = fontSize;
-        BitmapFont font = mFontGenerator.generateFont(parameter);
-
+    public HintTextField getStdTextField(float width, float height, BitmapFont font, String hint) {
         Skin skin = new Skin();
         skin.add("font", font);
         skin.add("background", Game.ASSETS.get(mAssets[2].file));
@@ -78,19 +81,15 @@ public enum WidgetFactory {
         style.background = new TextureRegionDrawable(new TextureRegion(skin.get("background", Texture.class)));
         style.fontColor = Color.GRAY;
 
-        HintTextField textField = new HintTextField(hint, style);
-        Size size = Utils.scaleScreenSize(textField.getHeight(), textField.getWidth(), width);
+        HintTextField textField = new HintTextField("", style);
         textField.setAlignment(Align.center);
-        textField.setWidth(size.width);
-        textField.setHeight(size.height);
+        textField.setWidth(width);
+        textField.setHeight(height);
+        textField.setText(hint);
         return textField;
     }
 
-    public Label getStdLabel(float width, float height, int fontSize, String text) {
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = fontSize;
-        BitmapFont font = mFontGenerator.generateFont(parameter);
-
+    public Label getStdLabel(float width, float height, BitmapFont font, String text) {
         Skin skin = new Skin();
         skin.add("font", font);
 
@@ -98,11 +97,11 @@ public enum WidgetFactory {
         style.font = skin.get("font", BitmapFont.class);
         style.fontColor = Color.WHITE;
 
-        Label label = new Label(text, style);
+        Label label = new Label("", style);
         label.setWrap(true);
-        //label.setFontScale(fontScale);
         label.setWidth(width);
         label.setHeight(height);
+        label.setText(text);
         return label;
     }
 }
