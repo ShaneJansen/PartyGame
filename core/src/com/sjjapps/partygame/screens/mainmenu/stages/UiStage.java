@@ -24,7 +24,7 @@ public class UiStage extends Stage {
     public interface UiInterface {
         void btnHostClicked();
         void btnJoinClicked();
-        void btnCreditsClicked();
+        void btnAboutClicked();
     }
 
     public UiStage(UiInterface uiInterface) {
@@ -38,8 +38,8 @@ public class UiStage extends Stage {
                 WidgetFactory.mBfNormalRg, "Host Game\n2-8 Players Needed");
         TextButton btnJoin = WidgetFactory.getInstance().getStdButton(widgetWidth, widgetHeight,
                 WidgetFactory.mBfNormalRg, "Join Game");
-        TextButton btnCredits = WidgetFactory.getInstance().getStdButton(widgetWidth, widgetHeight,
-                WidgetFactory.mBfNormalRg, "Credits");
+        TextButton btnAbout = WidgetFactory.getInstance().getStdButton(widgetWidth, widgetHeight,
+                WidgetFactory.mBfNormalRg, "About");
 
         // Create table
         Table table = new Table();
@@ -47,7 +47,7 @@ public class UiStage extends Stage {
         table.row();
         table.add(btnJoin).width(btnJoin.getWidth()).height(btnJoin.getHeight()).padTop(20f);
         table.row();
-        table.add(btnCredits).width(btnCredits.getWidth()).height(btnCredits.getHeight()).padTop(20f);
+        table.add(btnAbout).width(btnAbout.getWidth()).height(btnAbout.getHeight()).padTop(20f);
         table.setFillParent(true);
         table.pack();
         //table.right().bottom(); // Alignment is center by default
@@ -68,10 +68,10 @@ public class UiStage extends Stage {
                 mInterface.btnJoinClicked();
             }
         });
-        btnCredits.addListener(new ClickListener() {
+        btnAbout.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                mInterface.btnCreditsClicked();
+                mInterface.btnAboutClicked();
             }
         });
     }
