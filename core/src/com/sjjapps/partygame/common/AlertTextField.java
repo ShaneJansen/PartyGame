@@ -1,9 +1,12 @@
 package com.sjjapps.partygame.common;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.sjjapps.partygame.common.actors.HintTextField;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
 
 /**
@@ -11,32 +14,57 @@ import com.sjjapps.partygame.common.actors.WidgetFactory;
  */
 public class AlertTextField extends Dialog {
     private static final float WIDGET_SCALE = 4f / 10f;
+    private HintTextField mTf;
+    private TextButton mBtnContinue;
 
     public static void addAssets() {
         Dialog.addAssets();
         WidgetFactory.addAssets();
     }
 
-    public AlertTextField(DialogInterface dialogInterface, BitmapFont font, String hint) {
+    public interface AlertTextFieldInterface {
+        void btnContinueClicked(String tfText);
+    }
+
+    public AlertTextField(DialogInterface dialogInterface, final AlertTextFieldInterface textFieldInterface,
+                          BitmapFont font, String hint) {
         super(dialogInterface, 5f / 10f);
 
         // Create views
         float widgetWidth = getCamera().viewportWidth * WIDGET_SCALE;
         float widgetHeight = widgetWidth * (4f / 10f);
-        TextField etAlert = WidgetFactory.getInstance().getStdTextField(widgetWidth * 2, widgetHeight, font, hint);
-        TextButton btnOk = WidgetFactory.getInstance().getStdButton(widgetWidth, widgetHeight, font, "Continue");
+        mTf = WidgetFactory.getInstance().getStdTextField(widgetWidth * 2, widgetHeight, font, hint);
+        mBtnContinue = WidgetFactory.getInstance().getStdButton(widgetWidth, widgetHeight, font, "Continue");
 
         // Create table
         Table table = new Table();
-        table.add(etAlert).width(etAlert.getWidth()).height(etAlert.getHeight());
+        table.add(mTf).width(mTf.getWidth()).height(mTf.getHeight());
         table.row();
-        table.add(btnOk).width(btnOk.getWidth()).height(btnOk.getHeight()).padTop(20f);
+        table.add(mBtnContinue).width(mBtnContinue.getWidth()).height(mBtnContinue.getHeight()).padTop(20f);
         table.setFillParent(true);
         table.pack();
         addActor(table);
+
+        // Listeners
+        mBtnContinue.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (mTf.didClear()) textFieldInterface.btnContinueClicked(mTf.getText());
+                else textFieldInterface.btnContinueClicked("");
+            }
+        });
     }
 
-    public AlertTextField(DialogInterface dialogInterface, String hint) {
-        this(dialogInterface, WidgetFactory.mBfNormalLg, hint);
+    public AlertTextField(DialogInterface dialogInterface, AlertTextFieldInterface textFieldInterface,
+                          String hint) {
+        this(dialogInterface, textFieldInterface, WidgetFactory.mBfNormalLg, hint);
+    }
+
+    public HintTextField getTf() {
+        return mTf;
+    }
+
+    public TextButton getBtnContinue() {
+        return mBtnContinue;
     }
 }

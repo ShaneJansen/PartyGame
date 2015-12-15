@@ -6,10 +6,14 @@ import com.sjjapps.partygame.common.AlertDialog;
 import com.sjjapps.partygame.common.AlertTextField;
 import com.sjjapps.partygame.common.DialogRealm;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.managers.PrefManager;
 import com.sjjapps.partygame.screens.mainmenu.dialogs.AboutDialog;
 import com.sjjapps.partygame.screens.mainmenu.stages.BackgroundStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.PencilStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.UiStage;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Shane Jansen on 11/17/15.
@@ -39,12 +43,35 @@ public class MainMenu extends DialogRealm {
         addStage(new UiStage(new UiStage.UiInterface() {
             @Override
             public void btnHostClicked() {
-                addDialog(new AlertDialog(MainMenu.this, "This is an alert!\nA lot more text and more and more and more."), false);
+                String name = Game.PREFS.getString(PrefManager.USER_NAME, null);
+                AlertTextField alertTextField = new AlertTextField(MainMenu.this,
+                        new AlertTextField.AlertTextFieldInterface() {
+                            @Override
+                            public void btnContinueClicked(String tfText) {
+                                if (tfText.trim().length() != 0) {
+                                    Game.PREFS.putString(PrefManager.USER_NAME, tfText);
+                                    Game.PREFS.flush();
+                                    addDialog(new AlertDialog(MainMenu.this, tfText), true);
+                                }
+                            }
+                        }, "Enter your name here.");
+                addDialog(alertTextField, true);
+                if (name != null) alertTextField.getTf().setDefaultText(name);
             }
 
             @Override
             public void btnJoinClicked() {
-                addDialog(new AlertTextField(MainMenu.this, "Enter your name here."), false);
+                final AlertDialog alertDialog = new AlertDialog(MainMenu.this, "");
+                addDialog(alertDialog, false);
+                new Timer().scheduleAtFixedRate(new TimerTask() {
+                    String ellipsis = "Searching ";
+                    @Override
+                    public void run() {
+                        if (ellipsis.length() == 16) ellipsis = "Searching ";
+                        else ellipsis += ". ";
+                        alertDialog.getLbl().setText(ellipsis);
+                    }
+                }, 0, 1000);
             }
 
             @Override

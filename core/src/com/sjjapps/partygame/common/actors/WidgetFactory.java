@@ -81,7 +81,7 @@ public class WidgetFactory {
         style.background = new TextureRegionDrawable(new TextureRegion(skin.get("background", Texture.class)));
         style.fontColor = Color.GRAY;
 
-        HintTextField textField = new HintTextField("", style);
+        HintTextField textField = new HintTextField(hint, style);
         textField.setAlignment(Align.center);
         textField.setWidth(width);
         textField.setHeight(height);
@@ -99,6 +99,7 @@ public class WidgetFactory {
 
         Label label = new Label("", style);
         label.setWrap(true);
+        label.setAlignment(Align.center);
         label.setWidth(width);
         label.setHeight(height);
         label.setText(text);

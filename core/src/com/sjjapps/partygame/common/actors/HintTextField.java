@@ -13,7 +13,7 @@ public class HintTextField extends TextField {
     private boolean mDidClear;
 
     public HintTextField(String hint, TextFieldStyle style) {
-        super(hint, style);
+        super("", style);
         this.mHint = hint;
 
         addListener(new FocusListener() {
@@ -23,13 +23,26 @@ public class HintTextField extends TextField {
                     setText("");
                     getStyle().fontColor = Color.WHITE;
                     mDidClear = true;
-                }
-                else if (actor == HintTextField.this && !focused && getText().equals("")) {
+                } else if (actor == HintTextField.this && !focused && getText().trim().length() == 0) {
                     setText(mHint);
                     getStyle().fontColor = Color.GRAY;
                 }
                 super.keyboardFocusChanged(event, actor, focused);
             }
         });
+    }
+
+    public void setDefaultText(String str) {
+        setText(str);
+        getStyle().fontColor = Color.WHITE;
+        mDidClear = true;
+    }
+
+    public String getHint() {
+        return mHint;
+    }
+
+    public boolean didClear() {
+        return mDidClear;
     }
 }

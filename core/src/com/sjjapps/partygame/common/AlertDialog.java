@@ -10,6 +10,7 @@ import com.sjjapps.partygame.common.actors.WidgetFactory;
  */
 public class AlertDialog extends Dialog {
     private static final float WIDGET_SCALE = 8f / 10f;
+    private Label mLbl;
 
     public static void addAssets() {
         Dialog.addAssets();
@@ -22,11 +23,11 @@ public class AlertDialog extends Dialog {
         // Create views
         float widgetWidth = getCamera().viewportWidth * WIDGET_SCALE;
         float widgetHeight = getCamera().viewportHeight * WIDGET_SCALE;
-        Label lblAlert = WidgetFactory.getInstance().getStdLabel(widgetWidth, widgetHeight, font, text);
+        mLbl = WidgetFactory.getInstance().getStdLabel(widgetWidth, widgetHeight, font, text);
 
         // Create table
         Table table = new Table();
-        table.add(lblAlert).width(lblAlert.getWidth()).height(lblAlert.getHeight());
+        table.add(mLbl).width(mLbl.getWidth()).height(mLbl.getHeight());
         table.setFillParent(true);
         table.pack();
         table.debug();
@@ -35,5 +36,9 @@ public class AlertDialog extends Dialog {
 
     public AlertDialog(DialogInterface dialogInterface, String text) {
         this(dialogInterface, WidgetFactory.mBfNormalLg, text);
+    }
+
+    public Label getLbl() {
+        return mLbl;
     }
 }

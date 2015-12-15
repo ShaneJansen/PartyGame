@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,6 +31,7 @@ public class Game implements ApplicationListener {
 	public static SpriteBatch SPRITE_BATCH;
 	public static ShapeRenderer SHAPE_RENDERER;
 	public static MultiplexerManager MULTIPLEXER_MANAGER;
+	public static Preferences PREFS;
 	public static final com.badlogic.gdx.Game GAME = new com.badlogic.gdx.Game() {
 		@Override
 		public void create() {
@@ -39,6 +41,7 @@ public class Game implements ApplicationListener {
 			SPRITE_BATCH = new SpriteBatch();
 			SHAPE_RENDERER = new ShapeRenderer();
 			MULTIPLEXER_MANAGER = new MultiplexerManager(new InputMultiplexer());
+			PREFS = Gdx.app.getPreferences("MyPrefs");
 
 			Gdx.input.setInputProcessor(MULTIPLEXER_MANAGER.getInputMultiplexer());
 			Texture.setAssetManager(ASSETS);
