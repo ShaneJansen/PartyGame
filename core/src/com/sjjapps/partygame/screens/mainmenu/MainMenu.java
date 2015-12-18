@@ -1,6 +1,9 @@
 package com.sjjapps.partygame.screens.mainmenu;
 
 import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.AlertDialog;
 import com.sjjapps.partygame.common.AlertTextField;
@@ -12,6 +15,7 @@ import com.sjjapps.partygame.screens.mainmenu.stages.BackgroundStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.PencilStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.UiStage;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -51,7 +55,7 @@ public class MainMenu extends DialogRealm {
                                 if (tfText.trim().length() != 0) {
                                     Game.PREFS.putString(PrefManager.USER_NAME, tfText);
                                     Game.PREFS.flush();
-                                    addDialog(new AlertDialog(MainMenu.this, tfText), true);
+                                    startServer();
                                 }
                             }
                         }, "Enter your name here.");
@@ -65,6 +69,7 @@ public class MainMenu extends DialogRealm {
                 addDialog(alertDialog, false);
                 new Timer().scheduleAtFixedRate(new TimerTask() {
                     String ellipsis = "Searching ";
+
                     @Override
                     public void run() {
                         if (ellipsis.length() == 16) ellipsis = "Searching ";
@@ -91,5 +96,21 @@ public class MainMenu extends DialogRealm {
         // Finalize
         addInputListeners();
         mStgPencil.addPencil(0, 0, true);
+    }
+
+    private void startServer() {
+        Game.SERVER = new Server();
+        Game.SERVER.start();
+        try {
+            Game.SERVER.bind(54555, 54777);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Game.SERVER.addListener(new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                Gdx.app.log("TEST", "RECEIVED DATA");
+            }
+        });
     }
 }

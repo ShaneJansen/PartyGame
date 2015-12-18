@@ -9,6 +9,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.managers.MultiplexerManager;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 
@@ -32,6 +34,8 @@ public class Game implements ApplicationListener {
 	public static ShapeRenderer SHAPE_RENDERER;
 	public static MultiplexerManager MULTIPLEXER_MANAGER;
 	public static Preferences PREFS;
+	public static Client CLIENT;
+	public static Server SERVER;
 	public static final com.badlogic.gdx.Game GAME = new com.badlogic.gdx.Game() {
 		@Override
 		public void create() {
