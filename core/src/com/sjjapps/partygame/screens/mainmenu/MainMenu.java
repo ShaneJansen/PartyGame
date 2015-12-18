@@ -1,10 +1,12 @@
 package com.sjjapps.partygame.screens.mainmenu;
 
 import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.kryonet.Client;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.AlertDialog;
 import com.sjjapps.partygame.common.AlertTextField;
 import com.sjjapps.partygame.common.DialogRealm;
+import com.sjjapps.partygame.common.Network;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
 import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.managers.PrefManager;
@@ -14,6 +16,8 @@ import com.sjjapps.partygame.screens.mainmenu.stages.BackgroundStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.PencilStage;
 import com.sjjapps.partygame.screens.mainmenu.stages.UiStage;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,19 +54,7 @@ public class MainMenu extends DialogRealm {
 
             @Override
             public void btnJoinClicked() {
-                Game.SERVER = null;
-                final AlertDialog alertDialog = new AlertDialog(MainMenu.this, "");
-                addDialog(alertDialog, false);
-                new Timer().scheduleAtFixedRate(new TimerTask() {
-                    String ellipsis = "Searching ";
-
-                    @Override
-                    public void run() {
-                        if (ellipsis.length() == 16) ellipsis = "Searching ";
-                        else ellipsis += ". ";
-                        alertDialog.getLbl().setText(ellipsis);
-                    }
-                }, 0, 1000);
+                searchAndJoinGame();
             }
 
             @Override
@@ -103,5 +95,70 @@ public class MainMenu extends DialogRealm {
                 }, "Enter your name here.");
         addDialog(alertTextField, true);
         if (name != null) alertTextField.getTf().setDefaultText(name);
+    }
+
+    private void searchAndJoinGame() {
+        Game.SERVER = null;
+        Game.CLIENT = new Client();
+        Game.CLIENT.start();
+        // Searching dialog
+        final AlertDialog alertDialog = new AlertDialog(MainMenu.this, "");
+        addDialog(alertDialog, false);
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            String ellipsis = "Searching ";
+            @Override
+            public void run() {
+                if (ellipsis.length() == 16) ellipsis = "Searching ";
+                else ellipsis += ". ";
+                alertDialog.getLbl().setText(ellipsis);
+            }
+        }, 0, 1000);
+        // Search for server
+        new Thread("Connect") {
+            @Override
+            public void run() {
+                InetAddress address = Game.CLIENT.discoverHost(Network.UDP_PORT, 5000);
+                if (address == null) {
+                    // Server could not be found; Prompt to enter manually
+                    // Post a runnable to the rendering thread that processes the result
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            removeDialog();
+                            addDialog(new AlertTextField(MainMenu.this,
+                                    new AlertTextField.AlertTextFieldInterface() {
+                                        @Override
+                                        public void btnContinueClicked(String tfText) {
+                                            // Try to connect to supplied address
+                                            try {
+                                                Game.CLIENT.connect(10000, tfText, Network.TCP_PORT, Network.UDP_PORT);
+                                                showNameDialog();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                                addDialog(new AlertDialog(MainMenu.this, "Could not connect to supplied address."), false);
+                                            }
+                                        }
+                                    }, "Enter Server IP"), false);
+                        }
+                    });
+                }
+                else {
+                    // Server found; Try to connect
+                    try {
+                        Game.CLIENT.connect(10000, address, Network.TCP_PORT, Network.UDP_PORT);
+                        showNameDialog();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                removeDialog();
+                                addDialog(new AlertDialog(MainMenu.this, "There was a problem connecting to the server."), false);
+                            }
+                        });
+                    }
+                }
+            }
+        }.start();
     }
 }
