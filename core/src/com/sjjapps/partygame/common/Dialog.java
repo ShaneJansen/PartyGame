@@ -28,7 +28,6 @@ public abstract class Dialog extends Stage {
     private DialogInterface mDialogInterface;
     private FillViewport mVpBackground;
     private Texture mTxtBackground;
-    private Button mBtnX;
 
     public static void addAssets() {
         for (Asset a: mAssets) {
@@ -68,13 +67,13 @@ public abstract class Dialog extends Stage {
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.up = new TextureRegionDrawable(new TextureRegion(skin.get("up", Texture.class)));
         style.down = new TextureRegionDrawable(new TextureRegion(skin.get("down", Texture.class)));
-        mBtnX = new Button(style);
-        mBtnX.setSize(szExitButton.width, szExitButton.height);
-        mBtnX.setPosition(0, getViewport().getWorldHeight() - szExitButton.height);
-        addActor(mBtnX);
+        Button btnX = new Button(style);
+        btnX.setSize(szExitButton.width, szExitButton.height);
+        btnX.setPosition(0, getViewport().getWorldHeight() - szExitButton.height);
+        addActor(btnX);
 
         // Listeners
-        mBtnX.addListener(new ClickListener() {
+        btnX.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 mDialogInterface.btnExitPressed();
@@ -123,6 +122,5 @@ public abstract class Dialog extends Stage {
     public void dispose() {
         super.dispose();
         mTxtBackground.dispose();
-        mBtnX.getSkin().dispose();
     }
 }
