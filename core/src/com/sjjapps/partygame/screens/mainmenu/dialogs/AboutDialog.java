@@ -22,9 +22,9 @@ public class AboutDialog extends Dialog {
         super(dialogInterface, 8f / 10f);
 
         // Create views
-        float labelWidth = getCamera().viewportWidth * 7f / 10f;
+        float labelWidth = getCamera().viewportWidth * (7f / 10f);
         float labelHeight = labelWidth * (1f / 10f);
-        float buttonWidth = getCamera().viewportWidth * 3f / 10f;
+        float buttonWidth = getCamera().viewportWidth * (3f / 10f);
         float buttonHeight = buttonWidth * (4f / 10f);
         Label tfP1 = WidgetFactory.getInstance().getStdLabel(labelWidth, labelHeight,
                 WidgetFactory.mBfNormalRg, "This game is an open source project created by Shane Jansen.");

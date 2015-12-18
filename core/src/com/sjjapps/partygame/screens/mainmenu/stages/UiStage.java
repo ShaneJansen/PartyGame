@@ -14,7 +14,6 @@ import com.sjjapps.partygame.common.actors.WidgetFactory;
  */
 public class UiStage extends Stage {
     private static final float WIDGET_SCALE = 3f / 10f;
-    private static final float FONT_SCALE = 10f / 100f;
     private UiInterface mInterface;
 
     public static void addAssets() {

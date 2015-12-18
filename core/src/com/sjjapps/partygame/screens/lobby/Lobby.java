@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.DialogRealm;
+import com.sjjapps.partygame.screens.lobby.stages.UiStage;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class Lobby extends DialogRealm {
     public Lobby() {
         super();
         // Loading assets
+        UiStage.addAssets();
 
         Game.ASSETS.finishLoading();
         finishedLoading();
@@ -52,6 +54,15 @@ public class Lobby extends DialogRealm {
                 }
             });
         }
+
+        // UI Stage
+        addStage(new UiStage(new UiStage.UiInterface() {
+            @Override
+            public void btnBackClicked() {
+                Game.GAME.setScreen(new MainMenu());
+                dispose();
+            }
+        }, ipAddress));
     }
 
     private String startServer() {
