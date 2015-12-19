@@ -25,9 +25,9 @@ public class AlertTextField extends Dialog {
         void btnContinueClicked(String tfText);
     }
 
-    public AlertTextField(DialogInterface dialogInterface, final AlertTextFieldInterface textFieldInterface,
-                          BitmapFont font, String hint) {
-        super(dialogInterface, 5f / 10f);
+    public AlertTextField(DialogInterface dialogInterface, boolean cancelable,
+                          final AlertTextFieldInterface textFieldInterface, BitmapFont font, String hint) {
+        super(dialogInterface, 5f / 10f, cancelable);
 
         // Create views
         float widgetWidth = getCamera().viewportWidth * WIDGET_SCALE;
@@ -56,7 +56,7 @@ public class AlertTextField extends Dialog {
 
     public AlertTextField(DialogInterface dialogInterface, AlertTextFieldInterface textFieldInterface,
                           String hint) {
-        this(dialogInterface, textFieldInterface, WidgetFactory.mBfNormalLg, hint);
+        this(dialogInterface, true, textFieldInterface, WidgetFactory.mBfNormalLg, hint);
     }
 
     public HintTextField getTf() {

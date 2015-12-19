@@ -8,7 +8,7 @@ import com.sjjapps.partygame.common.actors.WidgetFactory;
 /**
  * Created by Shane Jansen on 12/13/15.
  */
-public class AlertDialog extends Dialog {
+public class Alert extends Dialog {
     private static final float WIDGET_SCALE = 8f / 10f;
     private Label mLbl;
 
@@ -17,8 +17,8 @@ public class AlertDialog extends Dialog {
         WidgetFactory.addAssets();
     }
 
-    public AlertDialog(DialogInterface dialogInterface, BitmapFont font, String text) {
-        super(dialogInterface, 5f / 10f);
+    public Alert(DialogInterface dialogInterface, boolean cancelable, BitmapFont font, String text) {
+        super(dialogInterface, 5f / 10f, cancelable);
 
         // Create views
         float widgetWidth = getCamera().viewportWidth * WIDGET_SCALE;
@@ -34,8 +34,8 @@ public class AlertDialog extends Dialog {
         addActor(table);
     }
 
-    public AlertDialog(DialogInterface dialogInterface, String text) {
-        this(dialogInterface, WidgetFactory.mBfNormalLg, text);
+    public Alert(DialogInterface dialogInterface, String text) {
+        this(dialogInterface, true, WidgetFactory.mBfNormalLg, text);
     }
 
     public Label getLbl() {

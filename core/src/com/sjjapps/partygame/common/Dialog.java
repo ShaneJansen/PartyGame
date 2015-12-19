@@ -39,7 +39,7 @@ public abstract class Dialog extends Stage {
         void btnExitPressed();
     }
 
-    public Dialog(DialogInterface dialogInterface, float widthScale) {
+    public Dialog(DialogInterface dialogInterface, float widthScale, boolean cancelable) {
         super(new ScreenViewport(), Game.SPRITE_BATCH);
         this.mDialogInterface = dialogInterface;
         mVpBackground = new FillViewport(Game.WORLD_WIDTH, Game.WORLD_HEIGHT);
@@ -70,7 +70,7 @@ public abstract class Dialog extends Stage {
         Button btnX = new Button(style);
         btnX.setSize(szExitButton.width, szExitButton.height);
         btnX.setPosition(0, getViewport().getWorldHeight() - szExitButton.height);
-        addActor(btnX);
+        if (cancelable) addActor(btnX);
 
         // Listeners
         btnX.addListener(new ClickListener() {
@@ -79,6 +79,10 @@ public abstract class Dialog extends Stage {
                 mDialogInterface.btnExitPressed();
             }
         });
+    }
+
+    public Dialog(DialogInterface dialogInterface, float widthScale) {
+        this(dialogInterface, widthScale, true);
     }
 
     @Override
