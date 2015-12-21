@@ -5,6 +5,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -49,6 +50,11 @@ public class Game implements ApplicationListener {
 			Texture.setAssetManager(ASSETS);
 			GAME.setScreen(new MainMenu()); // Initial screen
 		}
+
+		/*@Override
+		public void setScreen(Screen screen) {
+			this.screen = screen;
+		}*/
 	};
 
 	public static void log(String message) {
@@ -91,7 +97,6 @@ public class Game implements ApplicationListener {
 	 */
 	@Override
 	public void pause() {
-		PAUSED = true;
 		GAME.pause();
 	}
 
@@ -101,7 +106,6 @@ public class Game implements ApplicationListener {
 	 */
 	@Override
 	public void resume() {
-		PAUSED = false;
 		GAME.resume();
 	}
 

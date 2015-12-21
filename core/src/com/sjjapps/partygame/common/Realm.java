@@ -54,6 +54,12 @@ public abstract class Realm implements Screen {
         }
     }
 
+    public void changeRealm(Realm nextRealm) {
+        Game.MULTIPLEXER_MANAGER.clear();
+        nextRealm.addInputListeners();
+        Game.GAME.setScreen(nextRealm);
+    }
+
     @Override
     public void show() {
 
@@ -111,13 +117,8 @@ public abstract class Realm implements Screen {
 
     }
 
-    /**
-     * Disposes each controller.
-     */
     @Override
     public void dispose() {
-        for (Stage s: mStages) {
-            s.dispose();
-        }
+
     }
 }

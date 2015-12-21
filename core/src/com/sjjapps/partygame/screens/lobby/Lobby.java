@@ -37,8 +37,8 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
         mUiStage = new UiStage(new UiStage.UiInterface() {
             @Override
             public void btnBackClicked() {
-                Game.GAME.setScreen(new MainMenu());
-                dispose();
+                Game.NETWORK_HELPER.getEndPoint().close();
+                changeRealm(new MainMenu());
             }
         });
         addStage(mUiStage);
@@ -105,6 +105,6 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
 
     @Override
     public void serverDisconnected() {
-        dispose();
+
     }
 }

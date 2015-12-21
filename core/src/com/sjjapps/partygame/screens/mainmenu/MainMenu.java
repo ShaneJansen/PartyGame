@@ -56,7 +56,7 @@ public class MainMenu extends DialogRealm {
                     showNameDialog();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    addDialog(new Alert(MainMenu.this, "A server could not be started."), true);
+                    addDialog(new Alert(MainMenu.this, "A server could not be started."));
                 }
             }
 
@@ -70,7 +70,7 @@ public class MainMenu extends DialogRealm {
 
             @Override
             public void btnAboutClicked() {
-                addDialog(new AboutDialog(MainMenu.this), true);
+                addDialog(new AboutDialog(MainMenu.this));
             }
         }));
 
@@ -105,19 +105,18 @@ public class MainMenu extends DialogRealm {
                             Game.PREFS.putString(PrefManager.USER_NAME, tfText);
                             Game.PREFS.flush();
                             DataManager.USER_NAME = tfText;
-                            Game.GAME.setScreen(new Lobby());
-                            dispose();
+                            changeRealm(new Lobby());
                         }
                     }
                 }, "Enter your name here.");
-        addDialog(alertTextField, true);
+        addDialog(alertTextField);
         if (name != null) alertTextField.getTf().setDefaultText(name);
     }
 
     private void searchAndJoinGame() {
         // Searching dialog
         addDialog(new Alert(MainMenu.this, false, WidgetFactory.mBfNormalLg,
-                "Please Wait\nSearching..."), false);
+                "Please Wait\nSearching..."));
         // Search for server
         new Thread("Discover") {
             @Override
@@ -136,11 +135,11 @@ public class MainMenu extends DialogRealm {
                                         @Override
                                         public void btnContinueClicked(String tfText) {
                                             addDialog(new Alert(MainMenu.this, false, WidgetFactory.mBfNormalLg,
-                                                    "Please Wait\nConnecting..."), false);
+                                                    "Please Wait\nConnecting..."));
                                             connectToIp(tfText, "Could not connect to supplied address.\n" +
                                                     "You must be on the same network as the host.");
                                         }
-                                    }, "Enter Server IP"), false);
+                                    }, "Enter Server IP"));
                         }
                     });
                 }
@@ -173,7 +172,7 @@ public class MainMenu extends DialogRealm {
                         @Override
                         public void run() {
                             removeDialog();
-                            addDialog(new Alert(MainMenu.this, failMessage), false);
+                            addDialog(new Alert(MainMenu.this, failMessage));
                         }
                     });
                 }

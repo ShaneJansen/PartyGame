@@ -81,7 +81,7 @@ public class NetworkHelper {
                     Game.log("INTERFACE - SERVER DISCONNECTED");
                     if (mNetworkInterface != null) mNetworkInterface.serverDisconnected();
                     MainMenu mainMenu = new MainMenu();
-                    mainMenu.addDialog(new Alert(mainMenu, "You have been disconnected from the server."), false);
+                    mainMenu.addDialog(new Alert(mainMenu, "You have been disconnected from the server."));
                     Game.GAME.setScreen(new MainMenu());
                 }
             }
