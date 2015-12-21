@@ -2,9 +2,11 @@ package com.sjjapps.partygame.screens.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Alert;
 import com.sjjapps.partygame.common.AlertTextField;
+import com.sjjapps.partygame.common.Dialog;
 import com.sjjapps.partygame.common.DialogRealm;
 import com.sjjapps.partygame.network.NetworkHelper;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
@@ -46,12 +48,23 @@ public class MainMenu extends DialogRealm {
         addStage(new UiStage(new UiStage.UiInterface() {
             @Override
             public void btnHostClicked() {
-                Game.CLIENT = null;
-                showNameDialog();
+                Server server = new Server();
+                server.start();
+                try {
+                    server.bind(NetworkHelper.TCP_PORT, NetworkHelper.UDP_PORT);
+                    Game.NETWORK_HELPER = new NetworkHelper(server);
+                    showNameDialog();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    addDialog(new Alert(MainMenu.this, "A server could not be started."), true);
+                }
             }
 
             @Override
             public void btnJoinClicked() {
+                Client client = new Client();
+                client.start();
+                Game.NETWORK_HELPER = new NetworkHelper(client);
                 searchAndJoinGame();
             }
 
@@ -78,7 +91,13 @@ public class MainMenu extends DialogRealm {
 
     private void showNameDialog() {
         String name = Game.PREFS.getString(PrefManager.USER_NAME, null);
-        AlertTextField alertTextField = new AlertTextField(MainMenu.this,
+        AlertTextField alertTextField = new AlertTextField(new Dialog.DialogInterface() {
+            @Override
+            public void btnExitPressed() {
+                Game.NETWORK_HELPER.getEndPoint().close();
+                removeDialog();
+            }
+        },
                 new AlertTextField.AlertTextFieldInterface() {
                     @Override
                     public void btnContinueClicked(String tfText) {
@@ -96,9 +115,6 @@ public class MainMenu extends DialogRealm {
     }
 
     private void searchAndJoinGame() {
-        Game.SERVER = null;
-        Game.CLIENT = new Client();
-        Game.CLIENT.start();
         // Searching dialog
         addDialog(new Alert(MainMenu.this, false, WidgetFactory.mBfNormalLg,
                 "Please Wait\nSearching..."), false);
@@ -106,7 +122,8 @@ public class MainMenu extends DialogRealm {
         new Thread("Discover") {
             @Override
             public void run() {
-                InetAddress address = Game.CLIENT.discoverHost(NetworkHelper.UDP_PORT, 5000);
+                Client client = (Client) Game.NETWORK_HELPER.getEndPoint();
+                InetAddress address = client.discoverHost(NetworkHelper.UDP_PORT, 5000);
                 if (address == null) {
                     // Server could not be found; Prompt to enter manually
                     // Post a runnable to the rendering thread that processes the result
@@ -129,6 +146,7 @@ public class MainMenu extends DialogRealm {
                 }
                 else {
                     // Server found; Try to connect
+                    removeDialog();
                     connectToIp(address.getHostAddress(), "There was a problem connecting to the server.");
                 }
             }
@@ -140,8 +158,9 @@ public class MainMenu extends DialogRealm {
             @Override
             public void run() {
                 // Try to connect to supplied address
+                Client client = (Client) Game.NETWORK_HELPER.getEndPoint();
                 try {
-                    Game.CLIENT.connect(10000, ipAddress, NetworkHelper.TCP_PORT, NetworkHelper.UDP_PORT);
+                    client.connect(10000, ipAddress, NetworkHelper.TCP_PORT, NetworkHelper.UDP_PORT);
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {

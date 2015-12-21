@@ -6,12 +6,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.network.NetworkHelper;
+import com.sjjapps.partygame.network.User;
 
 /**
  * Created by Shane Jansen on 12/17/15.
  */
 public class UiStage extends Stage {
     private UiInterface mUiInterface;
+    private Label mLblAddress;
+    private Label mLblPlayers;
 
     public static void addAssets() {
         WidgetFactory.addAssets();
@@ -21,20 +25,41 @@ public class UiStage extends Stage {
         void btnBackClicked();
     }
 
-    public UiStage(UiInterface uiInterface, String ipAddress) {
+    public UiStage(UiInterface uiInterface) {
         super(new ScreenViewport(), Game.SPRITE_BATCH);
         this.mUiInterface = uiInterface;
 
         // Create views
-        Label lblAddress = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (4f / 10f),
-                getCamera().viewportHeight * (1f / 10f), WidgetFactory.mBfNormalRg, "Server IP: " + ipAddress);
+        mLblAddress = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (4f / 10f),
+                getCamera().viewportHeight * (1f / 10f), WidgetFactory.mBfNormalRg, "");
+        mLblPlayers = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (5f / 10f),
+                getCamera().viewportHeight, WidgetFactory.mBfNormalRg, "Players:");
 
-        // Create table
-        Table table = new Table();
-        table.add(lblAddress).width(lblAddress.getWidth()).height(lblAddress.getHeight());
-        table.setFillParent(true);
-        table.setDebug(true);
-        table.pack();
-        addActor(table);
+        // Create ipTable
+        Table ipTable = new Table();
+        ipTable.add(mLblAddress).width(mLblAddress.getWidth()).height(mLblAddress.getHeight());
+        ipTable.right().bottom();
+        ipTable.setFillParent(true);
+        ipTable.pack();
+        addActor(ipTable);
+
+        // Create playersTable
+        Table playersTable = new Table();
+        playersTable.add(mLblPlayers).width(mLblPlayers.getWidth()).height(mLblPlayers.getHeight());
+        playersTable.setFillParent(true);
+        playersTable.pack();
+        addActor(playersTable);
+    }
+
+    public void updateIpAddress(String ipAddress) {
+        mLblAddress.setText("Server IP: " + ipAddress);
+    }
+
+    public void updatePlayerList() {
+        String players = "Players:\n";
+        for (User u: Game.NETWORK_HELPER.getNetworkUsers().users) {
+            players += u.getName() + "\n";
+        }
+        mLblPlayers.setText(players);
     }
 }

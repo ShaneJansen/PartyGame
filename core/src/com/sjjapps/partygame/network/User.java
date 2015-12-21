@@ -40,9 +40,9 @@ public class User {
         mScore = score;
     }
 
-    public static class Users {
+    public static class NetworkUsers {
         public ArrayList<User> users = new ArrayList<User>();
 
-        public Users() {}
+        public NetworkUsers() {}
     }
 }
