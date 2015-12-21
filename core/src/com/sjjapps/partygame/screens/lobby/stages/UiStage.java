@@ -1,12 +1,14 @@
 package com.sjjapps.partygame.screens.lobby.stages;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
-import com.sjjapps.partygame.network.NetworkHelper;
 import com.sjjapps.partygame.network.User;
 
 /**
@@ -30,10 +32,21 @@ public class UiStage extends Stage {
         this.mUiInterface = uiInterface;
 
         // Create views
+        float exitButtonSize = getCamera().viewportWidth * (1f / 10f);
+        TextButton btnBack = WidgetFactory.getInstance().getStdButton(exitButtonSize, exitButtonSize,
+                WidgetFactory.mBfNormalRg, "Back");
         mLblAddress = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (4f / 10f),
                 getCamera().viewportHeight * (1f / 10f), WidgetFactory.mBfNormalRg, "");
         mLblPlayers = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (5f / 10f),
                 getCamera().viewportHeight, WidgetFactory.mBfNormalRg, "Players:");
+
+        // Create exitTable
+        Table exitTable = new Table();
+        exitTable.add(btnBack).width(btnBack.getWidth()).height(btnBack.getHeight());
+        exitTable.top().left();
+        exitTable.setFillParent(true);
+        exitTable.pack();
+        addActor(exitTable);
 
         // Create ipTable
         Table ipTable = new Table();
@@ -49,6 +62,14 @@ public class UiStage extends Stage {
         playersTable.setFillParent(true);
         playersTable.pack();
         addActor(playersTable);
+
+        // Listeners
+        btnBack.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mUiInterface.btnBackClicked();
+            }
+        });
     }
 
     public void updateIpAddress(String ipAddress) {

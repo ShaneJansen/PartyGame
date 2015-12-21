@@ -6,7 +6,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Alert;
 import com.sjjapps.partygame.common.DialogRealm;
 import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.network.NetworkHelper;
@@ -58,6 +57,9 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
             client.sendTCP(new User(DataManager.USER_NAME));
         }
         mUiStage.updateIpAddress(ipAddress);
+
+        // Finalize
+        addInputListeners();
     }
 
     @Override

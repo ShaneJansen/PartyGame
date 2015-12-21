@@ -9,8 +9,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.managers.MultiplexerManager;
 import com.sjjapps.partygame.network.NetworkHelper;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
