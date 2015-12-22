@@ -1,4 +1,4 @@
-package com.sjjapps.partygame.common;
+package com.sjjapps.partygame.common.realms;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

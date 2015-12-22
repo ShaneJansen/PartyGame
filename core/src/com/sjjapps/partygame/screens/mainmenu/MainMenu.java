@@ -7,8 +7,8 @@ import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Alert;
 import com.sjjapps.partygame.common.AlertTextField;
 import com.sjjapps.partygame.common.Dialog;
-import com.sjjapps.partygame.common.DialogRealm;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.common.realms.DialogRealm;
 import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.managers.PrefManager;
 import com.sjjapps.partygame.network.NetworkHelper;
@@ -44,7 +44,7 @@ public class MainMenu extends DialogRealm {
     }
 
     private void finishedLoading() {
-        // UI Stage
+        // UI stage
         addStage(new UiStage(new UiStage.UiInterface() {
             @Override
             public void btnHostClicked() {
@@ -74,7 +74,7 @@ public class MainMenu extends DialogRealm {
             }
         }));
 
-        // Pencil Stage
+        // Pencil stage
         final PencilStage stgPencil = new PencilStage();
         addStage(stgPencil);
         addStage(new BackgroundStage(new BackgroundStage.BackgroundInterface() {

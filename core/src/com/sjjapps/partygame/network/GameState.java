@@ -5,6 +5,7 @@ package com.sjjapps.partygame.network;
  */
 public class GameState {
     public boolean paused;
+    public boolean started;
 
     public GameState() {}
 }

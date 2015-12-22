@@ -7,8 +7,6 @@ import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Alert;
-import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -51,6 +49,7 @@ public class NetworkHelper {
         kryo.register(ArrayList.class);
         kryo.register(User.class);
         kryo.register(User.NetworkUsers.class);
+        kryo.register(GameState.class);
     }
 
     private void addEndpointListener(EndPoint endpoint) {
@@ -80,9 +79,6 @@ public class NetworkHelper {
                 } else {
                     Game.log("INTERFACE - SERVER DISCONNECTED");
                     if (mNetworkInterface != null) mNetworkInterface.serverDisconnected();
-                    MainMenu mainMenu = new MainMenu();
-                    mainMenu.addDialog(new Alert(mainMenu, "You have been disconnected from the server."));
-                    Game.GAME.setScreen(new MainMenu());
                 }
             }
         });

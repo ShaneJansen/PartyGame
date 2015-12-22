@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
-import com.sjjapps.partygame.network.User;
 
 /**
  * Created by Shane Jansen on 12/17/15.
@@ -18,6 +17,7 @@ public class UiStage extends Stage {
     private UiInterface mUiInterface;
     private Label mLblAddress;
     private Label mLblPlayers;
+    private TextButton mBtnStart;
 
     public static void addAssets() {
         WidgetFactory.addAssets();
@@ -25,6 +25,7 @@ public class UiStage extends Stage {
 
     public interface UiInterface {
         void btnBackClicked();
+        void btnStartClicked();
     }
 
     public UiStage(UiInterface uiInterface) {
@@ -38,7 +39,11 @@ public class UiStage extends Stage {
         mLblAddress = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (4f / 10f),
                 getCamera().viewportHeight * (1f / 10f), WidgetFactory.mBfNormalRg, "");
         mLblPlayers = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (5f / 10f),
-                getCamera().viewportHeight, WidgetFactory.mBfNormalRg, "Players:");
+                getCamera().viewportHeight * (7f / 10f), WidgetFactory.mBfNormalRg, "Players:");
+        float startButtonSize = getCamera().viewportWidth * (3f / 10f);
+        mBtnStart = WidgetFactory.getInstance().getStdButton(startButtonSize, startButtonSize * (3f / 10f),
+                WidgetFactory.mBfNormalRg, "Start");
+        //mBtnStart.setVisible(false);
 
         // Create exitTable
         Table exitTable = new Table();
@@ -59,8 +64,11 @@ public class UiStage extends Stage {
         // Create playersTable
         Table playersTable = new Table();
         playersTable.add(mLblPlayers).width(mLblPlayers.getWidth()).height(mLblPlayers.getHeight());
+        playersTable.row();
+        playersTable.add(mBtnStart).width(mBtnStart.getWidth()).height(mBtnStart.getHeight());
         playersTable.setFillParent(true);
         playersTable.pack();
+        playersTable.debug();
         addActor(playersTable);
 
         // Listeners
@@ -70,17 +78,23 @@ public class UiStage extends Stage {
                 mUiInterface.btnBackClicked();
             }
         });
+        mBtnStart.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mUiInterface.btnStartClicked();
+            }
+        });
     }
 
-    public void updateIpAddress(String ipAddress) {
-        mLblAddress.setText("Server IP: " + ipAddress);
+    public Label getLblAddress() {
+        return mLblAddress;
     }
 
-    public void updatePlayerList() {
-        String players = "Players:\n";
-        for (User u: Game.NETWORK_HELPER.getNetworkUsers().users) {
-            players += u.getName() + "\n";
-        }
-        mLblPlayers.setText(players);
+    public Label getLblPlayers() {
+        return mLblPlayers;
+    }
+
+    public TextButton getBtnStart() {
+        return mBtnStart;
     }
 }
