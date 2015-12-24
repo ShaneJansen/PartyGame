@@ -78,7 +78,8 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
             players += u.getName() + "\n";
         }
         mUiStage.getLblPlayers().setText(players);
-        if (Game.NETWORK_HELPER.getNetworkUsers().users.size() > 1) {
+        if (Game.NETWORK_HELPER.getNetworkUsers().users.size() > 1
+                && Game.NETWORK_HELPER.isServer()) {
             mUiStage.getBtnStart().setVisible(true);
         }
         else {

@@ -68,7 +68,6 @@ public class UiStage extends Stage {
         playersTable.add(mBtnStart).width(mBtnStart.getWidth()).height(mBtnStart.getHeight());
         playersTable.setFillParent(true);
         playersTable.pack();
-        playersTable.debug();
         addActor(playersTable);
 
         // Listeners
