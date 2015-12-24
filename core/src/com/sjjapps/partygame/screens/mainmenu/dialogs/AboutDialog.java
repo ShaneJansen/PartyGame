@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.sjjapps.partygame.common.Dialog;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.managers.DataManager;
 
 /**
  * Created by Shane Jansen on 12/4/15.
@@ -47,6 +48,7 @@ public class AboutDialog extends Dialog {
         table.add(btnGit).width(btnGit.getWidth()).height(btnGit.getHeight()).padTop(20f);
         table.setFillParent(true);
         table.pack();
+        if (DataManager.DEBUG) table.debug();
         addActor(table);
 
         // Listeners

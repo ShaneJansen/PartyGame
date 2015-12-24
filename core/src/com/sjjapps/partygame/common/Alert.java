@@ -30,7 +30,6 @@ public class Alert extends Dialog {
         table.add(mLbl).width(mLbl.getWidth()).height(mLbl.getHeight());
         table.setFillParent(true);
         table.pack();
-        table.debug();
         addActor(table);
     }
 

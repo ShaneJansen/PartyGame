@@ -9,6 +9,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.managers.MultiplexerManager;
 import com.sjjapps.partygame.network.NetworkHelper;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
@@ -49,15 +50,12 @@ public class Game implements ApplicationListener {
 			Texture.setAssetManager(ASSETS);
 			GAME.setScreen(new MainMenu()); // Initial screen
 		}
-
-		/*@Override
-		public void setScreen(Screen screen) {
-			this.screen = screen;
-		}*/
 	};
 
 	public static void log(String message) {
-		Gdx.app.log(TAG, message);
+		if (DataManager.DEBUG) {
+			Gdx.app.log(TAG, message);
+		}
 	}
 
 	/**
@@ -65,7 +63,7 @@ public class Game implements ApplicationListener {
 	 */
 	@Override
 	public void create () {
-		Gdx.app.setLogLevel(Application.LOG_DEBUG); // Set to Application.NONE for release
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		GAME.create();
 	}
 

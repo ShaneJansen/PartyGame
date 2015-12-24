@@ -5,5 +5,6 @@ package com.sjjapps.partygame.managers;
  */
 public class DataManager {
 
+    public static boolean DEBUG = true;
     public static String USER_NAME;
 }

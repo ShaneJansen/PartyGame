@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.managers.DataManager;
 
 /**
  * Created by Shane Jansen on 11/27/15.
@@ -49,8 +50,7 @@ public class UiStage extends Stage {
         table.add(btnAbout).width(btnAbout.getWidth()).height(btnAbout.getHeight()).padTop(20f);
         table.setFillParent(true);
         table.pack();
-        //table.right().bottom(); // Alignment is center by default
-        //table.debug();
+        if (DataManager.DEBUG) table.debug();
         addActor(table);
         //table.addAction(Actions.fadeIn(100f)); // Not working
 

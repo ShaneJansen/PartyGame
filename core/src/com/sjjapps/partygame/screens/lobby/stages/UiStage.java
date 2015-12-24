@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.managers.DataManager;
 
 /**
  * Created by Shane Jansen on 12/17/15.
@@ -38,7 +39,7 @@ public class UiStage extends Stage {
                 WidgetFactory.mBfNormalRg, "Back");
         mLblAddress = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (4f / 10f),
                 getCamera().viewportHeight * (1f / 10f), WidgetFactory.mBfNormalRg, "");
-        mLblPlayers = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (5f / 10f),
+        mLblPlayers = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (3f / 10f),
                 getCamera().viewportHeight * (7f / 10f), WidgetFactory.mBfNormalRg, "Players:");
         float startButtonSize = getCamera().viewportWidth * (3f / 10f);
         mBtnStart = WidgetFactory.getInstance().getStdButton(startButtonSize, startButtonSize * (3f / 10f),
@@ -51,6 +52,7 @@ public class UiStage extends Stage {
         exitTable.top().left();
         exitTable.setFillParent(true);
         exitTable.pack();
+        if (DataManager.DEBUG) exitTable.debug();
         addActor(exitTable);
 
         // Create ipTable
@@ -59,6 +61,7 @@ public class UiStage extends Stage {
         ipTable.right().bottom();
         ipTable.setFillParent(true);
         ipTable.pack();
+        if (DataManager.DEBUG) ipTable.debug();
         addActor(ipTable);
 
         // Create playersTable
@@ -68,7 +71,12 @@ public class UiStage extends Stage {
         playersTable.add(mBtnStart).width(mBtnStart.getWidth()).height(mBtnStart.getHeight());
         playersTable.setFillParent(true);
         playersTable.pack();
+        if (DataManager.DEBUG) playersTable.debug();
         addActor(playersTable);
+
+        // Create games table
+        Table gamesTable = new Table();
+        // TODO
 
         // Listeners
         btnBack.addListener(new ClickListener() {
