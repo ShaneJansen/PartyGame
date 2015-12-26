@@ -3,8 +3,10 @@ package com.sjjapps.partygame.screens.lobby.stages;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
@@ -64,19 +66,25 @@ public class UiStage extends Stage {
         if (DataManager.DEBUG) ipTable.debug();
         addActor(ipTable);
 
+        // Create games table
+        Table gamesTable = new Table();
+        WidgetGroup widgetGroup = new WidgetGroup();
+        ScrollPane scrollPane = new ScrollPane(widgetGroup);
+        widgetGroup.addActor();
+        gamesTable.add(mLblPlayers).width(mLblPlayers.getWidth()).height(mLblPlayers.getHeight());
+        gamesTable.pack();
+        if (DataManager.DEBUG) gamesTable.debug();
+
         // Create playersTable
         Table playersTable = new Table();
         playersTable.add(mLblPlayers).width(mLblPlayers.getWidth()).height(mLblPlayers.getHeight());
+        if (Game.NETWORK_HELPER.isServer()) playersTable.add(gamesTable);
         playersTable.row();
         playersTable.add(mBtnStart).width(mBtnStart.getWidth()).height(mBtnStart.getHeight());
         playersTable.setFillParent(true);
         playersTable.pack();
         if (DataManager.DEBUG) playersTable.debug();
         addActor(playersTable);
-
-        // Create games table
-        Table gamesTable = new Table();
-        // TODO
 
         // Listeners
         btnBack.addListener(new ClickListener() {
