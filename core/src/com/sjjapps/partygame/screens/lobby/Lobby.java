@@ -16,6 +16,8 @@ import com.sjjapps.partygame.screens.games.bubby.Bubby;
 import com.sjjapps.partygame.screens.lobby.stages.UiStage;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 
+import java.util.Map;
+
 /**
  * Created by Shane Jansen on 12/17/15.
  */
@@ -38,6 +40,11 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
         // UI stage
         mUiStage = new UiStage(new UiStage.UiInterface() {
             @Override
+            public void btnAddSubtractClicked() {
+                updateUi();
+            }
+
+            @Override
             public void btnBackClicked() {
                 Game.NETWORK_HELPER.getEndPoint().close();
                 changeRealm(new MainMenu());
@@ -59,7 +66,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
             ipAddress = Game.NETWORK_HELPER.getServerIp();
             Game.log("Server running at address: " + ipAddress);
             Game.NETWORK_HELPER.getNetworkUsers().users.add(new User(DataManager.USER_NAME));
-            updatePlayerList();
+            updateUi();
         }
         else {
             Client client = (Client) Game.NETWORK_HELPER.getEndPoint();
@@ -72,20 +79,24 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
         addInputListeners();
     }
 
-    private void updatePlayerList() {
+    /**
+     * Updates the player list and visibility
+     * of the start button.
+     */
+    private void updateUi() {
         String players = "Players:\n";
         for (User u: Game.NETWORK_HELPER.getNetworkUsers().users) {
             players += u.getName() + "\n";
         }
         mUiStage.getLblPlayers().setText(players);
+        Map gamesMap = mUiStage.getGamesMap();
         if (Game.NETWORK_HELPER.getNetworkUsers().users.size() > 1
                 && Game.NETWORK_HELPER.isServer()
+                && gamesMap.size() > 0
                 || DataManager.DEBUG) {
             mUiStage.getBtnStart().setVisible(true);
         }
-        else {
-            mUiStage.getBtnStart().setVisible(false);
-        }
+        else mUiStage.getBtnStart().setVisible(false);
     }
 
     @Override
@@ -102,7 +113,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
                     user.setScore(0);
                     Game.NETWORK_HELPER.getNetworkUsers().users.add(user);
                     server.sendToAllTCP(Game.NETWORK_HELPER.getNetworkUsers());
-                    updatePlayerList();
+                    updateUi();
                 }
             }
         });
@@ -118,7 +129,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
                     // Update the list of users
                     Game.log("Received new user list.");
                     Game.NETWORK_HELPER.setNetworkUsers((User.NetworkUsers) object);
-                    updatePlayerList();
+                    updateUi();
                 }
                 if (object instanceof GameState) {
                     // Check if the game has started
@@ -133,7 +144,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
 
     @Override
     public void clientDisconnected() {
-        updatePlayerList();
+        updateUi();
     }
 
     @Override
