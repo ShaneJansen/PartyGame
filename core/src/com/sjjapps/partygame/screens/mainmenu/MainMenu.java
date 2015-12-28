@@ -77,6 +77,8 @@ public class MainMenu extends DialogRealm {
         // Pencil stage
         final PencilStage stgPencil = new PencilStage();
         addStage(stgPencil);
+
+        // Background stage
         addStage(new BackgroundStage(new BackgroundStage.BackgroundInterface() {
             @Override
             public void backgroundClicked(int posX, int posY) {

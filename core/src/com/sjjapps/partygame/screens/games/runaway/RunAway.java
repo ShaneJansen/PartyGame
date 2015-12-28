@@ -1,4 +1,4 @@
-package com.sjjapps.partygame.screens.games.bubby;
+package com.sjjapps.partygame.screens.games.runaway;
 
 import com.esotericsoftware.minlog.Log;
 import com.sjjapps.partygame.Game;
@@ -6,18 +6,21 @@ import com.sjjapps.partygame.common.Alert;
 import com.sjjapps.partygame.common.Dialog;
 import com.sjjapps.partygame.common.realms.DialogRealm;
 import com.sjjapps.partygame.network.NetworkHelper;
-import com.sjjapps.partygame.screens.games.bubby.stages.GameStage;
+import com.sjjapps.partygame.screens.games.runaway.stages.GameStage;
+import com.sjjapps.partygame.screens.games.runaway.stages.UiStage;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 
 /**
  * Created by Shane Jansen on 12/21/15.
  */
-public class Bubby extends DialogRealm implements NetworkHelper.NetworkInterface {
+public class RunAway extends DialogRealm implements NetworkHelper.NetworkInterface {
+    private UiStage mUiStage;
     private GameStage mGameStage;
 
-    public Bubby() {
+    public RunAway() {
         super();
         // Loading assets
+        UiStage.addAssets();
         GameStage.addAssets();
 
         Game.ASSETS.finishLoading();
@@ -28,6 +31,10 @@ public class Bubby extends DialogRealm implements NetworkHelper.NetworkInterface
         // Network setup
         Log.set(Log.LEVEL_DEBUG);
         Game.NETWORK_HELPER.setNetworkInterface(this);
+
+        // UI stage
+        mUiStage = new UiStage();
+        addStage(mUiStage);
 
         // Game stage
         mGameStage = new GameStage();

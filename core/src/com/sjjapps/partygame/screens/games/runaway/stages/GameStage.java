@@ -1,4 +1,4 @@
-package com.sjjapps.partygame.screens.games.bubby.stages;
+package com.sjjapps.partygame.screens.games.runaway.stages;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;

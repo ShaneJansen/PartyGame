@@ -11,15 +11,10 @@ import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
 import com.sjjapps.partygame.managers.DataManager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Shane Jansen on 12/17/15.
  */
 public class UiStage extends Stage {
-    private static final String[] mGameTypes = new String[]{"Bubby"};
-    private Map<String, Integer> mGamesMap = new HashMap<String, Integer>();
     private UiInterface mUiInterface;
     private Label mLblAddress;
     private Label mLblPlayers;
@@ -50,6 +45,8 @@ public class UiStage extends Stage {
                 getCamera().viewportHeight * (7f / 10f), WidgetFactory.mBfNormalRg, "Players:");
         mBtnStart = WidgetFactory.getInstance().getStdButton(startButtonSize, startButtonSize * (3f / 10f),
                 WidgetFactory.mBfNormalRg, "Start");
+        Label lblMore = WidgetFactory.getInstance().getStdLabel(startButtonSize, exitButtonSize,
+                WidgetFactory.mBfNormalRg, "More games coming soon!");
 
         // Create exitTable
         Table exitTable = new Table();
@@ -72,7 +69,7 @@ public class UiStage extends Stage {
         // Create games table
         float gamesWidgetSize = getCamera().viewportWidth * (1f / 20f);
         Table gamesTable = new Table();
-        for (final String gameType: mGameTypes) {
+        for (final String gameType: Game.NETWORK_HELPER.getGameState().gameTypes) {
             TextButton btnSubtract = WidgetFactory.getInstance().getStdButton(gamesWidgetSize, gamesWidgetSize,
                     WidgetFactory.mBfNormalLg, "-");
             final Label lblNumRounds = WidgetFactory.getInstance().getStdLabel(gamesWidgetSize, gamesWidgetSize,
@@ -85,6 +82,7 @@ public class UiStage extends Stage {
             gamesTable.add(lblNumRounds).width(lblNumRounds.getWidth()).height(lblNumRounds.getHeight());
             gamesTable.add(btnAdd).width(btnAdd.getWidth()).height(btnAdd.getHeight());
             gamesTable.add(lblGameName).width(lblGameName.getWidth()).height(lblGameName.getHeight()).padLeft(10);
+            gamesTable.row();
             // Adding add/subtract button listeners
             btnAdd.addListener(new ClickListener() {
                 @Override
@@ -93,7 +91,7 @@ public class UiStage extends Stage {
                     if (increment < 5) {
                         increment++;
                         lblNumRounds.setText(String.valueOf(increment));
-                        mGamesMap.put(gameType, increment);
+                        Game.NETWORK_HELPER.getGameState().gamesMap.put(gameType, increment);
                     }
                     mUiInterface.btnAddSubtractClicked();
                 }
@@ -105,13 +103,14 @@ public class UiStage extends Stage {
                     if (decrement > 0) {
                         decrement--;
                         lblNumRounds.setText(String.valueOf(decrement));
-                        mGamesMap.put(gameType, decrement);
+                        Game.NETWORK_HELPER.getGameState().gamesMap.put(gameType, decrement);
+                        if (decrement == 0) Game.NETWORK_HELPER.getGameState().gamesMap.remove(gameType);
                     }
-                    else mGamesMap.remove(gameType);
                     mUiInterface.btnAddSubtractClicked();
                 }
             });
         }
+        gamesTable.add(lblMore).width(lblMore.getWidth()).height(lblMore.getHeight()).colspan(4);
         gamesTable.pack();
         if (DataManager.DEBUG) gamesTable.debug();
 
@@ -139,10 +138,6 @@ public class UiStage extends Stage {
                 mUiInterface.btnStartClicked();
             }
         });
-    }
-
-    public Map<String, Integer> getGamesMap() {
-        return mGamesMap;
     }
 
     public Label getLblAddress() {

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.sjjapps.partygame.Game;
@@ -23,7 +24,9 @@ public class WidgetFactory {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.BUTTON, Texture.class),
             new Asset(FilePathManager.BUTTON_DOWN, Texture.class),
-            new Asset(FilePathManager.EDIT_TEXT, Texture.class)
+            new Asset(FilePathManager.EDIT_TEXT, Texture.class),
+            new Asset(FilePathManager.TOUCHPAD_BACKGROUND, Texture.class),
+            new Asset(FilePathManager.TOUCHPAD_KNOB, Texture.class)
     };
     private static WidgetFactory INSTANCE;
     public static BitmapFont mBfNormalLg, mBfNormalRg, mBfNormalSm;
@@ -104,5 +107,23 @@ public class WidgetFactory {
         label.setHeight(height);
         label.setText(text);
         return label;
+    }
+
+    public Touchpad getStdTouchpad(float width, float height) {
+        Skin skin = new Skin();
+        skin.add("background", Game.ASSETS.get(mAssets[3].file, Texture.class));
+        skin.add("knob", Game.ASSETS.get(mAssets[4].file, Texture.class));
+
+        Touchpad.TouchpadStyle style = new Touchpad.TouchpadStyle();
+        style.background = new TextureRegionDrawable(new TextureRegion(skin.get("background", Texture.class)));
+        TextureRegionDrawable knob = new TextureRegionDrawable(new TextureRegion(skin.get("knob", Texture.class)));
+        knob.setMinWidth(width * 0.5f);
+        knob.setMinHeight(height * 0.5f);
+        style.knob = knob;
+
+        Touchpad touchpad = new Touchpad(10f, style);
+        touchpad.setWidth(width);
+        touchpad.setHeight(height);
+        return touchpad;
     }
 }

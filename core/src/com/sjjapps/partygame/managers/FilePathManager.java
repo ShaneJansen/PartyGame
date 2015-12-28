@@ -18,6 +18,10 @@ public class FilePathManager {
     // EditTexts
     public static final String EDIT_TEXT = IMAGE_BASE + "et.png";
 
+    // Touchpad
+    public static final String TOUCHPAD_BACKGROUND = IMAGE_BASE + "tpBackground.png";
+    public static final String TOUCHPAD_KNOB = IMAGE_BASE + "tpKnob.png";
+
     // Backgrounds
     public static final String MAIN_MENU = IMAGE_BASE + "bgMainMenu.png";
     public static final String DIALOG_BACKGROUND = IMAGE_BASE + "bgDialog.png";

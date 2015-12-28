@@ -12,6 +12,8 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Shane Jansen on 12/17/15.
@@ -50,6 +52,9 @@ public class NetworkHelper {
         kryo.register(User.class);
         kryo.register(User.NetworkUsers.class);
         kryo.register(GameState.class);
+        kryo.register(String[].class);
+        kryo.register(Map.class);
+        kryo.register(HashMap.class);
     }
 
     private void addEndpointListener(EndPoint endpoint) {

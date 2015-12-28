@@ -12,7 +12,7 @@ import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.network.GameState;
 import com.sjjapps.partygame.network.NetworkHelper;
 import com.sjjapps.partygame.network.User;
-import com.sjjapps.partygame.screens.games.bubby.Bubby;
+import com.sjjapps.partygame.screens.games.runaway.RunAway;
 import com.sjjapps.partygame.screens.lobby.stages.UiStage;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 
@@ -55,7 +55,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
                 Game.NETWORK_HELPER.getGameState().started = true;
                 Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
                 server.sendToAllTCP(Game.NETWORK_HELPER.getGameState());
-                changeRealm(new Bubby());
+                changeRealm(new RunAway());
             }
         });
         addStage(mUiStage);
@@ -89,7 +89,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
             players += u.getName() + "\n";
         }
         mUiStage.getLblPlayers().setText(players);
-        Map gamesMap = mUiStage.getGamesMap();
+        Map gamesMap = Game.NETWORK_HELPER.getGameState().gamesMap;
         if (Game.NETWORK_HELPER.getNetworkUsers().users.size() > 1
                 && Game.NETWORK_HELPER.isServer()
                 && gamesMap.size() > 0
@@ -126,16 +126,17 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof User.NetworkUsers) {
-                    // Update the list of users
-                    Game.log("Received new user list.");
+                    Game.log("Received new User.NetworkUsers.");
                     Game.NETWORK_HELPER.setNetworkUsers((User.NetworkUsers) object);
+                    // Update the list of users
                     updateUi();
                 }
                 if (object instanceof GameState) {
+                    Game.log("Received new GameState.");
+                    Game.NETWORK_HELPER.setGameState((GameState) object);
                     // Check if the game has started
                     if (((GameState) object).started) {
-                        Game.log("Game started.");
-                        changeRealm(new Bubby());
+                        changeRealm(new RunAway());
                     }
                 }
             }
