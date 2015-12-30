@@ -36,7 +36,7 @@ public class RunAway extends DialogRealm implements NetworkHelper.NetworkInterfa
         mUiStage = new UiStage();
         addStage(mUiStage);
 
-        // Game stage
+        // MiniGame stage
         mGameStage = new GameStage();
         addStage(mGameStage);
 

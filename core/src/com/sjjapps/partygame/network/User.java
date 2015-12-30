@@ -10,9 +10,14 @@ public class User {
     private int mId;
     private int mScore;
 
-    public User() {}
+    public User() {
+        mName = "unknown";
+        mId = -1;
+        mScore = 0;
+    }
 
     public User(String name) {
+        this();
         this.mName = name;
     }
 

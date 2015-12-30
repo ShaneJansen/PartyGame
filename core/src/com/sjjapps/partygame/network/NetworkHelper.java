@@ -7,12 +7,15 @@ import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
+import com.sjjapps.partygame.common.models.MiniGame;
+import com.sjjapps.partygame.common.realms.Realm;
 
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -48,13 +51,15 @@ public class NetworkHelper {
 
     private void registerEndpoint(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
+        // General
         kryo.register(ArrayList.class);
+        // Users
         kryo.register(User.class);
         kryo.register(User.NetworkUsers.class);
+        // GameState
         kryo.register(GameState.class);
-        kryo.register(String[].class);
-        kryo.register(Map.class);
-        kryo.register(HashMap.class);
+        kryo.register(MiniGame.class);
+        kryo.register(HashSet.class);
     }
 
     private void addEndpointListener(EndPoint endpoint) {
@@ -63,7 +68,7 @@ public class NetworkHelper {
             public void received(Connection connection, Object object) {
                 if (object instanceof GameState) {
                     GameState gameState = (GameState) object;
-                    Game.PAUSED = gameState.paused;
+                    Game.PAUSED = gameState.isPaused();
                 }
             }
 

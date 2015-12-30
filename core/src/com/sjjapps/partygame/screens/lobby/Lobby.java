@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Alert;
 import com.sjjapps.partygame.common.Dialog;
+import com.sjjapps.partygame.common.Utils;
 import com.sjjapps.partygame.common.realms.DialogRealm;
 import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.network.GameState;
@@ -15,8 +16,6 @@ import com.sjjapps.partygame.network.User;
 import com.sjjapps.partygame.screens.games.runaway.RunAway;
 import com.sjjapps.partygame.screens.lobby.stages.UiStage;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
-
-import java.util.Map;
 
 /**
  * Created by Shane Jansen on 12/17/15.
@@ -52,10 +51,11 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
 
             @Override
             public void btnStartClicked() {
-                Game.NETWORK_HELPER.getGameState().started = true;
+                GameState gameState = Game.NETWORK_HELPER.getGameState();
+                gameState.setIsStarted(true);
                 Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
-                server.sendToAllTCP(Game.NETWORK_HELPER.getGameState());
-                changeRealm(new RunAway());
+                server.sendToAllTCP(gameState);
+                changeRealm(Utils.createRealmFromName(gameState.getMiniGames().iterator().next()));
             }
         });
         addStage(mUiStage);
@@ -89,10 +89,9 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
             players += u.getName() + "\n";
         }
         mUiStage.getLblPlayers().setText(players);
-        Map gamesMap = Game.NETWORK_HELPER.getGameState().gamesMap;
         if (Game.NETWORK_HELPER.getNetworkUsers().users.size() > 1
                 && Game.NETWORK_HELPER.isServer()
-                && gamesMap.size() > 0
+                && Game.NETWORK_HELPER.getGameState().getMiniGames().size() > 0
                 || DataManager.DEBUG) {
             mUiStage.getBtnStart().setVisible(true);
         }
@@ -135,7 +134,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
                     Game.log("Received new GameState.");
                     Game.NETWORK_HELPER.setGameState((GameState) object);
                     // Check if the game has started
-                    if (((GameState) object).started) {
+                    if (((GameState) object).isStarted()) {
                         changeRealm(new RunAway());
                     }
                 }

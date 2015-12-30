@@ -39,7 +39,7 @@ public class Pencil extends Actor implements Disposable {
         mPoints = new Array<Point>();
         mTxtBackground = Game.ASSETS.get(mAssets[0].file);
 
-        Size size = Utils.scaleScreenSize(mTxtBackground.getHeight(), mTxtBackground.getWidth(),
+        Size size = Utils.scaleUniformly(mTxtBackground.getHeight(), mTxtBackground.getWidth(),
                 viewportWidth * scaleWidth);
         setWidth(size.width);
         setHeight(size.height);

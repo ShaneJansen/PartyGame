@@ -47,7 +47,7 @@ public abstract class Dialog extends Stage {
         Texture txtButtonX = Game.ASSETS.get(mAssets[1].file);
 
         // Set dialog size
-        Size mainSize = Utils.scaleScreenSize(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
+        Size mainSize = Utils.scaleUniformly(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
                 Gdx.graphics.getWidth() * widthScale);
         getViewport().setScreenSize((int) mainSize.width, (int) mainSize.height);
         getViewport().setScreenPosition((int) (Gdx.graphics.getWidth() * 0.5f - getViewport().getScreenWidth() * 0.5f),
@@ -59,7 +59,7 @@ public abstract class Dialog extends Stage {
                 (int) (Gdx.graphics.getHeight() * 0.5f - mVpBackground.getScreenHeight() * 0.5f));
 
         // Set exit button size and style
-        Size szExitButton = Utils.scaleScreenSize(txtButtonX.getHeight(), txtButtonX.getWidth(),
+        Size szExitButton = Utils.scaleUniformly(txtButtonX.getHeight(), txtButtonX.getWidth(),
                 Gdx.graphics.getWidth() * 1f / 10f);
         Skin skin = new Skin();
         skin.add("up", txtButtonX);
@@ -97,12 +97,12 @@ public abstract class Dialog extends Stage {
         getBatch().end();
 
         // Test circles
-        /*Game.SHAPE_RENDERER.setProjectionMatrix(mVpBackground.getCamera().combined);
-        Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
-        Game.SHAPE_RENDERER.setColor(Color.YELLOW);
-        Game.SHAPE_RENDERER.circle(mVpBackground.getWorldWidth(), mVpBackground.getWorldHeight(), 30);
-        Game.SHAPE_RENDERER.circle(0, 0, 30);
-        Game.SHAPE_RENDERER.end();*/
+        /*MiniGame.SHAPE_RENDERER.setProjectionMatrix(mVpBackground.getCamera().combined);
+        MiniGame.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
+        MiniGame.SHAPE_RENDERER.setColor(Color.YELLOW);
+        MiniGame.SHAPE_RENDERER.circle(mVpBackground.getWorldWidth(), mVpBackground.getWorldHeight(), 30);
+        MiniGame.SHAPE_RENDERER.circle(0, 0, 30);
+        MiniGame.SHAPE_RENDERER.end();*/
 
         super.draw();
     }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.common.models.MiniGame;
 import com.sjjapps.partygame.managers.DataManager;
 
 /**
@@ -69,7 +70,7 @@ public class UiStage extends Stage {
         // Create games table
         float gamesWidgetSize = getCamera().viewportWidth * (1f / 20f);
         Table gamesTable = new Table();
-        for (final String gameType: Game.NETWORK_HELPER.getGameState().gameTypes) {
+        for (final MiniGame miniGame: Game.NETWORK_HELPER.getGameState().getMiniGameTypes()) {
             TextButton btnSubtract = WidgetFactory.getInstance().getStdButton(gamesWidgetSize, gamesWidgetSize,
                     WidgetFactory.mBfNormalLg, "-");
             final Label lblNumRounds = WidgetFactory.getInstance().getStdLabel(gamesWidgetSize, gamesWidgetSize,
@@ -77,7 +78,7 @@ public class UiStage extends Stage {
             TextButton btnAdd = WidgetFactory.getInstance().getStdButton(gamesWidgetSize, gamesWidgetSize,
                     WidgetFactory.mBfNormalLg, "+");
             Label lblGameName = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth * (2f / 10f),
-                    gamesWidgetSize, WidgetFactory.mBfNormalRg, gameType);
+                    gamesWidgetSize, WidgetFactory.mBfNormalRg, miniGame.getName());
             gamesTable.add(btnSubtract).width(btnSubtract.getWidth()).height(btnSubtract.getHeight());
             gamesTable.add(lblNumRounds).width(lblNumRounds.getWidth()).height(lblNumRounds.getHeight());
             gamesTable.add(btnAdd).width(btnAdd.getWidth()).height(btnAdd.getHeight());
@@ -87,11 +88,10 @@ public class UiStage extends Stage {
             btnAdd.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    int increment = Integer.parseInt(lblNumRounds.getText().toString());
-                    if (increment < 5) {
-                        increment++;
-                        lblNumRounds.setText(String.valueOf(increment));
-                        Game.NETWORK_HELPER.getGameState().gamesMap.put(gameType, increment);
+                    if (miniGame.getNumRounds() < 5) {
+                        miniGame.setNumRounds(miniGame.getNumRounds() + 1);
+                        lblNumRounds.setText(String.valueOf(miniGame.getNumRounds()));
+                        Game.NETWORK_HELPER.getGameState().getMiniGames().add(miniGame);
                     }
                     mUiInterface.btnAddSubtractClicked();
                 }
@@ -99,12 +99,13 @@ public class UiStage extends Stage {
             btnSubtract.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    int decrement = Integer.parseInt(lblNumRounds.getText().toString());
-                    if (decrement > 0) {
-                        decrement--;
-                        lblNumRounds.setText(String.valueOf(decrement));
-                        Game.NETWORK_HELPER.getGameState().gamesMap.put(gameType, decrement);
-                        if (decrement == 0) Game.NETWORK_HELPER.getGameState().gamesMap.remove(gameType);
+                    if (miniGame.getNumRounds() > 0) {
+                        miniGame.setNumRounds(miniGame.getNumRounds() - 1);
+                        lblNumRounds.setText(String.valueOf(miniGame.getNumRounds()));
+                        Game.NETWORK_HELPER.getGameState().getMiniGames().add(miniGame);
+                        if (miniGame.getNumRounds() == 0) {
+                            Game.NETWORK_HELPER.getGameState().getMiniGames().remove(miniGame);
+                        }
                     }
                     mUiInterface.btnAddSubtractClicked();
                 }
