@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.sjjapps.partygame.common.Dialog;
-import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.common.WidgetFactory;
+import com.sjjapps.partygame.common.stages.Dialog;
 import com.sjjapps.partygame.managers.DataManager;
 
 /**

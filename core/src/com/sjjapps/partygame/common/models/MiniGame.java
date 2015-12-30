@@ -7,10 +7,15 @@ public class MiniGame {
     private String mName;
     private int mNumRounds, mCurrentRound;
 
-    public MiniGame(String name) {
-        mName = name;
+    public MiniGame() {
+        mName = "";
         mNumRounds = 0;
         mCurrentRound = 1;
+    }
+
+    public MiniGame(String name) {
+        this();
+        mName = name;
     }
 
     public String getName() {

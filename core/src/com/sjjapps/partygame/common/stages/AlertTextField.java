@@ -1,12 +1,12 @@
-package com.sjjapps.partygame.common;
+package com.sjjapps.partygame.common.stages;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.sjjapps.partygame.common.WidgetFactory;
 import com.sjjapps.partygame.common.actors.HintTextField;
-import com.sjjapps.partygame.common.actors.WidgetFactory;
 
 /**
  * Created by Shane Jansen on 12/14/15.
@@ -17,7 +17,7 @@ public class AlertTextField extends Dialog {
     private TextButton mBtnContinue;
 
     public static void addAssets() {
-        Dialog.addAssets();
+        com.sjjapps.partygame.common.stages.Dialog.addAssets();
         WidgetFactory.addAssets();
     }
 

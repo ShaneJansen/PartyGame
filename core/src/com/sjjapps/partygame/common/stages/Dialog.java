@@ -1,4 +1,4 @@
-package com.sjjapps.partygame.common;
+package com.sjjapps.partygame.common.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
+import com.sjjapps.partygame.common.Utils;
 import com.sjjapps.partygame.common.models.Asset;
 import com.sjjapps.partygame.common.models.Size;
 import com.sjjapps.partygame.managers.FilePathManager;

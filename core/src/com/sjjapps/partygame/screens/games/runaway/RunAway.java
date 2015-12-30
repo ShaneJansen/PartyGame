@@ -2,9 +2,9 @@ package com.sjjapps.partygame.screens.games.runaway;
 
 import com.esotericsoftware.minlog.Log;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Alert;
-import com.sjjapps.partygame.common.Dialog;
 import com.sjjapps.partygame.common.realms.DialogRealm;
+import com.sjjapps.partygame.common.stages.Alert;
+import com.sjjapps.partygame.common.stages.Dialog;
 import com.sjjapps.partygame.network.NetworkHelper;
 import com.sjjapps.partygame.screens.games.runaway.stages.GameStage;
 import com.sjjapps.partygame.screens.games.runaway.stages.UiStage;

@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Alert;
-import com.sjjapps.partygame.common.AlertTextField;
-import com.sjjapps.partygame.common.Dialog;
-import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.common.WidgetFactory;
 import com.sjjapps.partygame.common.realms.DialogRealm;
+import com.sjjapps.partygame.common.stages.Alert;
+import com.sjjapps.partygame.common.stages.AlertTextField;
+import com.sjjapps.partygame.common.stages.Dialog;
 import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.managers.PrefManager;
 import com.sjjapps.partygame.network.NetworkHelper;
@@ -56,7 +56,8 @@ public class MainMenu extends DialogRealm {
                     showNameDialog();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    addDialog(new Alert(MainMenu.this, "A server could not be started."));
+                    addDialog(new Alert(MainMenu.this, "A server could not be started." +
+                            "\nA server may already be running on this device."));
                 }
             }
 

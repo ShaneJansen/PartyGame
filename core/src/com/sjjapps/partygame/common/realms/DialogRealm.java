@@ -1,7 +1,7 @@
 package com.sjjapps.partygame.common.realms;
 
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.Dialog;
+import com.sjjapps.partygame.common.stages.Dialog;
 
 import java.util.Stack;
 

@@ -1,9 +1,9 @@
-package com.sjjapps.partygame.common;
+package com.sjjapps.partygame.common.stages;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.common.WidgetFactory;
 
 /**
  * Created by Shane Jansen on 12/13/15.
@@ -13,7 +13,7 @@ public class Alert extends Dialog {
     private Label mLbl;
 
     public static void addAssets() {
-        Dialog.addAssets();
+        com.sjjapps.partygame.common.stages.Dialog.addAssets();
         WidgetFactory.addAssets();
     }
 

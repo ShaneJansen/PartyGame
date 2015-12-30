@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.actors.WidgetFactory;
+import com.sjjapps.partygame.common.WidgetFactory;
 import com.sjjapps.partygame.managers.DataManager;
 
 /**

@@ -8,15 +8,12 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.models.MiniGame;
-import com.sjjapps.partygame.common.realms.Realm;
 
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 /**
  * Created by Shane Jansen on 12/17/15.
@@ -59,6 +56,7 @@ public class NetworkHelper {
         // GameState
         kryo.register(GameState.class);
         kryo.register(MiniGame.class);
+        kryo.register(MiniGame[].class);
         kryo.register(HashSet.class);
     }
 
