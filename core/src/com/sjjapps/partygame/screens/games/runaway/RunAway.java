@@ -1,11 +1,13 @@
 package com.sjjapps.partygame.screens.games.runaway;
 
-import com.esotericsoftware.minlog.Log;
 import com.sjjapps.partygame.Game;
+import com.sjjapps.partygame.common.models.MiniGame;
 import com.sjjapps.partygame.common.realms.DialogRealm;
 import com.sjjapps.partygame.common.stages.Alert;
 import com.sjjapps.partygame.common.stages.Dialog;
+import com.sjjapps.partygame.common.stages.GameUiStage;
 import com.sjjapps.partygame.network.NetworkHelper;
+import com.sjjapps.partygame.network.User;
 import com.sjjapps.partygame.screens.games.runaway.stages.GameStage;
 import com.sjjapps.partygame.screens.games.runaway.stages.UiStage;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
@@ -14,12 +16,14 @@ import com.sjjapps.partygame.screens.mainmenu.MainMenu;
  * Created by Shane Jansen on 12/21/15.
  */
 public class RunAway extends DialogRealm implements NetworkHelper.NetworkInterface {
+    private GameUiStage mGameUiStage;
     private UiStage mUiStage;
     private GameStage mGameStage;
 
     public RunAway() {
         super();
         // Loading assets
+        GameUiStage.addAssets();
         UiStage.addAssets();
         GameStage.addAssets();
 
@@ -28,9 +32,13 @@ public class RunAway extends DialogRealm implements NetworkHelper.NetworkInterfa
     }
 
     private void finishedLoading() {
-        // Network setup
-        Log.set(Log.LEVEL_DEBUG);
+        // Setup
         Game.NETWORK_HELPER.setNetworkInterface(this);
+
+        // Game UI stage
+        mGameUiStage = new GameUiStage();
+        addStage(mGameUiStage);
+        mGameUiStage.updateUi();
 
         // UI stage
         mUiStage = new UiStage();

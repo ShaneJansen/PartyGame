@@ -25,7 +25,7 @@ public class UiStage extends Stage {
         mTouchpad = WidgetFactory.getInstance().getStdTouchpad(touchpadSize, touchpadSize);
 
         Table table = new Table();
-        table.addActor(mTouchpad);
+        table.add(mTouchpad).width(mTouchpad.getWidth()).height(mTouchpad.getHeight());;
         table.setFillParent(true);
         table.bottom().left().pack();
         if (DataManager.DEBUG) table.debug();

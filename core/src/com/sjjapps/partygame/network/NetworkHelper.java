@@ -76,7 +76,7 @@ public class NetworkHelper {
                     // Check who disconnected based on connection id
                     Game.log("INTERFACE - CLIENT DISCONNECTED");
                     Server server = (Server) getEndPoint();
-                    for (User u: Game.NETWORK_HELPER.getNetworkUsers().users) {
+                    for (User u : Game.NETWORK_HELPER.getNetworkUsers().users) {
                         if (u.getId() == connection.getID()) {
                             Game.NETWORK_HELPER.getNetworkUsers().users.remove(u);
                             server.sendToAllTCP(Game.NETWORK_HELPER.getNetworkUsers());
@@ -109,6 +109,21 @@ public class NetworkHelper {
             e.printStackTrace();
         }
         return "unknown";
+    }
+
+    public User findThisUser() {
+        if (isServer()) {
+            for (User user: getNetworkUsers().users) {
+                if (user.getId() == -1) return user;
+            }
+        }
+        else {
+            Client client = (Client) getEndPoint();
+            for (User user: getNetworkUsers().users) {
+                if (user.getId() == client.getID()) return user;
+            }
+        }
+        return null;
     }
 
     /*
