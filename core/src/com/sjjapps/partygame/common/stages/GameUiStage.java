@@ -4,6 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Listener;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.WidgetFactory;
 import com.sjjapps.partygame.common.models.MiniGame;
@@ -17,6 +19,7 @@ import java.util.TimerTask;
  * Created by Shane Jansen on 12/30/15.
  */
 public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface {
+    private Listener mListener;
     private GameUiStageInterface mInterface;
     private Label mLblName, mLblRound, mLblScore, mLblReady;
 
@@ -69,6 +72,9 @@ public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface
         tblReady.setFillParent(true);
         tblReady.pack();
         addActor(tblReady);
+
+        updateUi();
+        userReady();
     }
 
     public void updateUi() {
@@ -77,6 +83,21 @@ public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface
         mLblName.setText(user.getName());
         mLblScore.setText("Score: " + user.getScore());
         mLblRound.setText("Round: " + miniGame.getCurrentRound() + " of " + miniGame.getNumRounds());
+    }
+
+    public void userReady() {
+        if (!Game.NETWORK_HELPER.isServer()) {
+            Client client = (Client) Game.NETWORK_HELPER.getEndPoint();
+            User user = Game.NETWORK_HELPER.findThisUser();
+            user.setIsReady(true);
+            client.sendTCP(user);
+        }
+    }
+
+    public void resetUsersReady() {
+        for (User u: Game.NETWORK_HELPER.users.getUsers()) {
+            u.setIsReady(false);
+        }
     }
 
     /**

@@ -25,19 +25,4 @@ public class Utils {
         if (name.equals("Run Away")) return new RunAway();
         return null;
     }
-
-    public static void userReady() {
-        if (!Game.NETWORK_HELPER.isServer()) {
-            Client client = (Client) Game.NETWORK_HELPER.getEndPoint();
-            User user = Game.NETWORK_HELPER.findThisUser();
-            user.setIsReady(true);
-            client.sendTCP(user);
-        }
-    }
-
-    public static void resetUserReady() {
-        for (User u: Game.NETWORK_HELPER.users.getUsers()) {
-            u.setIsReady(false);
-        }
-    }
 }

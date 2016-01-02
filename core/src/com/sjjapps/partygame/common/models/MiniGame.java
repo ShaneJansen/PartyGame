@@ -5,10 +5,12 @@ package com.sjjapps.partygame.common.models;
  */
 public class MiniGame {
     private String mName;
+    private boolean mIsStarted;
     private int mNumRounds, mCurrentRound;
 
     public MiniGame() {
         mName = "";
+        mIsStarted = false;
         mNumRounds = 0;
         mCurrentRound = 1;
     }
@@ -22,6 +24,10 @@ public class MiniGame {
         return mName;
     }
 
+    public boolean isStarted() {
+        return mIsStarted;
+    }
+
     public int getNumRounds() {
         return mNumRounds;
     }
@@ -32,6 +38,10 @@ public class MiniGame {
 
     public void setName(String name) {
         mName = name;
+    }
+
+    public void setIsStarted(boolean isStarted) {
+        mIsStarted = isStarted;
     }
 
     public void setNumRounds(int numRounds) {
