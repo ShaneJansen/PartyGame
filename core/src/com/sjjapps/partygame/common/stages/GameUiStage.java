@@ -7,20 +7,32 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.WidgetFactory;
 import com.sjjapps.partygame.common.models.MiniGame;
-import com.sjjapps.partygame.network.User;
+import com.sjjapps.partygame.common.models.User;
+import com.sjjapps.partygame.network.NetworkHelper;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Shane Jansen on 12/30/15.
  */
-public class GameUiStage extends Stage {
-    private Label mLblName, mLblRound, mLblScore;
+public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface {
+    private GameUiStageInterface mInterface;
+    private Label mLblName, mLblRound, mLblScore, mLblReady;
 
     public static void addAssets() {
         WidgetFactory.addAssets();
     }
 
-    public GameUiStage() {
+    public interface GameUiStageInterface {
+        void startGame();
+    }
+
+    public GameUiStage(GameUiStageInterface gameUiStageInterface) {
         super(new ScreenViewport(), Game.SPRITE_BATCH);
+        mInterface = gameUiStageInterface;
+        Game.NETWORK_HELPER.setNetworkInterface(this);
+        Game.PAUSED = true;
 
         // Create views
         float labelWidth = getCamera().viewportWidth * (2.5f / 10f);
@@ -30,6 +42,8 @@ public class GameUiStage extends Stage {
                 WidgetFactory.mBfNormalRg, "Round: ");
         mLblScore = WidgetFactory.getInstance().getStdLabel(labelWidth, labelWidth * (2f / 10f),
                 WidgetFactory.mBfNormalRg, "Score: ");
+        mLblReady = WidgetFactory.getInstance().getStdLabel(getCamera().viewportWidth,
+                getCamera().viewportHeight, WidgetFactory.mBfNormalLg, "Ready...");
 
         // Create tables
         Table tblName = new Table();
@@ -49,25 +63,67 @@ public class GameUiStage extends Stage {
         tblScore.setFillParent(true);
         tblScore.top().right().pack();
         addActor(tblScore);
+
+        Table tblReady = new Table();
+        tblReady.add(mLblReady).width(mLblReady.getWidth()).height(mLblReady.getHeight());
+        tblReady.setFillParent(true);
+        tblReady.pack();
+        addActor(tblReady);
     }
 
     public void updateUi() {
         User user = Game.NETWORK_HELPER.findThisUser();
-        MiniGame miniGame = Game.NETWORK_HELPER.getGameState().getMiniGames().iterator().next();
-        getLblName().setText(user.getName());
-        getLblScore().setText("Score: " + user.getScore());
-        getLblRound().setText("Round: " + miniGame.getCurrentRound() + "/" + miniGame.getNumRounds());
+        MiniGame miniGame = Game.NETWORK_HELPER.gameState.getMiniGames().iterator().next();
+        mLblName.setText(user.getName());
+        mLblScore.setText("Score: " + user.getScore());
+        mLblRound.setText("Round: " + miniGame.getCurrentRound() + " of " + miniGame.getNumRounds());
     }
 
-    public Label getLblName() {
-        return mLblName;
+    /**
+     * Called when everyone has finished loading.
+     * Starts a timer for 3 seconds, displays go
+     * text for 2 seconds, and calls a callback
+     * method.
+     */
+    public void finishedLoading() {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                mLblReady.setText("GO!");
+                Game.PAUSED = false;
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        mLblReady.setVisible(false);
+                        mInterface.startGame();
+                    }
+                }, 2000);
+            }
+        }, 3000);
     }
 
-    public Label getLblRound() {
-        return mLblRound;
+    @Override
+    public void addServerListeners() {
+
     }
 
-    public Label getLblScore() {
-        return mLblScore;
+    @Override
+    public void addClientListeners() {
+
+    }
+
+    @Override
+    public void removeListeners() {
+
+    }
+
+    @Override
+    public void clientDisconnected() {
+
+    }
+
+    @Override
+    public void serverDisconnected() {
+
     }
 }

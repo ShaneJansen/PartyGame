@@ -70,7 +70,7 @@ public class UiStage extends Stage {
         // Create games table
         float gamesWidgetSize = getCamera().viewportWidth * (1f / 20f);
         Table gamesTable = new Table();
-        for (final MiniGame miniGame: Game.NETWORK_HELPER.getGameState().getMiniGameTypes()) {
+        for (final MiniGame miniGame: Game.NETWORK_HELPER.gameState.getMiniGameTypes()) {
             TextButton btnSubtract = WidgetFactory.getInstance().getStdButton(gamesWidgetSize, gamesWidgetSize,
                     WidgetFactory.mBfNormalLg, "-");
             final Label lblNumRounds = WidgetFactory.getInstance().getStdLabel(gamesWidgetSize, gamesWidgetSize,
@@ -91,7 +91,7 @@ public class UiStage extends Stage {
                     if (miniGame.getNumRounds() < 5) {
                         miniGame.setNumRounds(miniGame.getNumRounds() + 1);
                         lblNumRounds.setText(String.valueOf(miniGame.getNumRounds()));
-                        Game.NETWORK_HELPER.getGameState().getMiniGames().add(miniGame);
+                        Game.NETWORK_HELPER.gameState.getMiniGames().add(miniGame);
                     }
                     mUiInterface.btnAddSubtractClicked();
                 }
@@ -102,9 +102,9 @@ public class UiStage extends Stage {
                     if (miniGame.getNumRounds() > 0) {
                         miniGame.setNumRounds(miniGame.getNumRounds() - 1);
                         lblNumRounds.setText(String.valueOf(miniGame.getNumRounds()));
-                        Game.NETWORK_HELPER.getGameState().getMiniGames().add(miniGame);
+                        Game.NETWORK_HELPER.gameState.getMiniGames().add(miniGame);
                         if (miniGame.getNumRounds() == 0) {
-                            Game.NETWORK_HELPER.getGameState().getMiniGames().remove(miniGame);
+                            Game.NETWORK_HELPER.gameState.getMiniGames().remove(miniGame);
                         }
                     }
                     mUiInterface.btnAddSubtractClicked();

@@ -1,6 +1,4 @@
-package com.sjjapps.partygame.network;
-
-import java.util.ArrayList;
+package com.sjjapps.partygame.common.models;
 
 /**
  * Created by Shane Jansen on 12/19/15.
@@ -9,11 +7,13 @@ public class User {
     private String mName;
     private int mId;
     private int mScore;
+    private boolean mIsReady;
 
     public User() {
         mName = "unknown";
         mId = -1;
         mScore = 0;
+        mIsReady = false;
     }
 
     public User(String name) {
@@ -33,6 +33,10 @@ public class User {
         return mScore;
     }
 
+    public boolean isReady() {
+        return mIsReady;
+    }
+
     public void setName(String name) {
         mName = name;
     }
@@ -45,9 +49,7 @@ public class User {
         mScore = score;
     }
 
-    public static class NetworkUsers {
-        public ArrayList<User> users = new ArrayList<User>();
-
-        public NetworkUsers() {}
+    public void setIsReady(boolean isReady) {
+        mIsReady = isReady;
     }
 }

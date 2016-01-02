@@ -1,13 +1,11 @@
 package com.sjjapps.partygame.screens.games.runaway;
 
 import com.sjjapps.partygame.Game;
-import com.sjjapps.partygame.common.models.MiniGame;
 import com.sjjapps.partygame.common.realms.DialogRealm;
 import com.sjjapps.partygame.common.stages.Alert;
 import com.sjjapps.partygame.common.stages.Dialog;
 import com.sjjapps.partygame.common.stages.GameUiStage;
 import com.sjjapps.partygame.network.NetworkHelper;
-import com.sjjapps.partygame.network.User;
 import com.sjjapps.partygame.screens.games.runaway.stages.GameStage;
 import com.sjjapps.partygame.screens.games.runaway.stages.UiStage;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
@@ -15,7 +13,9 @@ import com.sjjapps.partygame.screens.mainmenu.MainMenu;
 /**
  * Created by Shane Jansen on 12/21/15.
  */
-public class RunAway extends DialogRealm implements NetworkHelper.NetworkInterface {
+public class RunAway extends DialogRealm implements NetworkHelper.NetworkInterface,
+        GameUiStage.GameUiStageInterface {
+    private boolean mIsLoaded = false;
     private GameUiStage mGameUiStage;
     private UiStage mUiStage;
     private GameStage mGameStage;
@@ -26,17 +26,14 @@ public class RunAway extends DialogRealm implements NetworkHelper.NetworkInterfa
         GameUiStage.addAssets();
         UiStage.addAssets();
         GameStage.addAssets();
-
-        Game.ASSETS.finishLoading();
-        finishedLoading();
     }
 
     private void finishedLoading() {
         // Setup
-        Game.NETWORK_HELPER.setNetworkInterface(this);
+        mIsLoaded = true;
 
         // Game UI stage
-        mGameUiStage = new GameUiStage();
+        mGameUiStage = new GameUiStage(this);
         addStage(mGameUiStage);
         mGameUiStage.updateUi();
 
@@ -53,12 +50,30 @@ public class RunAway extends DialogRealm implements NetworkHelper.NetworkInterfa
     }
 
     @Override
+    public void render(float delta) {
+        super.render(delta);
+        if (!mIsLoaded) {
+            if (Game.ASSETS.update()) finishedLoading();
+        }
+    }
+
+    @Override
+    public void startGame() {
+        Game.NETWORK_HELPER.setNetworkInterface(this);
+    }
+
+    @Override
     public void addServerListeners() {
 
     }
 
     @Override
     public void addClientListeners() {
+
+    }
+
+    @Override
+    public void removeListeners() {
 
     }
 

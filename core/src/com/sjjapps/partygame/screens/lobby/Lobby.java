@@ -12,7 +12,8 @@ import com.sjjapps.partygame.common.stages.Dialog;
 import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.network.GameState;
 import com.sjjapps.partygame.network.NetworkHelper;
-import com.sjjapps.partygame.network.User;
+import com.sjjapps.partygame.common.models.User;
+import com.sjjapps.partygame.network.Users;
 import com.sjjapps.partygame.screens.games.runaway.RunAway;
 import com.sjjapps.partygame.screens.lobby.stages.UiStage;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
@@ -21,6 +22,7 @@ import com.sjjapps.partygame.screens.mainmenu.MainMenu;
  * Created by Shane Jansen on 12/17/15.
  */
 public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface {
+    private Listener mListener;
     private UiStage mUiStage;
 
     public Lobby() {
@@ -51,7 +53,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
 
             @Override
             public void btnStartClicked() {
-                GameState gameState = Game.NETWORK_HELPER.getGameState();
+                GameState gameState = Game.NETWORK_HELPER.gameState;
                 gameState.setIsStarted(true);
                 Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
                 server.sendToAllTCP(gameState);
@@ -65,7 +67,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
         if (Game.NETWORK_HELPER.isServer()) {
             ipAddress = Game.NETWORK_HELPER.getServerIp();
             Game.log("Server running at address: " + ipAddress);
-            Game.NETWORK_HELPER.getNetworkUsers().users.add(new User(DataManager.USER_NAME));
+            Game.NETWORK_HELPER.users.getUsers().add(new User(DataManager.USER_NAME));
             updateUi();
         }
         else {
@@ -85,13 +87,13 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
      */
     private void updateUi() {
         String players = "Players:\n";
-        for (User u: Game.NETWORK_HELPER.getNetworkUsers().users) {
+        for (User u: Game.NETWORK_HELPER.users.getUsers()) {
             players += u.getName() + "\n";
         }
         mUiStage.getLblPlayers().setText(players);
-        if (Game.NETWORK_HELPER.getNetworkUsers().users.size() > 1
+        if (Game.NETWORK_HELPER.users.getUsers().size() > 1
                 && Game.NETWORK_HELPER.isServer()
-                && Game.NETWORK_HELPER.getGameState().getMiniGames().size() > 0
+                && Game.NETWORK_HELPER.gameState.getMiniGames().size() > 0
                 || DataManager.DEBUG) {
             mUiStage.getBtnStart().setVisible(true);
         }
@@ -101,7 +103,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
     @Override
     public void addServerListeners() {
         final Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
-        server.addListener(new Listener() {
+        mListener = new Listener() {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof User) {
@@ -110,23 +112,24 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
                     User user = (User)object;
                     user.setId(connection.getID());
                     user.setScore(0);
-                    Game.NETWORK_HELPER.getNetworkUsers().users.add(user);
-                    server.sendToAllTCP(Game.NETWORK_HELPER.getNetworkUsers());
+                    Game.NETWORK_HELPER.users.getUsers().add(user);
+                    server.sendToAllTCP(Game.NETWORK_HELPER.users);
                     updateUi();
                 }
             }
-        });
+        };
+        server.addListener(mListener);
     }
 
     @Override
     public void addClientListeners() {
         Client client = (Client) Game.NETWORK_HELPER.getEndPoint();
-        client.addListener(new Listener() {
+        mListener = new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof User.NetworkUsers) {
+                if (object instanceof Users) {
                     Game.log("Received new User.NetworkUsers.");
-                    Game.NETWORK_HELPER.setNetworkUsers((User.NetworkUsers) object);
+                    Game.NETWORK_HELPER.setUsers((Users) object);
                     // Update the list of users
                     updateUi();
                 }
@@ -139,7 +142,13 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
                     }
                 }
             }
-        });
+        };
+        client.addListener(mListener);
+    }
+
+    @Override
+    public void removeListeners() {
+        Game.NETWORK_HELPER.getEndPoint().removeListener(mListener);
     }
 
     @Override

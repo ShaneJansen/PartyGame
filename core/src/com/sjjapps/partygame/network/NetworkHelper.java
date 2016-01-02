@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.models.MiniGame;
+import com.sjjapps.partygame.common.models.User;
 
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -26,12 +27,13 @@ public class NetworkHelper {
     private boolean mIsServer;
 
     // These network objects should persist for the life of the network connection
-    private User.NetworkUsers mNetworkUsers;
-    private GameState mGameState;
+    public Users users;
+    public GameState gameState;
 
     public interface NetworkInterface {
         void addServerListeners();
         void addClientListeners();
+        void removeListeners();
         void clientDisconnected();
         void serverDisconnected();
     }
@@ -40,8 +42,8 @@ public class NetworkHelper {
         this.mEndPoint = endPoint;
         if (endPoint instanceof Server) mIsServer = true;
         if (endPoint instanceof Client) mIsServer = false;
-        mNetworkUsers = new User.NetworkUsers();
-        mGameState = new GameState();
+        users = new Users();
+        gameState = new GameState();
         registerEndpoint(endPoint);
         addEndpointListener(endPoint);
     }
@@ -52,7 +54,7 @@ public class NetworkHelper {
         kryo.register(ArrayList.class);
         // Users
         kryo.register(User.class);
-        kryo.register(User.NetworkUsers.class);
+        kryo.register(Users.class);
         // GameState
         kryo.register(GameState.class);
         kryo.register(MiniGame.class);
@@ -76,10 +78,10 @@ public class NetworkHelper {
                     // Check who disconnected based on connection id
                     Game.log("INTERFACE - CLIENT DISCONNECTED");
                     Server server = (Server) getEndPoint();
-                    for (User u : Game.NETWORK_HELPER.getNetworkUsers().users) {
+                    for (User u : users.getUsers()) {
                         if (u.getId() == connection.getID()) {
-                            Game.NETWORK_HELPER.getNetworkUsers().users.remove(u);
-                            server.sendToAllTCP(Game.NETWORK_HELPER.getNetworkUsers());
+                            users.getUsers().remove(u);
+                            server.sendToAllTCP(users);
                             if (mNetworkInterface != null) mNetworkInterface.clientDisconnected();
                             break;
                         }
@@ -113,14 +115,14 @@ public class NetworkHelper {
 
     public User findThisUser() {
         if (isServer()) {
-            for (User user: getNetworkUsers().users) {
-                if (user.getId() == -1) return user;
+            for (User u: users.getUsers()) {
+                if (u.getId() == -1) return u;
             }
         }
         else {
             Client client = (Client) getEndPoint();
-            for (User user: getNetworkUsers().users) {
-                if (user.getId() == client.getID()) return user;
+            for (User u: users.getUsers()) {
+                if (u.getId() == client.getID()) return u;
             }
         }
         return null;
@@ -138,25 +140,21 @@ public class NetworkHelper {
         return mIsServer;
     }
 
-    public User.NetworkUsers getNetworkUsers() {
-        return mNetworkUsers;
-    }
-
-    public GameState getGameState() {
-        return mGameState;
-    }
-
     public void setNetworkInterface(NetworkInterface networkInterface) {
+        // Old listener
+        if (mNetworkInterface != null) mNetworkInterface.removeListeners();
+
+        // New listener
         mNetworkInterface = networkInterface;
         if (isServer()) networkInterface.addServerListeners();
         else networkInterface.addClientListeners();
     }
 
-    public void setNetworkUsers(User.NetworkUsers networkUsers) {
-        mNetworkUsers = networkUsers;
+    public void setUsers(Users users) {
+        this.users = users;
     }
 
     public void setGameState(GameState gameState) {
-        mGameState = gameState;
+        this.gameState = gameState;
     }
 }
