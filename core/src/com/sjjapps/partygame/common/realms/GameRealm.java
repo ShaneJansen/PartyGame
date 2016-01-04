@@ -1,5 +1,6 @@
 package com.sjjapps.partygame.common.realms;
 
+import com.badlogic.gdx.Gdx;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.stages.Alert;
 import com.sjjapps.partygame.common.stages.Dialog;
@@ -66,12 +67,17 @@ public abstract class GameRealm extends DialogRealm implements NetworkHelper.Net
 
     @Override
     public void serverDisconnected() {
-        addDialog(new Alert(new Dialog.DialogInterface() {
+        Gdx.app.postRunnable(new Runnable() {
             @Override
-            public void btnExitPressed() {
-                Game.NETWORK_HELPER.getEndPoint().close();
-                changeRealm(new MainMenu());
+            public void run() {
+                addDialog(new Alert(new Dialog.DialogInterface() {
+                    @Override
+                    public void btnExitPressed() {
+                        Game.NETWORK_HELPER.getEndPoint().close();
+                        changeRealm(new MainMenu());
+                    }
+                }, "You have been disconnected from the server."));
             }
-        }, "You have been disconnected from the server."));
+        });
     }
 }

@@ -58,6 +58,7 @@ public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface
         tblName.add(mLblName).width(mLblName.getWidth()).height(mLblName.getHeight());
         tblName.setFillParent(true);
         tblName.top().left().pack();
+        tblName.debug();
         addActor(tblName);
 
         Table tblRound = new Table();

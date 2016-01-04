@@ -44,17 +44,24 @@ public class WidgetFactory {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FilePathManager.FONT));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        parameter.size = (int) (viewportWidth * 30f / 500f);
+        parameter.size = (int) (viewportWidth * (30f / 500f));
         mBfNormalLg = fontGenerator.generateFont(parameter);
-        parameter.size = (int) (viewportWidth * 15f / 500f);
+        parameter.size = (int) (viewportWidth * (15f / 500f));
         mBfNormalRg = fontGenerator.generateFont(parameter);
-        parameter.size = (int) (viewportWidth * 8f / 500f);
+        parameter.size = (int) (viewportWidth * (8f / 500f));
         mBfNormalSm = fontGenerator.generateFont(parameter);
     }
 
     public static WidgetFactory getInstance() {
         if (INSTANCE != null) return INSTANCE;
         else throw new NullPointerException("WidgetFactory has not been initialized yet.");
+    }
+
+    public BitmapFont getCustomBitmapFont(int size) {
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(FilePathManager.FONT));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = size;
+        return fontGenerator.generateFont(parameter);
     }
 
     public TextButton getStdButton(float width, float height, BitmapFont font, String text) {
@@ -122,7 +129,7 @@ public class WidgetFactory {
         knob.setMinHeight(height * 0.5f);
         style.knob = knob;
 
-        Touchpad touchpad = new Touchpad(10f, style);
+        Touchpad touchpad = new Touchpad(5f, style);
         touchpad.setWidth(width);
         touchpad.setHeight(height);
         return touchpad;
