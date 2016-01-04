@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.sjjapps.partygame.Game;
+import com.sjjapps.partygame.screens.games.runaway.actors.Player;
 
 /**
  * Created by Shane Jansen on 12/21/15.
@@ -14,7 +15,7 @@ public class GameStage extends Stage {
     private static final float WORLD_HEIGHT = 800;
 
     public static void addAssets() {
-
+        Player.addAssets();
     }
 
     public GameStage() {
