@@ -5,11 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.WidgetFactory;
 import com.sjjapps.partygame.common.models.MiniGame;
 import com.sjjapps.partygame.common.models.User;
+import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.network.NetworkHelper;
 
 import java.util.Timer;
@@ -20,6 +23,7 @@ import java.util.TimerTask;
  */
 public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface {
     private Listener mListener;
+    private int mNumReady; // The number of ready users
     private GameUiStageInterface mInterface;
     private Label mLblName, mLblRound, mLblScore, mLblReady;
 
@@ -34,6 +38,7 @@ public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface
     public GameUiStage(GameUiStageInterface gameUiStageInterface) {
         super(new ScreenViewport(), Game.SPRITE_BATCH);
         mInterface = gameUiStageInterface;
+        mNumReady = 1;
         Game.NETWORK_HELPER.setNetworkInterface(this);
         Game.PAUSED = true;
 
@@ -75,6 +80,7 @@ public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface
 
         updateUi();
         userReady();
+        if (DataManager.DEBUG) finishedLoading();
     }
 
     public void updateUi() {
@@ -85,18 +91,12 @@ public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface
         mLblRound.setText("Round: " + miniGame.getCurrentRound() + " of " + miniGame.getNumRounds());
     }
 
-    public void userReady() {
+    private void userReady() {
         if (!Game.NETWORK_HELPER.isServer()) {
             Client client = (Client) Game.NETWORK_HELPER.getEndPoint();
             User user = Game.NETWORK_HELPER.findThisUser();
             user.setIsReady(true);
             client.sendTCP(user);
-        }
-    }
-
-    public void resetUsersReady() {
-        for (User u: Game.NETWORK_HELPER.users.getUsers()) {
-            u.setIsReady(false);
         }
     }
 
@@ -106,17 +106,17 @@ public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface
      * text for 2 seconds, and calls a callback
      * method.
      */
-    public void finishedLoading() {
+    private void finishedLoading() {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
                 mLblReady.setText("GO!");
                 Game.PAUSED = false;
+                mInterface.startGame();
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
                         mLblReady.setVisible(false);
-                        mInterface.startGame();
                     }
                 }, 2000);
             }
@@ -125,17 +125,51 @@ public class GameUiStage extends Stage implements NetworkHelper.NetworkInterface
 
     @Override
     public void addServerListeners() {
-
+        final Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
+        mListener = new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof User) {
+                    User user = (User) object;
+                    if (user.isReady()) {
+                        Game.log("Network: " + user.getName() + " is ready.");
+                        mNumReady++;
+                        if (Game.NETWORK_HELPER.users.getUsers().size() == mNumReady) {
+                            // The game should start
+                            MiniGame miniGame = Game.NETWORK_HELPER.gameState.getMiniGames().iterator().next();
+                            miniGame.setIsStarted(true);
+                            server.sendToAllTCP(miniGame);
+                            finishedLoading();
+                        }
+                    }
+                }
+            }
+        };
+        server.addListener(mListener);
     }
 
     @Override
     public void addClientListeners() {
-
+        Client client = (Client) Game.NETWORK_HELPER.getEndPoint();
+        mListener = new Listener() {
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof MiniGame) {
+                    MiniGame miniGame = (MiniGame) object;
+                    if (miniGame.isStarted()) {
+                        // The game should start
+                        Game.log("Network: The game should start.");
+                        finishedLoading();
+                    }
+                }
+            }
+        };
+        client.addListener(mListener);
     }
 
     @Override
     public void removeListeners() {
-
+        Game.NETWORK_HELPER.getEndPoint().removeListener(mListener);
     }
 
     @Override

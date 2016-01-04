@@ -6,13 +6,13 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.Utils;
+import com.sjjapps.partygame.common.models.User;
 import com.sjjapps.partygame.common.realms.DialogRealm;
 import com.sjjapps.partygame.common.stages.Alert;
 import com.sjjapps.partygame.common.stages.Dialog;
 import com.sjjapps.partygame.managers.DataManager;
 import com.sjjapps.partygame.network.GameState;
 import com.sjjapps.partygame.network.NetworkHelper;
-import com.sjjapps.partygame.common.models.User;
 import com.sjjapps.partygame.network.Users;
 import com.sjjapps.partygame.screens.games.runaway.RunAway;
 import com.sjjapps.partygame.screens.lobby.stages.UiStage;
@@ -108,7 +108,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
             public void received(Connection connection, Object object) {
                 if (object instanceof User) {
                     // A new user has joined the game
-                    Game.log("A user has joined the game.");
+                    Game.log("Network: A user has joined the game.");
                     User user = (User)object;
                     user.setId(connection.getID());
                     user.setScore(0);
@@ -128,13 +128,13 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof Users) {
-                    Game.log("Received new User.NetworkUsers.");
+                    Game.log("Network: Received new user list.");
                     Game.NETWORK_HELPER.setUsers((Users) object);
                     // Update the list of users
                     updateUi();
                 }
                 if (object instanceof GameState) {
-                    Game.log("Received new GameState.");
+                    Game.log("Network: Received new GameState.");
                     Game.NETWORK_HELPER.setGameState((GameState) object);
                     // Check if the game has started
                     if (((GameState) object).isStarted()) {
