@@ -17,8 +17,8 @@ public class Player extends Actor {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.PENCIL, Texture.class)
     };
-    private static final int WIDTH = 100;
-    private static final int HEIGHT = 100;
+    private static final int WIDTH = 2;
+    private static final int HEIGHT = 2;
     private User mUser;
     private BitmapFont mBitmapFont;
     private Texture mTxtBackground;
@@ -38,16 +38,28 @@ public class Player extends Actor {
         setHeight(HEIGHT);
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-
+    public void drawPlayer(Batch batch) {
         batch.draw(new TextureRegion(mTxtBackground), getX(), getY(), getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+    }
 
-        // Draw the user's name
+    public void drawPlayerName(Batch batch) {
         mBitmapFont.draw(batch, mUser.getName(),
-                getX(), getY() + getHeight() + 35);
+                getX(), getY() + getHeight() + 1);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        drawPlayer(batch);
+        drawPlayerName(batch);
+    }
+
+    protected Texture getTxtBackground() {
+        return mTxtBackground;
+    }
+
+    protected BitmapFont getBitmapFont() {
+        return mBitmapFont;
     }
 
     public User getUser() {
