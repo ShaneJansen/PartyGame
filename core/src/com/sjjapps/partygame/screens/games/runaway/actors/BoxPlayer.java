@@ -16,7 +16,6 @@ import com.sjjapps.partygame.common.models.User;
  * Created by Shane Jansen on 1/5/16.
  */
 public class BoxPlayer extends Player {
-
     private Body mBody;
 
     public static void addAssets() {
@@ -26,11 +25,10 @@ public class BoxPlayer extends Player {
     public BoxPlayer(User user, BitmapFont bitmapFont, World world) {
         super(user, bitmapFont);
 
-        // TODO: Box2d
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(getWidth(), getHeight());
+        polygonShape.setAsBox(getWidth() * 0.5f, getHeight() * 0.5f);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
         fixtureDef.density = 0.8f;
@@ -56,12 +54,13 @@ public class BoxPlayer extends Player {
         Matrix4 originalMatrix = batch.getProjectionMatrix().cpy();
         batch.setProjectionMatrix(originalMatrix.cpy().scale(getUnitsInPixel(), getUnitsInPixel(), 1));
 
-        //bitmapFonts.draw(batch, "YO", 0, 1);
+        float uip = getUnitsInPixel();
         getBitmapFont().draw(batch, getUser().getName(),
-                (mBody.getPosition().x / getUnitsInPixel())
-                        - ((getWidth() / getUnitsInPixel()) * .5f),
-                (mBody.getPosition().y / getUnitsInPixel())
-                        - ((getHeight() / getUnitsInPixel()) * .5f) + 1);
+                (mBody.getPosition().x / uip)
+                        - ((getWidth() / uip) * .5f),
+                (mBody.getPosition().y / uip)
+                        + ((getHeight() / uip) * .5f)
+                        + (getBitmapFont().getCapHeight()));
 
         batch.setProjectionMatrix(originalMatrix);
     }

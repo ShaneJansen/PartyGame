@@ -1,14 +1,9 @@
 package com.sjjapps.partygame.screens.games.runaway.stages;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -36,12 +31,10 @@ public class GameStage extends Stage {
     private Random mRandom;
     private GameUser mGameUser;
     private BoxPlayer mPlayer;
-    private Array<Player> mPlayers;
+    private Array<BoxPlayer> mPlayers;
 
-    // Box2d
     private World mWorld;
     private Box2DDebugRenderer mDebugRenderer;
-    //private Body mBody;
 
     public static void addAssets() {
         Player.addAssets();
@@ -57,43 +50,35 @@ public class GameStage extends Stage {
         mInterface = gameStageInterface;
         mTouchpad = touchpad;
         mRandom = new Random();
-        User thisUser = Game.NETWORK_HELPER.findThisUser();
-        mGameUser = new GameUser(thisUser.getId());
 
-        // TODO: Box2d
+        // Init Box2d
         mWorld = new World(new Vector2(0, 0), true);
         mDebugRenderer = new Box2DDebugRenderer();
-        /*BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(1, 1);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = polygonShape;
-        fixtureDef.density = 0.8f;
-        fixtureDef.friction = 0.8f;
-        fixtureDef.restitution = 0.15f;
-        bodyDef.position.set(2, 2);
-        mBody = mWorld.createBody(bodyDef);
-        mBody.createFixture(fixtureDef);*/
 
         // Create players
+        User thisUser = Game.NETWORK_HELPER.findThisUser();
+        mGameUser = new GameUser(thisUser.getId());
         BitmapFont bitmapFont = WidgetFactory.mBfNormalLg;
-        mPlayer = new BoxPlayer(thisUser, bitmapFont, mWorld);
-        addActor(mPlayer);
-        Point initialPos = randomBoundedPoint((int) WORLD_WIDTH, (int) WORLD_HEIGHT);
-        mPlayer.setPosition(initialPos.x, initialPos.y);
-        mPlayers = new Array<Player>();
+        mPlayers = new Array<BoxPlayer>();
         for (User u: Game.NETWORK_HELPER.users.getUsers()) {
-            Player player = new Player(u, bitmapFont);
-            player.setPosition(-WORLD_WIDTH, -WORLD_HEIGHT); // Start off screen
-            addActor(player);
-            mPlayers.add(player);
+            if (u.getId() != thisUser.getId()) {
+                BoxPlayer player = new BoxPlayer(u, bitmapFont, mWorld);
+                player.getBody().setTransform(-WORLD_WIDTH, -WORLD_HEIGHT, player.getBody().getAngle()); // Start off screen
+                player.getBody().setFixedRotation(true);
+                addActor(player);
+                mPlayers.add(player);
+            }
+            else {
+                mPlayer = new BoxPlayer(thisUser, bitmapFont, mWorld);
+                addActor(mPlayer);
+                Point initialPos = randomBoundedPoint((int) WORLD_WIDTH, (int) WORLD_HEIGHT);
+                mPlayer.getBody().setTransform(initialPos.x, initialPos.y, mPlayer.getBody().getAngle());
+                mPlayer.getBody().setFixedRotation(true);
+            }
         }
 
-        // Initial update
-        mGameUser.setPosY(mPlayer.getY());
-        mGameUser.setPosX(mPlayer.getX());
-        mInterface.playerMoved(mGameUser);
+        // Initial network update
+        updateNetworkClass();
     }
 
     /**
@@ -102,12 +87,24 @@ public class GameStage extends Stage {
      * update the Player's position based on gameUser.
      * @param gameUser
      */
-    public void updatePlayer(GameUser gameUser) {
-        for (Player p: mPlayers) {
+    public void updatePlayer(final GameUser gameUser) {
+        for (final BoxPlayer p: mPlayers) {
             if (p.getUser().getId() == gameUser.getUserId()) {
-                p.setPosition(gameUser.getPosX(), gameUser.getPosY());
+                // Box2d transformations must take place before or after Box2d update
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        p.getBody().setTransform(gameUser.getPosX(), gameUser.getPosY(), p.getBody().getAngle());
+                    }
+                });
             }
         }
+    }
+
+    private void updateNetworkClass() {
+        mGameUser.setPosX(mPlayer.getBody().getPosition().x);
+        mGameUser.setPosY(mPlayer.getBody().getPosition().y);
+        mInterface.playerMoved(mGameUser);
     }
 
     public Point randomBoundedPoint(int maxX, int maxY) {
@@ -125,13 +122,10 @@ public class GameStage extends Stage {
             mPlayer.getBody().setLinearVelocity(new Vector2(0, 0));
         }
 
-        // Update the network class
-        mGameUser.setPosX(mPlayer.getX());
-        mGameUser.setPosY(mPlayer.getY());
-        mInterface.playerMoved(mGameUser);
+        updateNetworkClass();
 
         // Update Box2d
-        mWorld.step( 1/ 60f, 6, 2);
+        mWorld.step(1/60f, 6, 2);
         mDebugRenderer.render(mWorld, getCamera().combined);
     }
 
