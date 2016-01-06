@@ -1,15 +1,15 @@
-package com.sjjapps.partygame.screens.games.runaway.models;
+package com.sjjapps.partygame.network;
 
 /**
  * Created by Shane Jansen on 1/4/16.
  */
-public class GameUser {
+public class MovablePlayer {
     private int mUserId;
     private float mPosX, mPosY;
 
-    public GameUser() {}
+    public MovablePlayer() {}
 
-    public GameUser(int userId) {
+    public MovablePlayer(int userId) {
         this.mUserId = userId;
         mPosX = 0;
         mPosY = 0;

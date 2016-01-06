@@ -22,11 +22,11 @@ public class BoxPlayer extends Player {
         Player.addAssets();
     }
 
-    public BoxPlayer(User user, BitmapFont bitmapFont, World world) {
+    public BoxPlayer(User user, BitmapFont bitmapFont, BodyDef.BodyType bodyType, World world) {
         super(user, bitmapFont);
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = bodyType;
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(getWidth() * 0.5f, getHeight() * 0.5f);
         FixtureDef fixtureDef = new FixtureDef();

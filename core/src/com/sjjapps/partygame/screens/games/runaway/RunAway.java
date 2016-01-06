@@ -6,7 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.realms.GameRealm;
-import com.sjjapps.partygame.screens.games.runaway.models.GameUser;
+import com.sjjapps.partygame.network.MovablePlayer;
 import com.sjjapps.partygame.screens.games.runaway.stages.GameStage;
 import com.sjjapps.partygame.screens.games.runaway.stages.UiStage;
 
@@ -42,7 +42,7 @@ public class RunAway extends GameRealm implements GameStage.GameStageInterface {
     }
 
     @Override
-    public void playerMoved(GameUser gameUser) {
+    public void playerMoved(MovablePlayer gameUser) {
         if (Game.NETWORK_HELPER.isServer()) {
             Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
             server.sendToAllUDP(gameUser);
@@ -59,8 +59,8 @@ public class RunAway extends GameRealm implements GameStage.GameStageInterface {
         mListener = new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof GameUser) {
-                    GameUser gameUser = (GameUser) object;
+                if (object instanceof MovablePlayer) {
+                    MovablePlayer gameUser = (MovablePlayer) object;
                     server.sendToAllUDP(gameUser);
                     mGameStage.updatePlayer(gameUser);
                 }
@@ -75,8 +75,8 @@ public class RunAway extends GameRealm implements GameStage.GameStageInterface {
         mListener = new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof GameUser) {
-                    GameUser gameUser = (GameUser) object;
+                if (object instanceof MovablePlayer) {
+                    MovablePlayer gameUser = (MovablePlayer) object;
                     mGameStage.updatePlayer(gameUser);
                 }
             }

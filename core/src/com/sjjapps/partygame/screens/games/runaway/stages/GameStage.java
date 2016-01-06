@@ -3,6 +3,7 @@ package com.sjjapps.partygame.screens.games.runaway.stages;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,7 +16,7 @@ import com.sjjapps.partygame.common.models.Point;
 import com.sjjapps.partygame.common.models.User;
 import com.sjjapps.partygame.screens.games.runaway.actors.BoxPlayer;
 import com.sjjapps.partygame.screens.games.runaway.actors.Player;
-import com.sjjapps.partygame.screens.games.runaway.models.GameUser;
+import com.sjjapps.partygame.network.MovablePlayer;
 
 import java.util.Random;
 
@@ -29,7 +30,8 @@ public class GameStage extends Stage {
     private GameStageInterface mInterface;
     private Touchpad mTouchpad;
     private Random mRandom;
-    private GameUser mGameUser;
+    private boolean mAlreadyStill; // True if the player is already still
+    private MovablePlayer mGameUser;
     private BoxPlayer mPlayer;
     private Array<BoxPlayer> mPlayers;
 
@@ -42,7 +44,7 @@ public class GameStage extends Stage {
     }
 
     public interface GameStageInterface {
-        void playerMoved(GameUser gameUser);
+        void playerMoved(MovablePlayer gameUser);
     }
 
     public GameStage(GameStageInterface gameStageInterface, Touchpad touchpad) {
@@ -50,6 +52,7 @@ public class GameStage extends Stage {
         mInterface = gameStageInterface;
         mTouchpad = touchpad;
         mRandom = new Random();
+        mAlreadyStill = false;
 
         // Init Box2d
         mWorld = new World(new Vector2(0, 0), true);
@@ -57,19 +60,19 @@ public class GameStage extends Stage {
 
         // Create players
         User thisUser = Game.NETWORK_HELPER.findThisUser();
-        mGameUser = new GameUser(thisUser.getId());
+        mGameUser = new MovablePlayer(thisUser.getId());
         BitmapFont bitmapFont = WidgetFactory.mBfNormalLg;
         mPlayers = new Array<BoxPlayer>();
         for (User u: Game.NETWORK_HELPER.users.getUsers()) {
             if (u.getId() != thisUser.getId()) {
-                BoxPlayer player = new BoxPlayer(u, bitmapFont, mWorld);
-                player.getBody().setTransform(-WORLD_WIDTH, -WORLD_HEIGHT, player.getBody().getAngle()); // Start off screen
+                BoxPlayer player = new BoxPlayer(u, bitmapFont, BodyDef.BodyType.KinematicBody, mWorld);
+                player.getBody().setTransform(-WORLD_WIDTH, -WORLD_HEIGHT, player.getBody().getAngle()); // Begin off screen
                 player.getBody().setFixedRotation(true);
                 addActor(player);
                 mPlayers.add(player);
             }
             else {
-                mPlayer = new BoxPlayer(thisUser, bitmapFont, mWorld);
+                mPlayer = new BoxPlayer(thisUser, bitmapFont, BodyDef.BodyType.DynamicBody, mWorld);
                 addActor(mPlayer);
                 Point initialPos = randomBoundedPoint((int) WORLD_WIDTH, (int) WORLD_HEIGHT);
                 mPlayer.getBody().setTransform(initialPos.x, initialPos.y, mPlayer.getBody().getAngle());
@@ -87,7 +90,7 @@ public class GameStage extends Stage {
      * update the Player's position based on gameUser.
      * @param gameUser
      */
-    public void updatePlayer(final GameUser gameUser) {
+    public void updatePlayer(final MovablePlayer gameUser) {
         for (final BoxPlayer p: mPlayers) {
             if (p.getUser().getId() == gameUser.getUserId()) {
                 // Box2d transformations must take place before or after Box2d update
@@ -114,15 +117,22 @@ public class GameStage extends Stage {
     @Override
     public void act(float delta) {
         super.act(delta);
-        // Set the velocity of the body
-        //mBody.applyForceToCenter(mTouchpad.getKnobPercentX(), mTouchpad.getKnobPercentY(), true);
-        mPlayer.getBody().setLinearVelocity(mTouchpad.getKnobPercentX() * SPEED_MULTIPLIER,
-                mTouchpad.getKnobPercentY() * SPEED_MULTIPLIER);
-        if (mTouchpad.getKnobPercentX() == 0 && mTouchpad.getKnobPercentY() == 0) {
-            mPlayer.getBody().setLinearVelocity(new Vector2(0, 0));
-        }
 
-        updateNetworkClass();
+        // Set the velocity of the player
+        //mBody.applyForceToCenter(mTouchpad.getKnobPercentX(), mTouchpad.getKnobPercentY(), true);
+        float padX = mTouchpad.getKnobPercentX();
+        float padY = mTouchpad.getKnobPercentY();
+        if (padX != 0 || padY != 0) {
+            mAlreadyStill = false;
+            mPlayer.getBody().setLinearVelocity(padX * SPEED_MULTIPLIER,
+                    padY * SPEED_MULTIPLIER);
+            updateNetworkClass();
+        }
+        if (padX == 0 && padY == 0 && !mAlreadyStill) {
+            mAlreadyStill = true;
+            mPlayer.getBody().setLinearVelocity(new Vector2(0, 0));
+            updateNetworkClass();
+        }
 
         // Update Box2d
         mWorld.step(1/60f, 6, 2);

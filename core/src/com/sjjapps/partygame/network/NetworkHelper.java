@@ -9,7 +9,6 @@ import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.models.MiniGame;
 import com.sjjapps.partygame.common.models.User;
-import com.sjjapps.partygame.screens.games.runaway.models.GameUser;
 
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -62,7 +61,7 @@ public class NetworkHelper {
         kryo.register(MiniGame[].class);
         kryo.register(HashSet.class);
         // RunAway
-        kryo.register(GameUser.class);
+        kryo.register(MovablePlayer.class);
     }
 
     private void addEndpointListener(EndPoint endpoint) {
