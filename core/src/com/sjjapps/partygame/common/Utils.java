@@ -1,5 +1,6 @@
 package com.sjjapps.partygame.common;
 
+import com.badlogic.gdx.Gdx;
 import com.sjjapps.partygame.common.models.MiniGame;
 import com.sjjapps.partygame.common.models.Size;
 import com.sjjapps.partygame.common.realms.Realm;
@@ -20,5 +21,9 @@ public class Utils {
         String name = miniGame.getName();
         if (name.equals("Run Away")) return new RunAway();
         return null;
+    }
+
+    public static float getUnitsInPixel(float worldWidth) {
+        return worldWidth / (float) Gdx.graphics.getWidth();
     }
 }

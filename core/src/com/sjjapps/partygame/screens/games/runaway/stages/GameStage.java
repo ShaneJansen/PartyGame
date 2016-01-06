@@ -17,6 +17,7 @@ import com.sjjapps.partygame.common.models.User;
 import com.sjjapps.partygame.screens.games.runaway.actors.BoxPlayer;
 import com.sjjapps.partygame.screens.games.runaway.actors.Player;
 import com.sjjapps.partygame.network.MovablePlayer;
+import com.sjjapps.partygame.screens.games.runaway.actors.Wall;
 
 import java.util.Random;
 
@@ -58,30 +59,45 @@ public class GameStage extends Stage {
         mWorld = new World(new Vector2(0, 0), true);
         mDebugRenderer = new Box2DDebugRenderer();
 
-        // Create players
+        createPlayers();
+        //createWalls();
+
+        // Initial network update
+        updateNetworkClass();
+    }
+
+    private void createPlayers() {
         User thisUser = Game.NETWORK_HELPER.findThisUser();
         mGameUser = new MovablePlayer(thisUser.getId());
         BitmapFont bitmapFont = WidgetFactory.mBfNormalLg;
         mPlayers = new Array<BoxPlayer>();
         for (User u: Game.NETWORK_HELPER.users.getUsers()) {
             if (u.getId() != thisUser.getId()) {
-                BoxPlayer player = new BoxPlayer(u, bitmapFont, BodyDef.BodyType.KinematicBody, mWorld);
+                BoxPlayer player = new BoxPlayer(u, bitmapFont, WORLD_WIDTH, BodyDef.BodyType.KinematicBody, mWorld);
                 player.getBody().setTransform(-WORLD_WIDTH, -WORLD_HEIGHT, player.getBody().getAngle()); // Begin off screen
                 player.getBody().setFixedRotation(true);
                 addActor(player);
                 mPlayers.add(player);
             }
             else {
-                mPlayer = new BoxPlayer(thisUser, bitmapFont, BodyDef.BodyType.DynamicBody, mWorld);
+                mPlayer = new BoxPlayer(thisUser, bitmapFont, WORLD_WIDTH, BodyDef.BodyType.DynamicBody, mWorld);
                 addActor(mPlayer);
                 Point initialPos = randomBoundedPoint((int) WORLD_WIDTH, (int) WORLD_HEIGHT);
                 mPlayer.getBody().setTransform(initialPos.x, initialPos.y, mPlayer.getBody().getAngle());
                 mPlayer.getBody().setFixedRotation(true);
             }
         }
+    }
 
-        // Initial network update
-        updateNetworkClass();
+    private void createWalls() {
+        Wall leftWall = new Wall(WORLD_WIDTH, WORLD_HEIGHT, Wall.Movement.RIGHT, mWorld);
+        addActor(leftWall);
+        Wall rightWall = new Wall(WORLD_WIDTH, WORLD_HEIGHT, Wall.Movement.LEFT, mWorld);
+        addActor(rightWall);
+        Wall upWall = new Wall(WORLD_WIDTH, WORLD_HEIGHT, Wall.Movement.UP, mWorld);
+        addActor(upWall);
+        Wall downWall = new Wall(WORLD_WIDTH, WORLD_HEIGHT, Wall.Movement.DOWN, mWorld);
+        addActor(downWall);
     }
 
     /**
@@ -137,18 +153,5 @@ public class GameStage extends Stage {
         // Update Box2d
         mWorld.step(1/60f, 6, 2);
         mDebugRenderer.render(mWorld, getCamera().combined);
-    }
-
-    @Override
-    public void draw() {
-        // Test circles
-        /*Game.SHAPE_RENDERER.setProjectionMatrix(getViewport().getCamera().combined);
-        Game.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
-        Game.SHAPE_RENDERER.setColor(Color.YELLOW);
-        Game.SHAPE_RENDERER.circle(getViewport().getWorldWidth(), getViewport().getWorldHeight(), 1);
-        Game.SHAPE_RENDERER.circle(0, 0, 30);
-        Game.SHAPE_RENDERER.end();*/
-
-        super.draw();
     }
 }
