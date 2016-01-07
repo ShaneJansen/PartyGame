@@ -1,4 +1,4 @@
-package com.sjjapps.partygame.screens.games.runaway.actors;
+package com.sjjapps.partygame.common.actors;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;

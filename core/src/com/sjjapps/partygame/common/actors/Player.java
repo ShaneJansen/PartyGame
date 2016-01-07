@@ -1,4 +1,4 @@
-package com.sjjapps.partygame.screens.games.runaway.actors;
+package com.sjjapps.partygame.common.actors;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -17,8 +17,8 @@ public class Player extends Actor {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.PENCIL, Texture.class)
     };
-    private static final int WIDTH = 2;
-    private static final int HEIGHT = 2;
+    private static final int WIDTH = 1;
+    private static final int HEIGHT = 1;
     private User mUser;
     private BitmapFont mBitmapFont;
     private Texture mTxtBackground;
@@ -50,6 +50,7 @@ public class Player extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
         drawPlayer(batch);
         drawPlayerName(batch);
     }

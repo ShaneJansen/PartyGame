@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Created by Shane Jansen on 1/6/16.
  */
 public class Wall extends Actor {
-    private static final float SPEED_MULTIPLIER = 0.05f;
+    private static final float SPEED_MULTIPLIER = 0.02f;
     private float mWorldHeight, mWorldWidth;
     private Body mBody;
 

@@ -14,9 +14,10 @@ import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.WidgetFactory;
 import com.sjjapps.partygame.common.models.Point;
 import com.sjjapps.partygame.common.models.User;
-import com.sjjapps.partygame.screens.games.runaway.actors.BoxPlayer;
-import com.sjjapps.partygame.screens.games.runaway.actors.Player;
+import com.sjjapps.partygame.common.actors.BoxPlayer;
+import com.sjjapps.partygame.common.actors.Player;
 import com.sjjapps.partygame.network.MovablePlayer;
+import com.sjjapps.partygame.screens.games.runaway.actors.Enemy;
 import com.sjjapps.partygame.screens.games.runaway.actors.Wall;
 
 import java.util.Random;
@@ -27,20 +28,22 @@ import java.util.Random;
 public class GameStage extends Stage {
     private static final float WORLD_WIDTH = 10;
     private static final float WORLD_HEIGHT = 10;
-    private static final float SPEED_MULTIPLIER = 5;
+    private static final float TOUCHPAD_SPEED = 5;
     private GameStageInterface mInterface;
     private Touchpad mTouchpad;
     private Random mRandom;
     private boolean mAlreadyStill; // True if the player is already still
-    private MovablePlayer mGameUser;
+    private MovablePlayer mGameUser; // Networking class
     private BoxPlayer mPlayer;
     private Array<BoxPlayer> mPlayers;
+    private Enemy mEnemy;
 
     private World mWorld;
     private Box2DDebugRenderer mDebugRenderer;
 
     public static void addAssets() {
         Player.addAssets();
+        Enemy.addAssets();
         WidgetFactory.addAssets();
     }
 
@@ -59,13 +62,25 @@ public class GameStage extends Stage {
         mWorld = new World(new Vector2(0, 0), true);
         mDebugRenderer = new Box2DDebugRenderer();
 
+
+        createEnemy();
         createPlayers();
-        //createWalls();
+        createWalls();
 
         // Initial network update
         updateNetworkClass();
     }
 
+    public void createEnemy() {
+        mEnemy = new Enemy(mWorld);
+        mEnemy.getBody().setTransform(WORLD_WIDTH * 0.5f, WORLD_HEIGHT * 0.5f, mEnemy.getBody().getAngle());
+        mEnemy.getBody().setFixedRotation(true);
+        addActor(mEnemy);
+    }
+
+    /**
+     * Create the game's players.
+     */
     private void createPlayers() {
         User thisUser = Game.NETWORK_HELPER.findThisUser();
         mGameUser = new MovablePlayer(thisUser.getId());
@@ -89,6 +104,9 @@ public class GameStage extends Stage {
         }
     }
 
+    /**
+     * Creates four moving walls.
+     */
     private void createWalls() {
         Wall leftWall = new Wall(WORLD_WIDTH, WORLD_HEIGHT, Wall.Movement.RIGHT, mWorld);
         addActor(leftWall);
@@ -120,12 +138,22 @@ public class GameStage extends Stage {
         }
     }
 
+    /**
+     * Called when this player has moved and the networking
+     * classes need to be updated.
+     */
     private void updateNetworkClass() {
         mGameUser.setPosX(mPlayer.getBody().getPosition().x);
         mGameUser.setPosY(mPlayer.getBody().getPosition().y);
         mInterface.playerMoved(mGameUser);
     }
 
+    /**
+     * Creates a random bounded point.
+     * @param maxX
+     * @param maxY
+     * @return
+     */
     public Point randomBoundedPoint(int maxX, int maxY) {
         return new Point(mRandom.nextInt(maxX), mRandom.nextInt(maxY));
     }
@@ -140,8 +168,8 @@ public class GameStage extends Stage {
         float padY = mTouchpad.getKnobPercentY();
         if (padX != 0 || padY != 0) {
             mAlreadyStill = false;
-            mPlayer.getBody().setLinearVelocity(padX * SPEED_MULTIPLIER,
-                    padY * SPEED_MULTIPLIER);
+            mPlayer.getBody().setLinearVelocity(padX * TOUCHPAD_SPEED,
+                    padY * TOUCHPAD_SPEED);
             updateNetworkClass();
         }
         if (padX == 0 && padY == 0 && !mAlreadyStill) {
