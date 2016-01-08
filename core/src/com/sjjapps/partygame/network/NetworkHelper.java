@@ -9,6 +9,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.models.MiniGame;
 import com.sjjapps.partygame.common.models.User;
+import com.sjjapps.partygame.screens.games.runaway.network.NetEnemy;
 
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -27,8 +28,8 @@ public class NetworkHelper {
     private boolean mIsServer;
 
     // These network objects should persist for the life of the network connection
-    public Users users;
-    public GameState gameState;
+    public NetUsers users;
+    public NetGameState gameState;
 
     public interface NetworkInterface {
         void addServerListeners();
@@ -42,8 +43,8 @@ public class NetworkHelper {
         this.mEndPoint = endPoint;
         if (endPoint instanceof Server) mIsServer = true;
         if (endPoint instanceof Client) mIsServer = false;
-        users = new Users();
-        gameState = new GameState();
+        users = new NetUsers();
+        gameState = new NetGameState();
         registerEndpoint(endPoint);
         addEndpointListener(endPoint);
     }
@@ -54,22 +55,23 @@ public class NetworkHelper {
         kryo.register(ArrayList.class);
         // Users
         kryo.register(User.class);
-        kryo.register(Users.class);
+        kryo.register(NetUsers.class);
         // GameState
-        kryo.register(GameState.class);
+        kryo.register(NetGameState.class);
         kryo.register(MiniGame.class);
         kryo.register(MiniGame[].class);
         kryo.register(HashSet.class);
         // RunAway
-        kryo.register(MovablePlayer.class);
+        kryo.register(NetPlayer.class);
+        kryo.register(NetEnemy.class);
     }
 
     private void addEndpointListener(EndPoint endpoint) {
         endpoint.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof GameState) {
-                    GameState gameState = (GameState) object;
+                if (object instanceof NetGameState) {
+                    NetGameState gameState = (NetGameState) object;
                     Game.PAUSED = gameState.isPaused();
                 }
             }
@@ -152,11 +154,11 @@ public class NetworkHelper {
         else networkInterface.addClientListeners();
     }
 
-    public void setUsers(Users users) {
+    public void setUsers(NetUsers users) {
         this.users = users;
     }
 
-    public void setGameState(GameState gameState) {
+    public void setGameState(NetGameState gameState) {
         this.gameState = gameState;
     }
 }

@@ -7,13 +7,13 @@ import java.util.HashSet;
 /**
  * Created by Shane Jansen on 12/20/15.
  */
-public class GameState {
+public class NetGameState {
     private boolean mIsPaused;
     private boolean mIsStarted;
     private MiniGame[] mMiniGameTypes;
     private HashSet<MiniGame> mMiniGames;
 
-    public GameState() {
+    public NetGameState() {
         mIsPaused = false;
         mIsStarted = false;
         mMiniGameTypes = new MiniGame[]{

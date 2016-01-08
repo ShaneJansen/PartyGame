@@ -11,9 +11,9 @@ import com.sjjapps.partygame.common.realms.DialogRealm;
 import com.sjjapps.partygame.common.stages.Alert;
 import com.sjjapps.partygame.common.stages.Dialog;
 import com.sjjapps.partygame.managers.DataManager;
-import com.sjjapps.partygame.network.GameState;
+import com.sjjapps.partygame.network.NetGameState;
+import com.sjjapps.partygame.network.NetUsers;
 import com.sjjapps.partygame.network.NetworkHelper;
-import com.sjjapps.partygame.network.Users;
 import com.sjjapps.partygame.screens.games.runaway.RunAway;
 import com.sjjapps.partygame.screens.lobby.stages.UiStage;
 import com.sjjapps.partygame.screens.mainmenu.MainMenu;
@@ -53,7 +53,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
 
             @Override
             public void btnStartClicked() {
-                GameState gameState = Game.NETWORK_HELPER.gameState;
+                NetGameState gameState = Game.NETWORK_HELPER.gameState;
                 gameState.setIsStarted(true);
                 Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
                 server.sendToAllTCP(gameState);
@@ -75,7 +75,7 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
             ipAddress = client.getRemoteAddressTCP().getAddress().getHostAddress();
             client.sendTCP(new User(DataManager.USER_NAME));
         }
-        mUiStage.getLblAddress().setText("Server IP:" + ipAddress);
+        mUiStage.getLblAddress().setText("Server IP: " + ipAddress);
 
         // Finalize
         addInputListeners();
@@ -127,17 +127,17 @@ public class Lobby extends DialogRealm implements NetworkHelper.NetworkInterface
         mListener = new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof Users) {
+                if (object instanceof NetUsers) {
                     Game.log("Network: Received new user list.");
-                    Game.NETWORK_HELPER.setUsers((Users) object);
+                    Game.NETWORK_HELPER.setUsers((NetUsers) object);
                     // Update the list of users
                     updateUi();
                 }
-                if (object instanceof GameState) {
+                if (object instanceof NetGameState) {
                     Game.log("Network: Received new GameState.");
-                    Game.NETWORK_HELPER.setGameState((GameState) object);
+                    Game.NETWORK_HELPER.setGameState((NetGameState) object);
                     // Check if the game has started
-                    if (((GameState) object).isStarted()) {
+                    if (((NetGameState) object).isStarted()) {
                         changeRealm(new RunAway());
                     }
                 }

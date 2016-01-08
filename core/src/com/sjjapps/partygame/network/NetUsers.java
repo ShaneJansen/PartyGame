@@ -7,10 +7,10 @@ import java.util.HashSet;
 /**
  * Created by Shane Jansen on 1/1/16.
  */
-public class Users {
+public class NetUsers {
     private HashSet<User> mUsers;
 
-    public Users() {
+    public NetUsers() {
         mUsers = new HashSet<User>();
     }
 

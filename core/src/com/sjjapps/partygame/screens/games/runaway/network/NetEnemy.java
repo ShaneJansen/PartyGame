@@ -1,22 +1,14 @@
-package com.sjjapps.partygame.network;
+package com.sjjapps.partygame.screens.games.runaway.network;
 
 /**
- * Created by Shane Jansen on 1/4/16.
+ * Created by Shane Jansen on 1/7/16.
  */
-public class MovablePlayer {
-    private int mUserId;
+public class NetEnemy {
     private float mPosX, mPosY;
 
-    public MovablePlayer() {}
-
-    public MovablePlayer(int userId) {
-        this.mUserId = userId;
+    public NetEnemy() {
         mPosX = 0;
         mPosY = 0;
-    }
-
-    public int getUserId() {
-        return mUserId;
     }
 
     public float getPosX() {

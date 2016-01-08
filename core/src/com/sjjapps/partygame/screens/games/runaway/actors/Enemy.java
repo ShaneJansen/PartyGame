@@ -20,8 +20,8 @@ public class Enemy extends Actor {
     private static final Asset[] mAssets = new Asset[] {
             new Asset(FilePathManager.PENCIL, Texture.class)
     };
-    private static final int WIDTH = 2;
-    private static final int HEIGHT = 2;
+    private static final float WIDTH = 1.5f;
+    private static final float HEIGHT = 1.5f;
     private Texture mTxtBackground;
 
     private Body mBody;
@@ -44,9 +44,9 @@ public class Enemy extends Actor {
         polygonShape.setAsBox(getWidth() * 0.5f, getHeight() * 0.5f);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
-        fixtureDef.density = 0.8f;
-        fixtureDef.friction = 0.8f;
-        fixtureDef.restitution = 0.15f;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 1.0f;
+        fixtureDef.restitution = 0;
 
         bodyDef.position.set(0, 0);
         mBody = world.createBody(bodyDef);

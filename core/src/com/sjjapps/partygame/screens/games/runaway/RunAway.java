@@ -6,7 +6,8 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.sjjapps.partygame.Game;
 import com.sjjapps.partygame.common.realms.GameRealm;
-import com.sjjapps.partygame.network.MovablePlayer;
+import com.sjjapps.partygame.network.NetPlayer;
+import com.sjjapps.partygame.screens.games.runaway.network.NetEnemy;
 import com.sjjapps.partygame.screens.games.runaway.stages.GameStage;
 import com.sjjapps.partygame.screens.games.runaway.stages.UiStage;
 
@@ -42,7 +43,7 @@ public class RunAway extends GameRealm implements GameStage.GameStageInterface {
     }
 
     @Override
-    public void playerMoved(MovablePlayer gameUser) {
+    public void playerMoved(NetPlayer gameUser) {
         if (Game.NETWORK_HELPER.isServer()) {
             Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
             server.sendToAllUDP(gameUser);
@@ -54,15 +55,21 @@ public class RunAway extends GameRealm implements GameStage.GameStageInterface {
     }
 
     @Override
+    public void enemyMoved(NetEnemy netEnemy) {
+        Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
+        server.sendToAllUDP(netEnemy);
+    }
+
+    @Override
     public void addServerListeners() {
         final Server server = (Server) Game.NETWORK_HELPER.getEndPoint();
         mListener = new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof MovablePlayer) {
-                    MovablePlayer gameUser = (MovablePlayer) object;
+                if (object instanceof NetPlayer) {
+                    NetPlayer gameUser = (NetPlayer) object;
                     server.sendToAllUDP(gameUser);
-                    mGameStage.updatePlayer(gameUser);
+                    mGameStage.playerReceived(gameUser);
                 }
             }
         };
@@ -75,9 +82,13 @@ public class RunAway extends GameRealm implements GameStage.GameStageInterface {
         mListener = new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof MovablePlayer) {
-                    MovablePlayer gameUser = (MovablePlayer) object;
-                    mGameStage.updatePlayer(gameUser);
+                if (object instanceof NetPlayer) {
+                    NetPlayer netPlayer = (NetPlayer) object;
+                    mGameStage.playerReceived(netPlayer);
+                }
+                if (object instanceof NetEnemy) {
+                    NetEnemy netEnemy = (NetEnemy) object;
+                    mGameStage.enemyReceived(netEnemy);
                 }
             }
         };

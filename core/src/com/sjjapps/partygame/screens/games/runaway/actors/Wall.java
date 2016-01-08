@@ -31,9 +31,9 @@ public class Wall extends Actor {
         polygonShape.setAsBox(getWidth() * 0.5f, getHeight() * 0.5f);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
-        fixtureDef.density = 0.8f;
-        fixtureDef.friction = 0.8f;
-        fixtureDef.restitution = 0.15f;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 1.0f;
+        fixtureDef.restitution = 0;
 
         bodyDef.position.set(0, 0);
         mBody = world.createBody(bodyDef);
