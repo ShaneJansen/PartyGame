@@ -12,7 +12,8 @@ public class IOSLauncher extends IOSApplication.Delegate {
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
 
-
+        config.orientationPortrait = false;
+        config.orientationLandscape = true;
 
         return new IOSApplication(new Game(), config);
     }
